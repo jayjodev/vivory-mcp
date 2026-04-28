@@ -150,7 +150,7 @@ By default the server calls `https://api.vivory.app/api`. To point at your own V
 export VIVORY_API_BASE="http://localhost:8000/api"
 ```
 
-You'll also need a working Vivory backend with `KOSIS_API_KEY` configured — see the parent repo at [github.com/jayjodev/vivory](https://github.com/jayjodev/vivory).
+You'll also need a working Vivory backend with `KOSIS_API_KEY` configured — see Vivory backend (private monorepo).
 
 ---
 

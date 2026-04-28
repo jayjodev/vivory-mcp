@@ -92,7 +92,7 @@ uvx vivory-mcp-korea
 export VIVORY_API_BASE="http://localhost:8000/api"
 ```
 
-Requires a working Vivory backend with `KOSIS_API_KEY` configured — see the parent repo at [github.com/jayjodev/vivory](https://github.com/jayjodev/vivory).
+Requires a working Vivory backend with `KOSIS_API_KEY` configured — see Vivory backend (private monorepo).
 
 ---
 
