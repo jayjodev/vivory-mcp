@@ -1,6 +1,6 @@
 # vivory-mcp-korea
 
-**Umbrella MCP server bundling Korean public-data sources into a single installation.** 45 tools across 13 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
+**Umbrella MCP server bundling Korean public-data sources into a single installation.** 51 tools across 14 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
 
 Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend handles auth, caching, attribution, JS-literal parsing, and rate-limit gating.
 
@@ -8,12 +8,13 @@ Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend h
 
 ## What's included
 
-### v0.2 — 13 sources, 45 tools
+### v0.3 — 14 sources, 51 tools
 
 | Source | Tools | What it covers |
 |---|---|---|
 | **KOSIS** (통계청) | 15 | Macro/social/economic statistics — Population, Labor, CPI, GDP, Trade Balance, Household Income + full catalog search + time-series. |
 | **BOK** (한국은행 ECOS) | 1 | Macro dashboard — base rate, CPI, unemployment, M2, KRW/USD, recent series. |
+| **DART** (전자공시 · 금감원) | 6 | Korean listed-company filings, financial statements, major shareholders, company-info lookup, daily disclosures feed. |
 | **KMA** (기상청) | 4 | Real-time observation, short-range forecast, city presets, six living-weather indices (UV / sensible temp / pollen / etc.). |
 | **AirKorea** (환경부) | 2 | Real-time PM10 / PM2.5 / O3 / NO2 / SO2 / CO per station, plus regional forecast. |
 | **Opinet** (한국석유공사) | 3 | National avg / per-SIDO / Top-10 cheapest gas stations (5 fuel grades). |
@@ -27,15 +28,18 @@ Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend h
 | **Seoul OpenData** (서울시) | 2 | Public parking lots (~2,300 with realtime), Seoul Bike (따릉이) stations. |
 | **MoE EV** (환경부) | 1 | EV chargers per SIDO with realtime status. |
 
-Tools are namespaced by source (`kosis_*`, `kma_*`, `hira_*`, …) so Claude can pick the right one automatically.
+Tools are namespaced by source (`kosis_*`, `kma_*`, `dart_*`, `hira_*`, …) so Claude can pick the right one automatically.
 
-### Coming next (v0.3+)
+> **DART note**: `dart_company_search` returns up to 0 rows until the corp_code mapping is synced upstream. Other DART tools (disclosures, financials, major-shareholders) work directly when you already have an 8-digit `corp_code`. Operator: run `POST /api/public-tools/dart/admin/sync-corp-codes` (admin auth) once a month to refresh the ~3,500 listed-company mapping. Status visible via `dart_meta`.
 
-- **DART** (전자공시) — listed-company filings, financials, shareholders.
+### Coming next (v0.4+)
+
 - **VWorld** — geospatial / cadastral.
 - **Forest Service** — hiking trails, mountain points.
 - **Kakao Local** reverse geocoding.
 - **AED** locations (NMC E-gen — pending data.go.kr activation).
+- **University search** (KCUE — pending data.go.kr activation).
+- **MVNO plans** (Korea Post — pending data.go.kr activation).
 
 When these ship, **users don't need to re-install** — `vivory-mcp-korea` auto-includes new tools as they're wired upstream.
 
@@ -77,7 +81,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-Restart Claude Desktop. All 45 Korean data tools appear in the tool palette.
+Restart Claude Desktop. All 51 Korean data tools appear in the tool palette.
 
 ### pip / pipx
 
@@ -142,7 +146,13 @@ Requires a working Vivory backend with upstream API keys configured (KOSIS / KMA
 > *"What festivals are happening in Seoul between May 1 and May 15?"*
 > *"How many bikes are currently available at Seoul Bike stations in Mapo-gu?"*
 
-Claude picks the right tool automatically from the 45-tool catalog.
+Claude picks the right tool automatically from the 51-tool catalog.
+
+For Korean listed-company queries (DART):
+
+> *"What did Samsung Electronics report in its 2024 annual filing — find their corp_code first."* → `dart_company_search` → `dart_financials`
+> *"Show me all KOSPI disclosures filed today."* → `dart_disclosures`
+> *"Who are the major shareholders of Hyundai Motor in 2024?"* → `dart_company_search` → `dart_major_shareholders`
 
 ---
 
@@ -166,7 +176,7 @@ Every response includes an `attribution` block — source, license, citation req
 
 ## Project status
 
-- **Version**: 0.2.0 (KOSIS + 12 new sources)
+- **Version**: 0.3.0 (14 sources / 51 tools — added DART listed-company filings)
 - **Source**: [github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea)
 - **License**: MIT (wrapper) / per-source license for upstream data
 - **Roadmap**: see "Coming next" above

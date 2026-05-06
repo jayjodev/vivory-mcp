@@ -28,6 +28,7 @@ from . import client
 from .tools import (
     air_quality as air_quality_tools,
     bok as bok_tools,
+    dart as dart_tools,
     healthcare as healthcare_tools,
     kosis as kosis_tools,
     misc as misc_tools,
@@ -47,6 +48,7 @@ server: Server = Server("vivory-korea")
 TOOLS: list[Tool] = [
     *kosis_tools.TOOLS,
     *bok_tools.TOOLS,
+    *dart_tools.TOOLS,
     *weather_tools.TOOLS,
     *air_quality_tools.TOOLS,
     *opinet_tools.TOOLS,
@@ -61,6 +63,7 @@ TOOLS: list[Tool] = [
 HANDLERS: dict[str, Any] = {
     **kosis_tools.HANDLERS,
     **bok_tools.HANDLERS,
+    **dart_tools.HANDLERS,
     **weather_tools.HANDLERS,
     **air_quality_tools.HANDLERS,
     **opinet_tools.HANDLERS,

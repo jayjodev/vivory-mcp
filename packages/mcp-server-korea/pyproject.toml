@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-korea"
-version = "0.2.0"
-description = "Umbrella MCP server for Korean public data — KOSIS + BOK + KMA + AirKorea + Opinet + HIRA + NMC + MOLIT + KTO + MFDS + MOIS + NEIS + Seoul OpenData. 45 tools across 13 sources, single registration point for AI agents."
+version = "0.3.0"
+description = "Umbrella MCP server for Korean public data — KOSIS + BOK + DART + KMA + AirKorea + Opinet + HIRA + NMC + MOLIT + KTO + MFDS + MOIS + NEIS + Seoul OpenData. 51 tools across 14 sources, single registration point for AI agents."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
