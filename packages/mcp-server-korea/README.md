@@ -1,48 +1,66 @@
 # vivory-mcp-korea
 
-Umbrella MCP server bundling **all Korean public-data sources** into a single registration. Install once, get every Vivory-supported Korean dataset.
+**Umbrella MCP server bundling Korean public-data sources into a single installation.** 45 tools across 13 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
 
-Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — all backend auth, caching, attribution, and normalization handled upstream.
+Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend handles auth, caching, attribution, JS-literal parsing, and rate-limit gating.
 
 ---
 
 ## What's included
 
-### v0.1 — KOSIS only (15 tools)
+### v0.2 — 13 sources, 45 tools
 
-[Statistics Korea, 통계청 국가통계포털](https://kosis.kr) — 16 categories of curated key indicators (Population, Labor, CPI, GDP, Trade Balance, Household Income, etc.) + full catalog search + time-series.
+| Source | Tools | What it covers |
+|---|---|---|
+| **KOSIS** (통계청) | 15 | Macro/social/economic statistics — Population, Labor, CPI, GDP, Trade Balance, Household Income + full catalog search + time-series. |
+| **BOK** (한국은행 ECOS) | 1 | Macro dashboard — base rate, CPI, unemployment, M2, KRW/USD, recent series. |
+| **KMA** (기상청) | 4 | Real-time observation, short-range forecast, city presets, six living-weather indices (UV / sensible temp / pollen / etc.). |
+| **AirKorea** (환경부) | 2 | Real-time PM10 / PM2.5 / O3 / NO2 / SO2 / CO per station, plus regional forecast. |
+| **Opinet** (한국석유공사) | 3 | National avg / per-SIDO / Top-10 cheapest gas stations (5 fuel grades). |
+| **HIRA** (건강보험심사평가원) | 3 | Hospital + pharmacy directory search, hospitals nearby a coordinate. |
+| **NMC** (국립중앙의료원 E-gen) | 3 | ER real-time bed availability, night-shift pharmacies, trauma centers. |
+| **MOLIT** (국토교통부) | 4 | Apartment sale / rent transactions (RTMS), price trend, LAWD region codes. |
+| **KTO** (한국관광공사 TourAPI) | 4 | Tour spots by region, festivals by date, nearby tour by coordinate, full detail. |
+| **MFDS** (식품의약품안전처) | 1 | Korean food nutrition database — calories, macros, vitamins, minerals. |
+| **MOIS LOCALDATA** (행정안전부) | 1 | ~50,000 public restrooms by address. |
+| **NEIS** (교육부 나이스) | 1 | K-12 school search across 12,555 schools. |
+| **Seoul OpenData** (서울시) | 2 | Public parking lots (~2,300 with realtime), Seoul Bike (따릉이) stations. |
+| **MoE EV** (환경부) | 1 | EV chargers per SIDO with realtime status. |
 
-### Planned for v0.2+
+Tools are namespaced by source (`kosis_*`, `kma_*`, `hira_*`, …) so Claude can pick the right one automatically.
 
-- **BoK ECOS** (한국은행 경제통계시스템) — interest rates, exchange rates, monetary aggregates
-- **NEIS** (교육부 나이스) — 11,900+ Korean schools (info / class size / meals / academic calendar)
-- **LOCALDATA** (행정안전부) — businesses by category × region
-- **Air Korea** — real-time PM2.5 / PM10 / O3 by 17 provinces
-- **KMA** (기상청) — short-term weather forecasts for 20 cities
-- **Opinet** — gas station prices nationwide
-- **HIRA** — hospitals · pharmacies · ER status
-- **DART** (전자공시) — Korean listed companies' filings/financials/shareholders
+### Coming next (v0.3+)
 
-When v0.2+ ships, **users don't need to re-install** — `vivory-mcp-korea` auto-includes new tools as they're added upstream. Single registration command, ever-growing toolbox.
+- **DART** (전자공시) — listed-company filings, financials, shareholders.
+- **VWorld** — geospatial / cadastral.
+- **Forest Service** — hiking trails, mountain points.
+- **Kakao Local** reverse geocoding.
+- **AED** locations (NMC E-gen — pending data.go.kr activation).
+
+When these ship, **users don't need to re-install** — `vivory-mcp-korea` auto-includes new tools as they're wired upstream.
 
 ---
 
 ## Why this exists
 
-Two installation patterns serve different audiences:
+Korean public-data APIs publish exclusively in Korean, require per-API key issuance, return JS-literal (not JSON) responses, and split similar data across 14+ portals. This MCP server normalizes everything to English JSON, attributes data per response, and presents one tool catalog the LLM can navigate.
 
 | Use case | Recommended package |
 |---|---|
 | Just KOSIS statistics | [`vivory-mcp-kosis`](../mcp-server-kosis) — narrower scope, smaller install |
 | All Korean public data | **`vivory-mcp-korea`** ← this package |
 
-If you only need one source, install that source's standalone package. If you want everything Korea-related, install this umbrella.
-
 ---
 
 ## Installation
 
-> **Note**: PyPI publication coming soon. Until then, install from this repo via Git.
+> **Status**: PyPI publication is queued for v0.2.0. Until it lands, install from this repo via Git — every command below works today.
+
+### Claude Code
+
+```bash
+claude mcp add vivory-korea -- uvx --from "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea" vivory-mcp-korea
+```
 
 ### Claude Desktop
 
@@ -63,15 +81,9 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-Restart Claude Desktop. All Korean data tools appear in the tool palette.
+Restart Claude Desktop. All 45 Korean data tools appear in the tool palette.
 
-### Claude Code
-
-```bash
-claude mcp add vivory-korea -- uvx --from "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea" vivory-mcp-korea
-```
-
-### pip from Git
+### pip from Git (development)
 
 ```bash
 pip install "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea"
@@ -82,6 +94,39 @@ vivory-mcp-korea  # runs the stdio MCP server
 
 ```bash
 uvx vivory-mcp-korea
+# or:  pip install vivory-mcp-korea
+```
+
+---
+
+## API tier (optional)
+
+The server runs anonymously by default — **100 calls/day per IP**, no signup. Works for casual use.
+
+For higher limits, sign up at [api.vivory.app/dashboard/api-keys](https://api.vivory.app/dashboard/api-keys) and set `VIVORY_API_KEY`:
+
+| Tier | Daily limit | How to enable |
+|---|---|---|
+| Anonymous | 100/day per IP | Default — no setup |
+| Pro | 10,000/day | `VIVORY_API_KEY=…` env var |
+| Enterprise | 100,000/day | Contact contact@vivory.app |
+
+```json
+{
+  "mcpServers": {
+    "vivory-korea": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea",
+        "vivory-mcp-korea"
+      ],
+      "env": {
+        "VIVORY_API_KEY": "vk_live_..."
+      }
+    }
+  }
+}
 ```
 
 ---
@@ -92,31 +137,47 @@ uvx vivory-mcp-korea
 export VIVORY_API_BASE="http://localhost:8000/api"
 ```
 
-Requires a working Vivory backend with `KOSIS_API_KEY` configured — see Vivory backend (private monorepo).
+Requires a working Vivory backend with upstream API keys configured (KOSIS / KMA / MOLIT / Opinet / etc.) — see Vivory backend (private monorepo).
 
 ---
 
 ## Example prompts
 
 > *"What's Korea's CPI trend over the last 24 months?"*
-> *"Compare Korean and Japanese unemployment trends... actually start by giving me Korea's data first."*
-> *"Search KOSIS for tables related to youth employment, then show me the latest data."*
+> *"What's the air quality in Seoul right now, and forecast for tomorrow?"*
+> *"Find the 5 cheapest diesel stations near Incheon airport."*
+> *"List trauma-center-equipped hospitals within 10 km of latitude 37.5, longitude 127.0."*
+> *"Show me Gangnam-gu apartment sale transactions in April 2026."*
+> *"What festivals are happening in Seoul between May 1 and May 15?"*
+> *"How many bikes are currently available at Seoul Bike stations in Mapo-gu?"*
 
-Claude picks the right tool automatically.
+Claude picks the right tool automatically from the 45-tool catalog.
 
 ---
 
 ## Data attribution
 
-Every response includes an `attribution` block per source. KOSIS data is licensed [공공누리(KOGL) Type 1](https://www.kogl.or.kr/info/license.do) — commercial use permitted with source attribution.
+Every response includes an `attribution` block — source, license, citation requirement.
+
+| Source | License | Commercial use |
+|---|---|---|
+| KOSIS / KOGL Type 1 | Open with attribution | ✅ |
+| BOK ECOS / KOGL Type 1 | Open with attribution | ✅ |
+| KMA / data.go.kr | Open with attribution | ✅ |
+| AirKorea / data.go.kr | Open with attribution | ✅ |
+| MOLIT / data.go.kr | Open with attribution | ✅ |
+| MFDS / KOGL Type 1 | Open with attribution | ✅ |
+| TourAPI | Open with attribution + non-broker T&C | ✅ |
+| Seoul OpenData | KOGL Type 1 | ✅ |
+| Opinet | Open with daily quota | ✅ (1,500 shared/day) |
 
 ---
 
 ## Project status
 
-- **Version**: 0.1.0 (KOSIS only)
+- **Version**: 0.2.0 (KOSIS + 12 new sources)
 - **Source**: [github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea)
 - **License**: MIT (wrapper) / per-source license for upstream data
-- **Roadmap**: see "Planned for v0.2+" above
+- **Roadmap**: see "Coming next" above
 
 🇰🇷 Built in Seoul · 🌐 [vivory.app](https://vivory.app)

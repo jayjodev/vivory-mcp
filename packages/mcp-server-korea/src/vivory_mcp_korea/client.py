@@ -17,14 +17,32 @@ import httpx
 
 DEFAULT_API_BASE = "https://api.vivory.app/api"
 TIMEOUT = httpx.Timeout(30.0, connect=10.0)
-USER_AGENT = "vivory-mcp-korea/0.1.0 (+https://vivory.app)"
+USER_AGENT = "vivory-mcp-korea/0.2.0 (+https://vivory.app)"
 
 
 def get_api_base() -> str:
     return (os.environ.get("VIVORY_API_BASE") or DEFAULT_API_BASE).rstrip("/")
 
 
+def get_api_key() -> str | None:
+    """Optional Vivory API key for tier upgrade (free 100/day → pro 10k/day → enterprise 100k/day).
+
+    Sign up at https://api.vivory.app/dashboard/api-keys. The MCP server runs
+    fine without a key (anonymous tier, 100 calls/day per source IP).
+    """
+    raw = os.environ.get("VIVORY_API_KEY")
+    return raw.strip() if raw and raw.strip() else None
+
+
 _client: httpx.AsyncClient | None = None
+
+
+def _build_headers() -> dict[str, str]:
+    headers = {"User-Agent": USER_AGENT, "Accept": "application/json"}
+    api_key = get_api_key()
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    return headers
 
 
 async def get_client() -> httpx.AsyncClient:
@@ -34,7 +52,7 @@ async def get_client() -> httpx.AsyncClient:
         _client = httpx.AsyncClient(
             base_url=get_api_base(),
             timeout=TIMEOUT,
-            headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            headers=_build_headers(),
             limits=httpx.Limits(max_connections=10, max_keepalive_connections=5),
             follow_redirects=True,
         )
@@ -46,5 +64,16 @@ async def get(path: str, params: dict[str, Any] | None = None) -> dict | list:
     client = await get_client()
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     resp = await client.get(f"/public-tools/{path.lstrip('/')}", params=clean)
+    if resp.status_code == 429:
+        raise RuntimeError(
+            "Vivory rate limit exceeded — "
+            "anonymous tier is 100/day per IP. Set VIVORY_API_KEY (sign up at "
+            "https://api.vivory.app/dashboard/api-keys) to upgrade."
+        )
+    if resp.status_code == 401:
+        raise RuntimeError(
+            "Vivory API key rejected — verify VIVORY_API_KEY against "
+            "https://api.vivory.app/dashboard/api-keys."
+        )
     resp.raise_for_status()
     return resp.json()

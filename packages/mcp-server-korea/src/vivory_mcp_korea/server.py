@@ -25,7 +25,18 @@ from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
 
 from . import client
-from .tools import kosis as kosis_tools
+from .tools import (
+    air_quality as air_quality_tools,
+    bok as bok_tools,
+    healthcare as healthcare_tools,
+    kosis as kosis_tools,
+    misc as misc_tools,
+    mobility as mobility_tools,
+    opinet as opinet_tools,
+    real_estate as real_estate_tools,
+    tour as tour_tools,
+    weather as weather_tools,
+)
 
 logger = logging.getLogger("vivory_mcp_korea")
 
@@ -35,13 +46,29 @@ server: Server = Server("vivory-korea")
 # Aggregate tool catalog from all sources
 TOOLS: list[Tool] = [
     *kosis_tools.TOOLS,
-    # Future: *ecos_tools.TOOLS, *neis_tools.TOOLS, *localdata_tools.TOOLS, ...
+    *bok_tools.TOOLS,
+    *weather_tools.TOOLS,
+    *air_quality_tools.TOOLS,
+    *opinet_tools.TOOLS,
+    *healthcare_tools.TOOLS,
+    *real_estate_tools.TOOLS,
+    *tour_tools.TOOLS,
+    *mobility_tools.TOOLS,
+    *misc_tools.TOOLS,
 ]
 
 # Aggregate handlers from all sources
 HANDLERS: dict[str, Any] = {
     **kosis_tools.HANDLERS,
-    # Future merges from other sources
+    **bok_tools.HANDLERS,
+    **weather_tools.HANDLERS,
+    **air_quality_tools.HANDLERS,
+    **opinet_tools.HANDLERS,
+    **healthcare_tools.HANDLERS,
+    **real_estate_tools.HANDLERS,
+    **tour_tools.HANDLERS,
+    **mobility_tools.HANDLERS,
+    **misc_tools.HANDLERS,
 }
 
 

@@ -1,4 +1,6 @@
-# MCP Directory Submission Drafts
+# MCP Directory Submission Drafts (HISTORICAL — superseded by umbrella)
+
+> **⚠ Superseded 2026-05-06**: First-submission target is now the umbrella package `vivory-mcp-korea` (13 sources / 45 tools), not this kosis-only one. See [`mcp-server-korea/MCP_DIRECTORY_SUBMISSION.md`](../mcp-server-korea/MCP_DIRECTORY_SUBMISSION.md) for current punkpeye/wong2 PR drafts. This document remains as historical record only — submit the umbrella first; consider this kosis-only submission only if directories explicitly want narrower-scope listings.
 
 Ready-to-submit entries for community MCP server directories. Pick one or multiple to maximize discovery.
 

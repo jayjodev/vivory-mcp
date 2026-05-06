@@ -6,6 +6,8 @@ This package wraps the [Vivory Korea Data Gateway](https://api.vivory.app/api/pu
 
 Built and maintained by **[Vivory](https://vivory.app)**. Data sourced from **[KOSIS · 통계청](https://kosis.kr)**.
 
+> **Need more than KOSIS?** [`vivory-mcp-korea`](../mcp-server-korea) is the umbrella package — 45 tools across 13 sources (KOSIS · BOK · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul OpenData). Use this standalone package only if you want a smaller install scoped to KOSIS alone.
+
 ---
 
 ## Why
