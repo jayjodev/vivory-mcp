@@ -54,12 +54,12 @@ Korean public-data APIs publish exclusively in Korean, require per-API key issua
 
 ## Installation
 
-> **Status**: PyPI publication is queued for v0.2.0. Until it lands, install from this repo via Git — every command below works today.
+Live on PyPI as [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/).
 
 ### Claude Code
 
 ```bash
-claude mcp add vivory-korea -- uvx --from "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea" vivory-mcp-korea
+claude mcp add vivory-korea -- uvx vivory-mcp-korea
 ```
 
 ### Claude Desktop
@@ -71,11 +71,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "vivory-korea": {
       "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea",
-        "vivory-mcp-korea"
-      ]
+      "args": ["vivory-mcp-korea"]
     }
   }
 }
@@ -83,18 +79,17 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 
 Restart Claude Desktop. All 45 Korean data tools appear in the tool palette.
 
-### pip from Git (development)
+### pip / pipx
 
 ```bash
-pip install "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea"
+pip install vivory-mcp-korea
 vivory-mcp-korea  # runs the stdio MCP server
 ```
 
-### Once on PyPI (planned)
+### Install from source (development)
 
 ```bash
-uvx vivory-mcp-korea
-# or:  pip install vivory-mcp-korea
+pip install "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea"
 ```
 
 ---
@@ -116,11 +111,7 @@ For higher limits, sign up at [api.vivory.app/dashboard/api-keys](https://api.vi
   "mcpServers": {
     "vivory-korea": {
       "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea",
-        "vivory-mcp-korea"
-      ],
+      "args": ["vivory-mcp-korea"],
       "env": {
         "VIVORY_API_KEY": "vk_live_..."
       }

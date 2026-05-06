@@ -19,7 +19,7 @@ Add vivory-mcp-korea (umbrella MCP for 13 Korean public-data sources)
 
 **Markdown line to add** (alphabetically sorted in section):
 ```markdown
-- [jayjodev/vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) 🐍 ☁️ 🏠 🇰🇷 - 45 tools across 13 official Korean public-data sources (KOSIS · BOK · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings, KOSIS time-series — all normalized to English JSON with auto-attribution. No upstream API keys required. Install: `uvx --from "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea" vivory-mcp-korea`. Ask Claude: *"Where are ER beds available near Gangnam right now?"*
+- [jayjodev/vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) 🐍 ☁️ 🏠 🇰🇷 - 45 tools across 13 official Korean public-data sources (KOSIS · BOK · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings, KOSIS time-series — all normalized to English JSON with auto-attribution. No upstream API keys required. Install: `uvx vivory-mcp-korea`. Ask Claude: *"Where are ER beds available near Gangnam right now?"*
 ```
 
 **PR body**:
@@ -70,11 +70,16 @@ Tools are namespaced by source for clean LLM picking:
 ## Install one-liner
 
 ```bash
-claude mcp add vivory-korea -- uvx --from "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea" vivory-mcp-korea
+claude mcp add vivory-korea -- uvx vivory-mcp-korea
 ```
 
-PyPI publication (`uvx vivory-mcp-korea`) is queued; the Git install above
-is the canonical command until then.
+Or in `claude_desktop_config.json`:
+
+```json
+{ "mcpServers": { "vivory-korea": { "command": "uvx", "args": ["vivory-mcp-korea"] } } }
+```
+
+PyPI: https://pypi.org/project/vivory-mcp-korea/
 ```
 
 ---
@@ -111,12 +116,12 @@ api.vivory.app reaches Phase 3 ($5k MRR signal — see `project_revenue_path_cal
 
 ## Submission checklist (before any PR)
 
-- [ ] PyPI package `vivory-mcp-korea==0.2.0` published — install one-liner works
-- [ ] GitHub repo `jayjodev/vivory-mcp` is **public** with the package directory pushed
-- [ ] README has `## Example prompts` (✅ done — 7 cross-source prompts)
-- [ ] LICENSE file present (✅ MIT)
-- [ ] Self-test: `uvx vivory-mcp-korea` launches the stdio server without errors
-- [ ] Tool count and source list in README accurate (✅ 45 / 13)
+- [x] PyPI package `vivory-mcp-korea==0.2.0` published — `uvx vivory-mcp-korea` works
+- [x] GitHub repo `jayjodev/vivory-mcp` is **public** with package directory at `packages/mcp-server-korea/`
+- [x] README has `## Example prompts` (7 cross-source prompts)
+- [x] LICENSE file present (MIT)
+- [x] Self-test: fresh `pip install vivory-mcp-korea` reports tools=45, handlers=45, parity=True
+- [x] Tool count and source list in README accurate (45 / 13)
 
 ---
 
