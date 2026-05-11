@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vivory-mcp-verification"
+version = "0.2.0"
+description = "Umbrella MCP server for verifiable AI work — claim verification, DOI resolution, web archive lookup, reproducibility hash registry, C2PA / PDF / hash-chain provenance, peer-review verdicts, forecast track-record, SEC EDGAR filings, GLEIF Legal Entity Identifier. Single MCP registration for AI agents that need to prove what's real."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Vivory", email = "contact@vivory.app" },
+]
+keywords = [
+    "mcp",
+    "verification",
+    "citation",
+    "doi",
+    "wayback",
+    "archive",
+    "c2pa",
+    "provenance",
+    "watermark",
+    "reproducibility",
+    "peer-review",
+    "forecast",
+    "sec",
+    "edgar",
+    "gleif",
+    "lei",
+    "anthropic",
+    "claude",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "mcp>=1.0.0",
+    "httpx>=0.27.0",
+]
+
+[project.urls]
+Homepage = "https://vivory.app"
+Repository = "https://github.com/jayjodev/vivory-mcp"
+Issues = "https://github.com/jayjodev/vivory-mcp/issues"
+"Verification Gateway" = "https://api.vivory.app"
+
+[project.scripts]
+vivory-mcp-verification = "vivory_mcp_verification.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vivory_mcp_verification"]

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.jayjodev/vivory-mcp-korea",
+  "title": "Vivory Korea Data Gateway",
+  "description": "Umbrella MCP server bundling 51 tools across 14 official Korean public-data sources (KOSIS · BOK · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul OpenData). All responses normalized to English JSON with source attribution. No upstream API keys required.",
+  "websiteUrl": "https://api.vivory.app",
+  "repository": {
+    "url": "https://github.com/jayjodev/vivory-mcp",
+    "source": "github",
+    "subfolder": "packages/mcp-server-korea"
+  },
+  "version": "0.3.1",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "vivory-mcp-korea",
+      "version": "0.3.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "VIVORY_API_KEY",
+          "description": "Optional Vivory Pro API key for higher daily limits (10,000/day Pro vs 100/day anonymous). Get one at api.vivory.app/dashboard/api-keys.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "VIVORY_API_BASE",
+          "description": "Override the upstream gateway URL (default: https://api.vivory.app/api). Useful for self-hosted Vivory backends.",
+          "isRequired": false,
+          "isSecret": false,
+          "default": "https://api.vivory.app/api"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "tool": "vivory-mcp-publisher",
+      "categories": ["search-data-extraction", "government-data", "korea"],
+      "regions": ["korea"],
+      "license": "MIT",
+      "upstream_data_license": "KOGL Type 1 (open with attribution, commercial use OK)",
+      "tool_count": 51,
+      "source_count": 14
+    }
+  }
+}

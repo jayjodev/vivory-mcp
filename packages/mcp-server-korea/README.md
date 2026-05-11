@@ -1,5 +1,7 @@
 # vivory-mcp-korea
 
+<!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->
+
 **Umbrella MCP server bundling Korean public-data sources into a single installation.** 51 tools across 14 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
 
 Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend handles auth, caching, attribution, JS-literal parsing, and rate-limit gating.
@@ -51,8 +53,10 @@ Korean public-data APIs publish exclusively in Korean, require per-API key issua
 
 | Use case | Recommended package |
 |---|---|
-| Just KOSIS statistics | [`vivory-mcp-kosis`](../mcp-server-kosis) — narrower scope, smaller install |
 | All Korean public data | **`vivory-mcp-korea`** ← this package |
+| Verification (DOI · archive · provenance · peer review · forecast) | `vivory-mcp-verification` — sister umbrella scaffold, 21 tools (PyPI ship pending) |
+
+> The earlier `vivory-mcp-kosis` standalone has been deprecated; all KOSIS tools ship inside this umbrella.
 
 ---
 
@@ -176,9 +180,10 @@ Every response includes an `attribution` block — source, license, citation req
 
 ## Project status
 
-- **Version**: 0.3.0 (14 sources / 51 tools — added DART listed-company filings)
+- **Version**: 0.3.1 (14 sources / 51 tools — added DART listed-company filings, MCP Registry verification chain)
 - **Source**: [github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea)
 - **License**: MIT (wrapper) / per-source license for upstream data
 - **Roadmap**: see "Coming next" above
+- **Registries**: PyPI · Official MCP Registry (`io.github.jayjodev/vivory-mcp-korea`) · awesome-mcp-servers
 
 🇰🇷 Built in Seoul · 🌐 [vivory.app](https://vivory.app)

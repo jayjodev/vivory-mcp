@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-korea"
-version = "0.3.0"
+version = "0.3.1"
 description = "Umbrella MCP server for Korean public data — KOSIS + BOK + DART + KMA + AirKorea + Opinet + HIRA + NMC + MOLIT + KTO + MFDS + MOIS + NEIS + Seoul OpenData. 51 tools across 14 sources, single registration point for AI agents."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,9 +26,6 @@ classifiers = [
 dependencies = [
     "mcp>=1.0.0",
     "httpx>=0.27.0",
-    # vivory-mcp-kosis re-exports its tool catalog. When PyPI publishes,
-    # we'll switch to a strict version constraint. For now (pre-PyPI),
-    # users install both packages from git via README instructions.
 ]
 
 [project.urls]

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.jayjodev/vivory-mcp-verification",
+  "title": "Vivory Verification Gateway",
+  "description": "Umbrella MCP server bundling 27 verification tools across 9 categories — claim verification, DOI resolution, web archive lookup (Wayback + archive.today), reproducibility hash registry, C2PA / PDF / hash-chain / AI-watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR filings, GLEIF Legal Entity Identifier resolution. Single MCP registration for AI agents that need to prove what's real.",
+  "websiteUrl": "https://api.vivory.app",
+  "repository": {
+    "url": "https://github.com/jayjodev/vivory-mcp",
+    "source": "github",
+    "subfolder": "packages/mcp-server-verification"
+  },
+  "version": "0.2.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "vivory-mcp-verification",
+      "version": "0.2.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "VIVORY_API_KEY",
+          "description": "Optional Vivory Pro API key for higher daily limits (10,000/day Pro vs 100/day anonymous). Get one at api.vivory.app/dashboard/api-keys.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "VIVORY_API_BASE",
+          "description": "Override the upstream gateway URL (default: https://api.vivory.app/api). Useful for self-hosted Vivory backends.",
+          "isRequired": false,
+          "isSecret": false,
+          "default": "https://api.vivory.app/api"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "tool": "vivory-mcp-publisher",
+      "categories": ["research", "verification", "provenance"],
+      "regions": ["global"],
+      "license": "MIT",
+      "tool_count": 27,
+      "category_count": 9
+    }
+  }
+}
