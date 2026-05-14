@@ -1,7 +1,7 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). Ships 27 tools across 9 categories:
+(`vivory-verification`). v0.4 ships 45 tools across 18 categories:
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
@@ -12,6 +12,15 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - forecast    (2) — forecast_track_record (crypto.vivory.app/forecast), submit_forecast
 - filing      (3) — verify_filing, filing_recent, filing_facts (SEC EDGAR — sister of Korea DART)
 - entity      (3) — verify_lei, entity_search, entity_relationships (GLEIF LEI)
+- work        (2) — verify_work, search_works (OpenAlex academic citation graph)
+- wikidata    (2) — verify_qid, wikidata_search (entity grounding via Q-numbers)
+- trial       (2) — verify_trial, trial_search (ClinicalTrials.gov v2)
+- indicator   (2) — verify_indicator, indicator_series (World Bank Open Data)
+- patent      (2) — verify_patent, patent_search (USPTO PatentsView)
+- place       (2) — verify_place, place_search (OpenStreetMap Nominatim)
+- tvl         (2) — verify_protocol_tvl, verify_chain_tvl (DefiLlama crypto TVL)
+- quake       (2) — verify_quake, recent_quakes (USGS Earthquake)
+- apt         (2) — apt_market_snapshot, verify_apt_price (MOLIT RTMS — Korean apartment real-transaction prices, daily nationwide ingest)
 
 Architecture:
 - Tool definitions live in `tools/{category}.py` per concern
@@ -33,15 +42,24 @@ from mcp.types import TextContent, Tool
 
 from . import client
 from .tools import (
+    apt as apt_tools,
     archive as archive_tools,
     claim as claim_tools,
     doi as doi_tools,
     entity as entity_tools,
     filing as filing_tools,
     forecast as forecast_tools,
+    indicator as indicator_tools,
+    patent as patent_tools,
     peer_review as peer_review_tools,
+    place as place_tools,
     provenance as provenance_tools,
+    quake as quake_tools,
     repro as repro_tools,
+    trial as trial_tools,
+    tvl as tvl_tools,
+    wikidata as wikidata_tools,
+    work as work_tools,
 )
 
 logger = logging.getLogger("vivory_mcp_verification")
@@ -59,6 +77,15 @@ TOOLS: list[Tool] = [
     *forecast_tools.TOOLS,
     *filing_tools.TOOLS,
     *entity_tools.TOOLS,
+    *work_tools.TOOLS,
+    *wikidata_tools.TOOLS,
+    *trial_tools.TOOLS,
+    *indicator_tools.TOOLS,
+    *patent_tools.TOOLS,
+    *place_tools.TOOLS,
+    *tvl_tools.TOOLS,
+    *quake_tools.TOOLS,
+    *apt_tools.TOOLS,
 ]
 
 
@@ -72,6 +99,15 @@ HANDLERS: dict[str, Any] = {
     **forecast_tools.HANDLERS,
     **filing_tools.HANDLERS,
     **entity_tools.HANDLERS,
+    **work_tools.HANDLERS,
+    **wikidata_tools.HANDLERS,
+    **trial_tools.HANDLERS,
+    **indicator_tools.HANDLERS,
+    **patent_tools.HANDLERS,
+    **place_tools.HANDLERS,
+    **tvl_tools.HANDLERS,
+    **quake_tools.HANDLERS,
+    **apt_tools.HANDLERS,
 }
 
 
@@ -105,12 +141,42 @@ async def run() -> None:
         await server.run(read, write, server.create_initialization_options())
 
 
+def _startup_banner() -> None:
+    """Print tier + tool-count banner to stderr.
+
+    Anonymous users see the upgrade path *before* hitting a 429. Pro users
+    see confirmation that their key is being sent. Both surface the
+    sibling Korea MCP because one $29/mo key unlocks both.
+    """
+    has_key = client.get_api_key() is not None
+    base = client.get_api_base()
+    tool_count = len(TOOLS)
+    if has_key:
+        print(
+            f"[vivory-mcp-verification] {tool_count} tools | Pro tier (Bearer key sent) | "
+            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 55 Korea tools)",
+            file=sys.stderr,
+            flush=True,
+        )
+    else:
+        print(
+            f"[vivory-mcp-verification] {tool_count} tools | Anonymous tier (100/day per IP) | "
+            f"gateway={base}\n"
+            f"  → Upgrade to Pro 10k/day ($29/mo USDC, no auto-renew, no custody) at\n"
+            f"    https://api.vivory.app/dashboard/public-api — same key unlocks the\n"
+            f"    sibling `vivory-mcp-korea` (55 Korea tools), 100+ tools total.",
+            file=sys.stderr,
+            flush=True,
+        )
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         stream=sys.stderr,
     )
+    _startup_banner()
     try:
         asyncio.run(run())
     except (KeyboardInterrupt, SystemExit):

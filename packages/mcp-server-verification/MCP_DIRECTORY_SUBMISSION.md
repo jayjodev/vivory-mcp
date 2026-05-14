@@ -1,5 +1,7 @@
 # MCP Directory submission — vivory-mcp-verification
 
+> **State as of 2026-05-13 evening**: package is **v0.4.0 / 45 tools / 18 categories**. PyPI publish is still pending; see [`docs/handoffs/MCP_PUBLISH_RUNBOOK_2026_05_13.md`](../../docs/handoffs/MCP_PUBLISH_RUNBOOK_2026_05_13.md) for current operator action. The body of this packet still uses older numbers in some spots — update before opening the actual PR.
+
 Submission packet for [Anthropic MCP Directory](https://github.com/anthropics/mcp-directory)
 + punkpeye/awesome-mcp-servers + wong2/awesome-mcp-servers.
 

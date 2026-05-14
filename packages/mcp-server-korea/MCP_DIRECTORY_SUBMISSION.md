@@ -78,19 +78,19 @@ Repo: https://github.com/punkpeye/awesome-mcp-servers (~86.5k stars, ~10k forks,
 
 **PR title**:
 ```
-Add vivory-mcp-korea (51 tools across 14 Korean public-data sources)
+Add vivory-mcp-korea (55 tools across 15 Korean public-data sources)
 ```
 
 **Markdown line to add** (alphabetical within section):
 ```markdown
-- [jayjodev/vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) 🐍 ☁️ 🏠 🇰🇷 - 51 tools across 14 official Korean public-data sources (KOSIS · BOK ECOS · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul OpenData). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings, KOSIS time-series — all normalized to English JSON with auto-attribution. No upstream API keys required. Install: `uvx vivory-mcp-korea`.
+- [jayjodev/vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) 🐍 ☁️ 🏠 🇰🇷 - 55 tools across 15 official Korean public-data sources (KOSIS · BOK ECOS · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul OpenData · VWorld). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings, KOSIS time-series, VWorld place/geocode + 1,534 museums & galleries — all normalized to English JSON with auto-attribution. No upstream API keys required. Install: `uvx vivory-mcp-korea`.
 ```
 
 **PR body**:
 ```
 ## What this adds
 
-`vivory-mcp-korea` — a single MCP server that bundles 51 tools spanning 14 official Korean government public-data APIs:
+`vivory-mcp-korea` — a single MCP server that bundles 55 tools spanning 15 official Korean government public-data APIs:
 
 - KOSIS (Statistics Korea) — 15 tools
 - BOK ECOS (Bank of Korea) — 1 tool
@@ -106,6 +106,7 @@ Add vivory-mcp-korea (51 tools across 14 Korean public-data sources)
 - NEIS (K-12 schools) — 1 tool
 - Seoul OpenData (parking, bike share) — 2 tools
 - MoE EV chargers — 1 tool
+- VWorld (국토교통부 공간정보) — 4 tools (place / address autocomplete, geocoder, 박물관·미술관 1,534 venue listing + detail)
 
 ## Why it's useful
 
@@ -154,9 +155,9 @@ $EDITOR README.md
 
 # 4. Commit + push + open PR
 git checkout -b add-vivory-mcp-korea
-git commit -am "Add vivory-mcp-korea (51 tools across 14 Korean public-data sources)"
+git commit -am "Add vivory-mcp-korea (55 tools across 15 Korean public-data sources)"
 git push -u origin add-vivory-mcp-korea
-gh pr create --title "Add vivory-mcp-korea (51 tools across 14 Korean public-data sources)" \
+gh pr create --title "Add vivory-mcp-korea (55 tools across 15 Korean public-data sources)" \
   --body-file ../scripts/mcp_pr_body_punkpeye.md  # see scripts/mcp_registry_submit.sh
 ```
 
@@ -170,7 +171,7 @@ Section: `Community Servers` (only third-party section currently; no geographic 
 
 **Markdown line**:
 ```markdown
-- [vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) - Umbrella MCP for Korean public data — 51 tools across 14 sources (KOSIS · BOK · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings. No upstream API keys required.
+- [vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) - Umbrella MCP for Korean public data — 55 tools across 15 sources (KOSIS · BOK · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul · VWorld). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings, VWorld geocoder + 1,534 museums. No upstream API keys required.
 ```
 
 Submit ~3 days after punkpeye/awesome PR lands cleanly (avoid double-spam appearance).

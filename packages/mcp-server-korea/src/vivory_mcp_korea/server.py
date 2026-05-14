@@ -36,6 +36,7 @@ from .tools import (
     opinet as opinet_tools,
     real_estate as real_estate_tools,
     tour as tour_tools,
+    vworld as vworld_tools,
     weather as weather_tools,
 )
 
@@ -56,6 +57,7 @@ TOOLS: list[Tool] = [
     *real_estate_tools.TOOLS,
     *tour_tools.TOOLS,
     *mobility_tools.TOOLS,
+    *vworld_tools.TOOLS,
     *misc_tools.TOOLS,
 ]
 
@@ -71,6 +73,7 @@ HANDLERS: dict[str, Any] = {
     **real_estate_tools.HANDLERS,
     **tour_tools.HANDLERS,
     **mobility_tools.HANDLERS,
+    **vworld_tools.HANDLERS,
     **misc_tools.HANDLERS,
 }
 
@@ -105,12 +108,42 @@ async def run() -> None:
         await server.run(read, write, server.create_initialization_options())
 
 
+def _startup_banner() -> None:
+    """Print tier + tool-count banner to stderr.
+
+    Anonymous users see the upgrade path *before* hitting a 429. Pro users
+    see confirmation that their key is being sent. Both surface the
+    sibling Verification MCP because one $29/mo key unlocks both.
+    """
+    has_key = client.get_api_key() is not None
+    base = client.get_api_base()
+    tool_count = len(TOOLS)
+    if has_key:
+        print(
+            f"[vivory-mcp-korea] {tool_count} tools across 15 sources | Pro tier (Bearer key sent) | "
+            f"gateway={base} | sibling: `uvx vivory-mcp-verification` (same key unlocks 45 verification tools)",
+            file=sys.stderr,
+            flush=True,
+        )
+    else:
+        print(
+            f"[vivory-mcp-korea] {tool_count} tools across 15 sources | Anonymous tier (100/day per IP) | "
+            f"gateway={base}\n"
+            f"  → Upgrade to Pro 10k/day ($29/mo USDC, no auto-renew, no custody) at\n"
+            f"    https://api.vivory.app/dashboard/public-api — same key unlocks the\n"
+            f"    sibling `vivory-mcp-verification` (45 tools), 100+ tools total.",
+            file=sys.stderr,
+            flush=True,
+        )
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         stream=sys.stderr,
     )
+    _startup_banner()
     try:
         asyncio.run(run())
     except (KeyboardInterrupt, SystemExit):

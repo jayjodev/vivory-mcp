@@ -2,20 +2,20 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jayjodev/vivory-mcp-korea",
   "title": "Vivory Korea Data Gateway",
-  "description": "51 MCP tools for 14 Korean public-data sources (KOSIS, BOK, DART, KMA, +10). English JSON.",
+  "description": "55 MCP tools for 15 Korean public-data sources (KOSIS, BOK, DART, KMA, VWorld, +10). English JSON.",
   "websiteUrl": "https://api.vivory.app",
   "repository": {
     "url": "https://github.com/jayjodev/vivory-mcp",
     "source": "github",
     "subfolder": "packages/mcp-server-korea"
   },
-  "version": "0.3.1",
+  "version": "0.4.0",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "vivory-mcp-korea",
-      "version": "0.3.1",
+      "version": "0.4.0",
       "transport": {
         "type": "stdio"
       },
@@ -43,8 +43,8 @@
       "regions": ["korea"],
       "license": "MIT",
       "upstream_data_license": "KOGL Type 1 (open with attribution, commercial use OK)",
-      "tool_count": 51,
-      "source_count": 14
+      "tool_count": 55,
+      "source_count": 15
     }
   }
 }

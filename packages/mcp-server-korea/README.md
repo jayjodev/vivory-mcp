@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->
 
-**Umbrella MCP server bundling Korean public-data sources into a single installation.** 51 tools across 14 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
+**Umbrella MCP server bundling Korean public-data sources into a single installation.** 55 tools across 15 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
 
 Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend handles auth, caching, attribution, JS-literal parsing, and rate-limit gating.
 
@@ -10,7 +10,7 @@ Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend h
 
 ## What's included
 
-### v0.3 — 14 sources, 51 tools
+### v0.4 — 15 sources, 55 tools
 
 | Source | Tools | What it covers |
 |---|---|---|
@@ -29,19 +29,20 @@ Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend h
 | **NEIS** (교육부 나이스) | 1 | K-12 school search across 12,555 schools. |
 | **Seoul OpenData** (서울시) | 2 | Public parking lots (~2,300 with realtime), Seoul Bike (따릉이) stations. |
 | **MoE EV** (환경부) | 1 | EV chargers per SIDO with realtime status. |
+| **VWorld** (국토교통부 공간정보) | 4 | Place / address autocomplete, geocoder (address → WGS84), 박물관·미술관 1,534 venue listing + detail (Wikipedia + Google Places enrichment). |
 
 Tools are namespaced by source (`kosis_*`, `kma_*`, `dart_*`, `hira_*`, …) so Claude can pick the right one automatically.
 
-> **DART note**: `dart_company_search` returns up to 0 rows until the corp_code mapping is synced upstream. Other DART tools (disclosures, financials, major-shareholders) work directly when you already have an 8-digit `corp_code`. Operator: run `POST /api/public-tools/dart/admin/sync-corp-codes` (admin auth) once a month to refresh the ~3,500 listed-company mapping. Status visible via `dart_meta`.
+> **DART note**: `dart_company_search` resolves once the corp_code mapping has been synced upstream. The Vivory backend now auto-refreshes the ~3,500 listed-company mapping on a monthly cron (every 1st 05:10 KST); operators can still trigger an on-demand sync via `POST /api/public-tools/dart/admin/sync-corp-codes` (admin auth) if needed. Status visible via `dart_meta`. Other DART tools (disclosures, financials, major-shareholders) work directly when you already have an 8-digit `corp_code`.
 
-### Coming next (v0.4+)
+### Coming next (v0.5+)
 
-- **VWorld** — geospatial / cadastral.
 - **Forest Service** — hiking trails, mountain points.
 - **Kakao Local** reverse geocoding.
 - **AED** locations (NMC E-gen — pending data.go.kr activation).
 - **University search** (KCUE — pending data.go.kr activation).
 - **MVNO plans** (Korea Post — pending data.go.kr activation).
+- **VWorld v2** — full LOCALDATA venue surface beyond museums (restaurant / cafe / cinema / gym / etc.).
 
 When these ship, **users don't need to re-install** — `vivory-mcp-korea` auto-includes new tools as they're wired upstream.
 
@@ -102,17 +103,17 @@ pip install "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=package
 
 ---
 
-## API tier (optional)
+## API tier — Vivory API Pro
 
 The server runs anonymously by default — **100 calls/day per IP**, no signup. Works for casual use.
 
-For higher limits, sign up at [api.vivory.app/dashboard/api-keys](https://api.vivory.app/dashboard/api-keys) and set `VIVORY_API_KEY`:
+For higher limits, sign up at **[api.vivory.app/dashboard/public-api](https://api.vivory.app/dashboard/public-api)** and set `VIVORY_API_KEY`. **One key unlocks both MCPs**: a Pro key for `vivory-mcp-korea` also unlocks the sibling [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) (45 verification tools across 18 clusters — DOI / Wayback / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT realestate, etc.).
 
 | Tier | Daily limit | How to enable |
 |---|---|---|
 | Anonymous | 100/day per IP | Default — no setup |
-| Pro | 10,000/day | `VIVORY_API_KEY=…` env var |
-| Enterprise | 100,000/day | Contact contact@vivory.app |
+| Pro | 10,000/day shared across 100+ tools | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. `VIVORY_API_KEY=…` env var. |
+| Enterprise | 100,000/day | Contact contact@vivory.app (self-serve only, no SaaS sales) |
 
 ```json
 {
@@ -175,12 +176,13 @@ Every response includes an `attribution` block — source, license, citation req
 | TourAPI | Open with attribution + non-broker T&C | ✅ |
 | Seoul OpenData | KOGL Type 1 | ✅ |
 | Opinet | Open with daily quota | ✅ (1,500 shared/day) |
+| VWorld / 국토교통부 공간정보 | Open with attribution + non-bulk T&C §10-3 | ✅ |
 
 ---
 
 ## Project status
 
-- **Version**: 0.3.1 (14 sources / 51 tools — added DART listed-company filings, MCP Registry verification chain)
+- **Version**: 0.4.0 (15 sources / 55 tools — added VWorld 공간정보: search/geocode + 박물관·미술관 1,534건)
 - **Source**: [github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea)
 - **License**: MIT (wrapper) / per-source license for upstream data
 - **Roadmap**: see "Coming next" above

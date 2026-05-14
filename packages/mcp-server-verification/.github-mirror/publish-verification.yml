@@ -1,0 +1,67 @@
+# Drop-in workflow file for the PUBLIC mirror repo (jayjodev/vivory-mcp).
+#
+# Operator steps (one time):
+#   1. cp src/mcp-server-verification/.github-mirror/publish-verification.yml \
+#        ~/path/to/jayjodev-vivory-mcp/.github/workflows/publish-verification.yml
+#      (or paste this file content via the GitHub web UI under
+#       jayjodev/vivory-mcp → Actions → New workflow → set up a workflow yourself)
+#   2. On PyPI: https://pypi.org/manage/account/publishing/ → Add a new pending publisher
+#        Project name:       vivory-mcp-verification
+#        Owner:              jayjodev
+#        Repository name:    vivory-mcp
+#        Workflow filename:  publish-verification.yml
+#        Environment name:   pypi
+#   3. On GitHub (jayjodev/vivory-mcp): Settings → Environments → New environment → pypi
+#      (no secrets needed — Trusted Publishing uses short-lived OIDC tokens)
+#   4. From either repo: bump version in src/mcp-server-verification/pyproject.toml +
+#      src/mcp-server-verification/src/vivory_mcp_verification/__init__.py,
+#      let sync-mcp-public.yml mirror, then:
+#        git tag verification-v0.4.0
+#        git push origin verification-v0.4.0
+#   5. Verify: `pip index versions vivory-mcp-verification` shows 0.4.0
+#      Smoke-test: `uvx vivory-mcp-verification --help`
+
+name: Publish vivory-mcp-verification to PyPI
+
+on:
+  push:
+    tags:
+      - 'verification-v*'      # e.g. verification-v0.4.0
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write              # Trusted Publishing — no PYPI_TOKEN needed
+
+jobs:
+  build-and-publish:
+    name: Build sdist + wheel, publish to PyPI
+    runs-on: ubuntu-latest
+    environment: pypi          # must match the PyPI trusted-publisher config
+    defaults:
+      run:
+        working-directory: packages/mcp-server-verification
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build deps
+        run: pip install --upgrade build
+
+      - name: Build sdist + wheel
+        run: python -m build
+
+      - name: Publish to PyPI (Trusted Publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: packages/mcp-server-verification/dist/
+
+      - name: Summary
+        run: |
+          echo "### vivory-mcp-verification published" >> $GITHUB_STEP_SUMMARY
+          echo "- Tag: ${GITHUB_REF#refs/tags/}" >> $GITHUB_STEP_SUMMARY
+          echo "- PyPI: https://pypi.org/project/vivory-mcp-verification/" >> $GITHUB_STEP_SUMMARY

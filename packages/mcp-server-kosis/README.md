@@ -1,4 +1,12 @@
-# vivory-mcp-kosis
+# vivory-mcp-kosis — ⚠️ DEPRECATED
+
+> **This package is deprecated.** All KOSIS tools (and 13 additional Korean public-data sources, 51 tools total) are now bundled in [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/) — the umbrella replacement.
+>
+> **Migrate**: `pip uninstall vivory-mcp-kosis && pip install vivory-mcp-korea` (or `uvx vivory-mcp-korea`). Tool names are unchanged.
+>
+> No further updates will ship to this package. Last release: 0.1.1 (2026-05-07, deprecation marker).
+
+---
 
 MCP server for **KOSIS (Statistics Korea)** — Korean macro/social/economic statistics for AI agents.
 
@@ -6,7 +14,7 @@ This package wraps the [Vivory Korea Data Gateway](https://api.vivory.app/api/pu
 
 Built and maintained by **[Vivory](https://vivory.app)**. Data sourced from **[KOSIS · 통계청](https://kosis.kr)**.
 
-> **Need more than KOSIS?** [`vivory-mcp-korea`](../mcp-server-korea) is the umbrella package — 45 tools across 13 sources (KOSIS · BOK · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul OpenData). Use this standalone package only if you want a smaller install scoped to KOSIS alone.
+> **Need more than KOSIS?** [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/) is the umbrella package — 51 tools across 14 sources (KOSIS · BOK · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul OpenData). Use this standalone package only if you want a smaller install scoped to KOSIS alone.
 
 ---
 

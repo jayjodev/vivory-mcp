@@ -4,17 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-kosis"
-version = "0.1.0"
-description = "MCP server for KOSIS (Statistics Korea) — Korean macro/social/economic statistics for AI agents"
+version = "0.1.1"
+description = "DEPRECATED — superseded by vivory-mcp-korea (umbrella, 51 tools across 14 sources). Install vivory-mcp-korea instead."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
     { name = "Vivory", email = "contact@vivory.app" },
 ]
-keywords = ["mcp", "kosis", "korea", "statistics", "anthropic", "claude"]
+keywords = ["mcp", "kosis", "korea", "statistics", "anthropic", "claude", "deprecated"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",

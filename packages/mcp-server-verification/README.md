@@ -5,28 +5,39 @@
 > **Verifiable AI work — one MCP server for every "is this real?" question.**
 
 An umbrella MCP (Model Context Protocol) server that gives AI agents a single
-registration for **27 verification tools** across 9 categories: claim
+registration for **45 verification tools** across 18 categories: claim
 verification, DOI resolution, web archive lookup, reproducibility hash
-registry, media + document provenance, peer-review verdict lookup,
-forecast track record, SEC EDGAR filings, and GLEIF Legal Entity
-Identifier resolution.
+registry, media + document provenance, peer-review verdict, forecast track
+record, SEC EDGAR filings, GLEIF Legal Entity Identifier, OpenAlex works,
+Wikidata Q-numbers, ClinicalTrials.gov, World Bank macro indicators, USPTO
+patents, OpenStreetMap places, DefiLlama TVL, USGS earthquakes, and MOLIT
+Korean apartment real-transaction prices.
 
 Built by [Vivory](https://vivory.app) — a verifiable AI work platform.
 Mission: when AI generates the world, agents need to know what's real.
 
-## What's inside (v0.2.0 — 27 tools)
+## What's inside (v0.4.0 — 45 tools)
 
 | Category    | Tools (count) | What it answers                                                      |
 |-------------|---------------|----------------------------------------------------------------------|
 | Claim       | 3             | Extract / verify / archive citations from arbitrary text             |
-| DOI         | 4             | Resolve, retraction-check, author network                            |
-| Archive     | 3             | Wayback Machine + archive.today snapshot lookup, capture, history    |
+| DOI         | 4             | Resolve, retraction-check, author network (Crossref + OpenAlex)      |
+| Archive     | 3             | Wayback Machine snapshot lookup, capture, history                    |
 | Repro       | 3             | Vivory Repro Hub hash registry — match, lookup, diff                 |
 | Provenance  | 4             | C2PA, PDF metadata, hash chain, AI-watermark detection               |
 | Peer review | 2             | Vivory Research peer-review verdict + per-persona lookup             |
-| Forecast    | 2             | Vivory Intel forecast track record + agent submission                |
+| Forecast    | 2             | Vivory forecast track record + agent submission                      |
 | Filing      | 3             | SEC EDGAR — ticker → CIK, recent filings, XBRL company facts         |
 | Entity      | 3             | GLEIF — LEI lookup, name search, corporate hierarchy                 |
+| Work        | 2             | OpenAlex academic works + citation graph (sister of DOI)             |
+| Wikidata    | 2             | Q-number entity grounding — global hallucination backbone            |
+| Trial       | 2             | ClinicalTrials.gov v2 — NCT registry verify + search                 |
+| Indicator   | 2             | World Bank Open Data — macro indicators + time series                |
+| Patent      | 2             | USPTO PatentsView — US patent registry (sister of KIPRIS)            |
+| Place       | 2             | OpenStreetMap Nominatim — geo verification by ID / coords / name     |
+| TVL         | 2             | DefiLlama — crypto protocol + chain TVL verification                 |
+| Quake       | 2             | USGS Earthquake — seismic event verification                         |
+| Apt         | 2             | MOLIT RTMS — Korean apartment real-transaction prices (매매·전월세) |
 
 ### Full tool list
 
@@ -47,6 +58,24 @@ Mission: when AI generates the world, agents need to know what's real.
 **Filing**: `verify_filing` · `filing_recent` · `filing_facts`
 
 **Entity**: `verify_lei` · `entity_search` · `entity_relationships`
+
+**Work**: `verify_work` · `search_works`
+
+**Wikidata**: `verify_qid` · `wikidata_search`
+
+**Trial**: `verify_trial` · `trial_search`
+
+**Indicator**: `verify_indicator` · `indicator_series`
+
+**Patent**: `verify_patent` · `patent_search`
+
+**Place**: `verify_place` · `place_search`
+
+**TVL**: `verify_protocol_tvl` · `verify_chain_tvl`
+
+**Quake**: `verify_quake` · `recent_quakes`
+
+**Apt**: `apt_market_snapshot` · `verify_apt_price` (MOLIT RTMS — sigungu × month × {trade, rent}, daily nationwide ingest from 국토교통부)
 
 ## Why this exists
 
@@ -119,13 +148,20 @@ and add the key:
 claude mcp add vivory-verification vivory-mcp-verification
 ```
 
-## Tier limits
+## Tier limits — Vivory API Pro
+
+**One $29/mo key unlocks BOTH MCPs.** A Pro key issued for `vivory-mcp-verification`
+also unlocks `vivory-mcp-korea` (55 Korean public-data tools) and vice versa —
+the same Bearer credential is honored across the entire Vivory MCP family.
 
 | Tier        | Daily quota  | Notes                                              |
 |-------------|--------------|----------------------------------------------------|
 | Anonymous   | 100/day/IP   | No signup, polite caching                          |
 | Free        | 500/day      | Sign up at api.vivory.app/dashboard/api-keys       |
-| Pro         | 10,000/day   | $29/mo USDC, x402 metering optional                |
+| Pro         | 10,000/day   | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. Same key unlocks `vivory-mcp-korea` (55 tools) = **100+ tools, one purchase**. |
+| Enterprise  | 100,000/day  | contact@vivory.app (self-serve only, no SaaS sales) |
+
+Sign up at **[api.vivory.app/dashboard/public-api](https://api.vivory.app/dashboard/public-api)**.
 
 Heavy tools (`doi_author_network` depth=2, `verify_claim` mode=thorough,
 `repro_artifact_diff`) count as 5 calls each.
@@ -153,12 +189,16 @@ Every endpoint returns a uniform envelope:
 Real today: extract_citations · hash_chain (sha256) · verify_doi · doi_metadata
 · doi_retraction_check · doi_author_network (depth=1) · verify_archive ·
 wayback_history · verify_filing · filing_recent · filing_facts · verify_lei
-· entity_search · entity_relationships.
+· entity_search · entity_relationships · verify_work · search_works ·
+verify_qid · wikidata_search · verify_trial · trial_search · verify_indicator
+· indicator_series · verify_patent · patent_search · verify_place ·
+place_search · verify_protocol_tvl · verify_chain_tvl · verify_quake ·
+recent_quakes.
 
 Scaffold today (envelope ready, full backing in a later release): verify_claim
 full pipeline · archive_claim_sources batch capture · wayback_capture SPN2
 dispatch · repro lookup · c2pa · pdf-provenance · watermark · peer-review
-verdict · forecast track-record + submit.
+verdict · forecast submit.
 
 ## Self-hosting
 
@@ -175,8 +215,11 @@ VIVORY_API_BASE=https://my-gateway.example.com/api vivory-mcp-verification
 - **[vivory-mcp-korea](https://pypi.org/project/vivory-mcp-korea/)** —
   Korean public data (KOSIS / BoK / DART / NEIS / Opinet / KMA / 14 sources,
   51 tools).
-- **vivory-mcp-verification** — this package (verification, 27 tools
-  including SEC EDGAR + GLEIF as global sister sources to DART).
+- **vivory-mcp-verification** — this package (verification, 45 tools
+  spanning DOI/Crossref/OpenAlex, web archive, SEC EDGAR + GLEIF + USPTO
+  as global sisters to DART/KIPRIS, Wikidata grounding, ClinicalTrials.gov,
+  World Bank macro, OpenStreetMap, DefiLlama, USGS earthquake, MOLIT RTMS
+  Korean apartment real-transaction prices).
 - More coming under the same `api.vivory.app` umbrella.
 
 ## License

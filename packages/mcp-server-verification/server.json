@@ -2,20 +2,20 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jayjodev/vivory-mcp-verification",
   "title": "Vivory Verification Gateway",
-  "description": "Umbrella MCP server bundling 27 verification tools across 9 categories — claim verification, DOI resolution, web archive lookup (Wayback + archive.today), reproducibility hash registry, C2PA / PDF / hash-chain / AI-watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR filings, GLEIF Legal Entity Identifier resolution. Single MCP registration for AI agents that need to prove what's real.",
+  "description": "45 MCP tools for verifiable AI work — DOI, archive, provenance, SEC, GLEIF, Wikidata, MOLIT Korean apartment prices, +11.",
   "websiteUrl": "https://api.vivory.app",
   "repository": {
     "url": "https://github.com/jayjodev/vivory-mcp",
     "source": "github",
     "subfolder": "packages/mcp-server-verification"
   },
-  "version": "0.2.0",
+  "version": "0.4.0",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "vivory-mcp-verification",
-      "version": "0.2.0",
+      "version": "0.4.0",
       "transport": {
         "type": "stdio"
       },
@@ -42,8 +42,8 @@
       "categories": ["research", "verification", "provenance"],
       "regions": ["global"],
       "license": "MIT",
-      "tool_count": 27,
-      "category_count": 9
+      "tool_count": 45,
+      "category_count": 18
     }
   }
 }

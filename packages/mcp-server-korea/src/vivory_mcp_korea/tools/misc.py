@@ -35,6 +35,10 @@ TOOLS: list[Tool] = [
                     "default": 50,
                 },
             },
+            "anyOf": [
+                {"required": ["name"]},
+                {"required": ["maker"]},
+            ],
             "additionalProperties": False,
         },
     ),

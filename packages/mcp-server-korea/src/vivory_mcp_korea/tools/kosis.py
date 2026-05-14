@@ -70,9 +70,9 @@ TOOLS: list[Tool] = [
         name="kosis_indicator_timeseries",
         description=(
             "Fetch time-series values for a KOSIS Key Indicator by indicator_id "
-            "OR indicator_name. Provide start_period / end_period in the format "
-            "matching periodicity: YYYY (annual), YYYYMM (monthly), YYYYQ1 "
-            "(quarterly). Time params are practically required."
+            "OR indicator_name (at least one required). Provide start_period / "
+            "end_period in the format matching periodicity: YYYY (annual), "
+            "YYYYMM (monthly), YYYYQ1 (quarterly)."
         ),
         inputSchema={
             "type": "object",
@@ -83,6 +83,10 @@ TOOLS: list[Tool] = [
                 "end_period": {"type": "string"},
                 "num_of_rows": {"type": "integer", "default": 50, "minimum": 1, "maximum": 500},
             },
+            "anyOf": [
+                {"required": ["indicator_id"]},
+                {"required": ["indicator_name"]},
+            ],
             "additionalProperties": False,
         },
     ),
@@ -190,6 +194,10 @@ TOOLS: list[Tool] = [
                 "org_id": {"type": "string"},
                 "tbl_id": {"type": "string"},
             },
+            "anyOf": [
+                {"required": ["stat_id"]},
+                {"required": ["org_id", "tbl_id"]},
+            ],
             "additionalProperties": False,
         },
     ),
