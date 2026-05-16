@@ -14,7 +14,7 @@ patents, OpenStreetMap places, DefiLlama TVL, USGS earthquakes, and MOLIT
 Korean apartment real-transaction prices.
 
 Built by [Vivory](https://vivory.app) — a verifiable AI work platform.
-Mission: when AI generates the world, agents need to know what's real.
+Mission: in an age where everything is synthesized, verification trails become trust.
 
 ## What's inside (v0.4.1 — 45 tools)
 
