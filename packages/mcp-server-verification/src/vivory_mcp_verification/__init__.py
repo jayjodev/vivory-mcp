@@ -27,4 +27,4 @@ adjacent endpoints. The backend handles caching, attribution, and
 upstream auth. The MCP layer translates LLM tool calls into HTTP GETs.
 """
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"

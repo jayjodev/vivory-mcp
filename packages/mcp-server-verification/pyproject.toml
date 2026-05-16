@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-verification"
-version = "0.4.0"
-description = "Umbrella MCP server for verifiable AI work — claim verification, DOI resolution (Crossref + OpenAlex), web archive lookup, reproducibility hash registry, C2PA / PDF / hash-chain provenance, peer-review verdicts, forecast track-record, SEC EDGAR filings, GLEIF Legal Entity Identifier, Wikidata entity grounding, ClinicalTrials.gov medical trials, World Bank macro indicators, USPTO patents, OpenStreetMap places, DefiLlama crypto TVL, USGS earthquakes, MOLIT Korean apartment real-transaction prices. Single MCP registration for AI agents that need to prove what's real."
+version = "0.4.1"
+description = "MCP server for verifiable AI work: claim/DOI verification, web archive, reproducibility hashes, C2PA/PDF/hash-chain provenance, peer-review verdicts, forecast track record, SEC EDGAR, GLEIF LEI, Wikidata, ClinicalTrials.gov, World Bank, USPTO, OpenStreetMap, DefiLlama TVL, USGS quakes, MOLIT Korean real-estate. 45 tools / 18 categories. One MCP registration so AI agents can prove what's real instead of re-inventing their verification stack."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
