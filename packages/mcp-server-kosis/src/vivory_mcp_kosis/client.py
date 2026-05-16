@@ -27,7 +27,7 @@ def get_api_key() -> str | None:
     """Optional Vivory API key for tier upgrade (v0.1.2 fwd-compat with umbrella).
 
     Same key unlocks vivory-mcp-korea (55) + vivory-mcp-verification (45).
-    Sign up at https://api.vivory.app/dashboard/api-keys.
+    Sign up at https://api.vivory.app/dashboard.
     """
     raw = os.environ.get("VIVORY_API_KEY")
     return raw.strip() if raw and raw.strip() else None
@@ -66,14 +66,14 @@ async def get(path: str, params: dict[str, Any] | None = None) -> dict | list:
     if resp.status_code == 429:
         raise RuntimeError(
             "Vivory rate limit exceeded — anonymous tier is 100/day per IP. "
-            "Set VIVORY_API_KEY (sign up at https://api.vivory.app/dashboard/api-keys) "
+            "Set VIVORY_API_KEY (sign up at https://api.vivory.app/dashboard) "
             "to upgrade. Note: vivory-mcp-kosis is deprecated EOL 2026-12-31 — "
             "migrate to vivory-mcp-korea."
         )
     if resp.status_code == 401:
         raise RuntimeError(
             "Vivory API key rejected — verify VIVORY_API_KEY against "
-            "https://api.vivory.app/dashboard/api-keys."
+            "https://api.vivory.app/dashboard."
         )
     resp.raise_for_status()
     return resp.json()

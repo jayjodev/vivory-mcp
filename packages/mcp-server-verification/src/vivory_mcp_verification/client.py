@@ -30,7 +30,7 @@ def get_api_key() -> str | None:
     Anonymous (no key)        — 100 calls/day per source IP
     Free   (sign up)          — 500 calls/day, attribution required
     Pro    ($29/mo USDC)      — 10,000 calls/day, x402 metering optional
-    Sign up at https://api.vivory.app/dashboard/api-keys.
+    Sign up at https://api.vivory.app/dashboard.
     """
     raw = os.environ.get("VIVORY_API_KEY")
     return raw.strip() if raw and raw.strip() else None
@@ -88,13 +88,13 @@ async def request(
     if resp.status_code == 429:
         raise RuntimeError(
             "Vivory rate limit exceeded — anonymous tier is 100/day per IP. "
-            "Set VIVORY_API_KEY (sign up at https://api.vivory.app/dashboard/api-keys) "
+            "Set VIVORY_API_KEY (sign up at https://api.vivory.app/dashboard) "
             "to upgrade."
         )
     if resp.status_code == 401:
         raise RuntimeError(
             "Vivory API key rejected — verify VIVORY_API_KEY against "
-            "https://api.vivory.app/dashboard/api-keys."
+            "https://api.vivory.app/dashboard."
         )
     if resp.status_code == 404 and not_found_ok:
         try:

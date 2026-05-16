@@ -27,7 +27,7 @@ def get_api_base() -> str:
 def get_api_key() -> str | None:
     """Optional Vivory API key for tier upgrade (free 100/day → pro 10k/day → enterprise 100k/day).
 
-    Sign up at https://api.vivory.app/dashboard/api-keys. The MCP server runs
+    Sign up at https://api.vivory.app/dashboard. The MCP server runs
     fine without a key (anonymous tier, 100 calls/day per source IP).
     """
     raw = os.environ.get("VIVORY_API_KEY")
@@ -73,12 +73,12 @@ async def get(path: str, params: dict[str, Any] | None = None, not_found_ok: boo
         raise RuntimeError(
             "Vivory rate limit exceeded — "
             "anonymous tier is 100/day per IP. Set VIVORY_API_KEY (sign up at "
-            "https://api.vivory.app/dashboard/api-keys) to upgrade."
+            "https://api.vivory.app/dashboard) to upgrade."
         )
     if resp.status_code == 401:
         raise RuntimeError(
             "Vivory API key rejected — verify VIVORY_API_KEY against "
-            "https://api.vivory.app/dashboard/api-keys."
+            "https://api.vivory.app/dashboard."
         )
     if resp.status_code == 404 and not_found_ok:
         try:
