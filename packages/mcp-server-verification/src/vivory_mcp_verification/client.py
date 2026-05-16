@@ -66,8 +66,15 @@ async def request(
     path: str,
     params: dict[str, Any] | None = None,
     json_body: dict[str, Any] | None = None,
+    not_found_ok: bool = True,
 ) -> dict | list:
-    """Generic dispatch — GET by default, POST when json_body provided."""
+    """Generic dispatch — GET by default, POST when json_body provided.
+
+    `not_found_ok` defaults to True for the verification gateway because most
+    verify_* tools treat 404 as "no record found, claim unverified" — a
+    legitimate verdict, not an error. Set to False for tools where 404
+    really is an upstream failure.
+    """
     client = await get_client()
     clean_params = {k: v for k, v in (params or {}).items() if v is not None}
     full_path = "/" + path.lstrip("/")
@@ -89,9 +96,7 @@ async def request(
             "Vivory API key rejected — verify VIVORY_API_KEY against "
             "https://api.vivory.app/dashboard/api-keys."
         )
-    if resp.status_code == 404:
-        # Verification endpoints often legitimately return 404 (no record found).
-        # Surface as data, not exception.
+    if resp.status_code == 404 and not_found_ok:
         try:
             return {"_status": 404, **(resp.json() if resp.content else {})}
         except Exception:
@@ -100,9 +105,9 @@ async def request(
     return resp.json()
 
 
-async def get(path: str, params: dict[str, Any] | None = None) -> dict | list:
-    return await request("GET", path, params=params)
+async def get(path: str, params: dict[str, Any] | None = None, not_found_ok: bool = True) -> dict | list:
+    return await request("GET", path, params=params, not_found_ok=not_found_ok)
 
 
-async def post(path: str, json_body: dict[str, Any] | None = None, params: dict[str, Any] | None = None) -> dict | list:
-    return await request("POST", path, params=params, json_body=json_body)
+async def post(path: str, json_body: dict[str, Any] | None = None, params: dict[str, Any] | None = None, not_found_ok: bool = True) -> dict | list:
+    return await request("POST", path, params=params, json_body=json_body, not_found_ok=not_found_ok)

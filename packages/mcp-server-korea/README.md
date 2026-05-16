@@ -22,7 +22,7 @@ Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend h
 | **Opinet** (한국석유공사) | 3 | National avg / per-SIDO / Top-10 cheapest gas stations (5 fuel grades). |
 | **HIRA** (건강보험심사평가원) | 3 | Hospital + pharmacy directory search, hospitals nearby a coordinate. |
 | **NMC** (국립중앙의료원 E-gen) | 3 | ER real-time bed availability, night-shift pharmacies, trauma centers. |
-| **MOLIT** (국토교통부) | 4 | Apartment sale / rent transactions (RTMS), price trend, LAWD region codes. |
+| **MOLIT** (국토교통부) | 4 | Apartment sale / rent transactions (RTMS) — raw transaction lists, monthly price trend, LAWD region codes. Sister tools in `vivory-mcp-verification` (`apt_market_snapshot` aggregated stats / `verify_apt_price` claim verification) hit the same MOLIT ingest but expose verification-axis surfaces. |
 | **KTO** (한국관광공사 TourAPI) | 4 | Tour spots by region, festivals by date, nearby tour by coordinate, full detail. |
 | **MFDS** (식품의약품안전처) | 1 | Korean food nutrition database — calories, macros, vitamins, minerals. |
 | **MOIS LOCALDATA** (행정안전부) | 1 | ~50,000 public restrooms by address. |

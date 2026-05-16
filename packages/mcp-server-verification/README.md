@@ -37,7 +37,7 @@ Mission: when AI generates the world, agents need to know what's real.
 | Place       | 2             | OpenStreetMap Nominatim — geo verification by ID / coords / name     |
 | TVL         | 2             | DefiLlama — crypto protocol + chain TVL verification                 |
 | Quake       | 2             | USGS Earthquake — seismic event verification                         |
-| Apt         | 2             | MOLIT RTMS — Korean apartment real-transaction prices (매매·전월세) |
+| Apt         | 2             | MOLIT RTMS — Korean apartment real-transaction prices (매매·전월세). Aggregate stats + claim verification. Raw transaction lists + price trend live in sister `vivory-mcp-korea` (`molit_*`). Same data, different axes. |
 
 ### Full tool list
 

@@ -355,6 +355,10 @@ TOOLS: list[Tool] = [
                 "org_id": {"type": "string", "description": "Organization code."},
                 "tbl_id": {"type": "string", "description": "Table ID."},
             },
+            "anyOf": [
+                {"required": ["stat_id"]},
+                {"required": ["org_id", "tbl_id"]},
+            ],
             "additionalProperties": False,
         },
     ),

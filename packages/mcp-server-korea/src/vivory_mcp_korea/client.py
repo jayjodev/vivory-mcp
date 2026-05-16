@@ -59,8 +59,13 @@ async def get_client() -> httpx.AsyncClient:
     return _client
 
 
-async def get(path: str, params: dict[str, Any] | None = None) -> dict | list:
-    """GET /api/public-tools/{path} → parsed JSON."""
+async def get(path: str, params: dict[str, Any] | None = None, not_found_ok: bool = False) -> dict | list:
+    """GET /api/public-tools/{path} → parsed JSON.
+
+    If `not_found_ok=True`, 404 is surfaced as data (`{"_status": 404, ...}`)
+    rather than raising — matches Verification gateway semantics for tools
+    where "not found" is a legitimate result.
+    """
     client = await get_client()
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     resp = await client.get(f"/public-tools/{path.lstrip('/')}", params=clean)
@@ -75,5 +80,10 @@ async def get(path: str, params: dict[str, Any] | None = None) -> dict | list:
             "Vivory API key rejected — verify VIVORY_API_KEY against "
             "https://api.vivory.app/dashboard/api-keys."
         )
+    if resp.status_code == 404 and not_found_ok:
+        try:
+            return {"_status": 404, **(resp.json() if resp.content else {})}
+        except Exception:
+            return {"_status": 404, "_message": "Not found"}
     resp.raise_for_status()
     return resp.json()

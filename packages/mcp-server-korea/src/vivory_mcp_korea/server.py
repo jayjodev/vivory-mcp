@@ -83,22 +83,58 @@ async def list_tools() -> list[Tool]:
     return TOOLS
 
 
+_ERROR_CODE_MAP = {
+    "RATE_LIMIT": ("rate limit", "RATE_LIMIT"),
+    "rejected": ("auth", "AUTH"),
+    "Unknown tool": ("unknown_tool", "UNKNOWN_TOOL"),
+}
+
+
+def _classify_error(exc: BaseException) -> str:
+    """Map exception → stable error code for agents to branch on."""
+    msg = str(exc).lower()
+    if "rate limit" in msg or "429" in msg:
+        return "RATE_LIMIT"
+    if "rejected" in msg or "401" in msg or "auth" in msg:
+        return "AUTH"
+    if "timeout" in msg or "timed out" in msg or isinstance(exc, TimeoutError):
+        return "TIMEOUT"
+    if "404" in msg or "not found" in msg:
+        return "NOT_FOUND"
+    if isinstance(exc, ValueError):
+        return "VALIDATION"
+    return "UPSTREAM"
+
+
+def _error_envelope(tool: str, exc: BaseException) -> dict[str, Any]:
+    return {
+        "error": f"{type(exc).__name__}: {exc}",
+        "code": _classify_error(exc),
+        "tool": tool,
+        "gateway": "vivory-mcp-korea",
+    }
+
+
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any] | None) -> list[TextContent]:
     args = arguments or {}
     handler = HANDLERS.get(name)
     if handler is None:
-        return [TextContent(type="text", text=f"Unknown tool: {name}")]
+        envelope = {
+            "error": f"Unknown tool: {name}",
+            "code": "UNKNOWN_TOOL",
+            "tool": name,
+            "gateway": "vivory-mcp-korea",
+        }
+        return [TextContent(type="text", text=json.dumps(envelope, ensure_ascii=False))]
 
     try:
         path, params = handler(args)
         data = await client.get(path, params)
     except Exception as exc:
         logger.exception("tool %s failed", name)
-        return [TextContent(
-            type="text",
-            text=f"Vivory Korea Data Gateway error ({type(exc).__name__}): {exc}",
-        )]
+        envelope = _error_envelope(name, exc)
+        return [TextContent(type="text", text=json.dumps(envelope, ensure_ascii=False))]
 
     return [TextContent(type="text", text=json.dumps(data, ensure_ascii=False, indent=2))]
 
@@ -114,7 +150,12 @@ def _startup_banner() -> None:
     Anonymous users see the upgrade path *before* hitting a 429. Pro users
     see confirmation that their key is being sent. Both surface the
     sibling Verification MCP because one $29/mo key unlocks both.
+
+    Silence with `VIVORY_MCP_QUIET=1` for embedding in IDE logs.
     """
+    import os
+    if os.environ.get("VIVORY_MCP_QUIET", "").strip() in ("1", "true", "yes"):
+        return
     has_key = client.get_api_key() is not None
     base = client.get_api_base()
     tool_count = len(TOOLS)

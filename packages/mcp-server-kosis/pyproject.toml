@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-kosis"
-version = "0.1.1"
-description = "DEPRECATED — superseded by vivory-mcp-korea (umbrella, 51 tools across 14 sources). Install vivory-mcp-korea instead."
+version = "0.1.2"
+description = "DEPRECATED (EOL 2026-12-31) — superseded by vivory-mcp-korea (umbrella, 55 tools across 15 sources). Install vivory-mcp-korea instead. v0.1.2 = final maintenance release (Bearer key fwd-compat + schema fix)."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -26,6 +26,12 @@ classifiers = [
 dependencies = [
     "mcp>=1.0.0",
     "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "jsonschema>=4.0.0",
 ]
 
 [project.urls]

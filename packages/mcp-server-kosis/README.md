@@ -1,10 +1,19 @@
-# vivory-mcp-kosis — ⚠️ DEPRECATED
+# vivory-mcp-kosis — ⚠️ DEPRECATED · EOL 2026-12-31
 
-> **This package is deprecated.** All KOSIS tools (and 13 additional Korean public-data sources, 51 tools total) are now bundled in [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/) — the umbrella replacement.
+> **This package is deprecated.** All 15 KOSIS tools (and 40 additional Korean public-data tools across 14 other sources, **55 tools total**) are now bundled in [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/) — the umbrella replacement.
 >
-> **Migrate**: `pip uninstall vivory-mcp-kosis && pip install vivory-mcp-korea` (or `uvx vivory-mcp-korea`). Tool names are unchanged.
+> **End-of-life: 2026-12-31.** After that date this repo is archived and no further security/dependency fixes ship.
 >
-> No further updates will ship to this package. Last release: 0.1.1 (2026-05-07, deprecation marker).
+> **Migrate in 2 lines** (tool names are unchanged — drop-in):
+>
+> ```bash
+> pip uninstall vivory-mcp-kosis
+> pip install vivory-mcp-korea   # or: uvx vivory-mcp-korea
+> ```
+>
+> Update your `claude_desktop_config.json` server name from `vivory-kosis` → `vivory-korea` and the entrypoint from `vivory-mcp-kosis` → `vivory-mcp-korea`. Same `VIVORY_API_KEY` works (unified Pro key unlocks both Korea 55 + Verification 45 = 100+ tools).
+>
+> Last release: **0.1.2** (2026-05-14) — added `VIVORY_API_KEY` Bearer support for forward-compat + `kosis_table_explanation` `anyOf` schema fix. No tools added or removed.
 
 ---
 
