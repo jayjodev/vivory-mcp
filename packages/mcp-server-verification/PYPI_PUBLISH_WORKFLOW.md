@@ -1,58 +1,60 @@
 # Verification MCP — PyPI publish status
 
+**Status 2026-05-16**: `vivory-mcp-verification` **0.4.1 LIVE on PyPI**. Install:
+
+```bash
+pip install vivory-mcp-verification
+# or
+uvx vivory-mcp-verification --help
+```
+
 The publish workflow lives in the **public mirror repo** (`jayjodev/vivory-mcp`) at
 `.github/workflows/publish-mcp-verification.yml`. The monorepo only mirrors source via
-`.github/workflows/sync-mcp-public.yml`. The local `.github-mirror/publish-verification.yml`
-drop-in was deleted 2026-05-16 — the public repo settled on a different naming convention
-(`mcp-verification-v*` + `publish-mcp-verification.yml`, not the original `verification-v*` +
-`publish-verification.yml`), and a stale drop-in would mislead the next operator session.
+`.github/workflows/sync-mcp-public.yml`. See [reference-api-key-store.md](../../../.claude_personal/projects/-home-ubuntu-vivory/memory/reference_api_key_store.md) for the GitHub PAT location (the same one drives `VIVORY_MCP_SYNC_TOKEN`).
 
-## Status (2026-05-16)
+## How the publish was actually run (2026-05-16)
 
-- Monorepo source: `0.4.0` in `pyproject.toml` and `__init__.py`
-- Public-repo mirror: `0.4.0` (auto-synced by `sync-mcp-public.yml`)
-- Local sanity check: `python -m build` clean, `pytest tests/` 99 passed, `vivory-mcp-verification --help` smoke OK
-- Public-repo workflow file: present
-- Public-repo GitHub `pypi` environment: present (korea + kosis use it)
-- **PyPI trusted publisher**: not yet registered (PyPI shows no `vivory-mcp-verification` project)
-- Existing tag `mcp-verification-v0.2.0` on remote: leftover from a pre-config attempt — ignore, push fresh `mcp-verification-v0.4.0`
+1. Source bump to v0.4.0 + monorepo push — sync mirrored to public repo (`76bd97b`).
+2. Tag `mcp-verification-v0.4.0` push to mirror → publish workflow fired → **PyPI rejected with `400 'summary' field must be 512 characters or less`**. The pyproject `description` was 570 chars (the exhaustive tool list); PyPI's `summary` field has a 512-char hard limit. The wheel itself built fine; metadata validation killed the upload.
+3. Description trimmed to 444 chars (no tool surface change, mission framing intact) + version bumped 0.4.0 → 0.4.1. Old 0.4.0 stays a dead release name; tag stays on the mirror as historical context.
+4. Tag `mcp-verification-v0.4.1` push → publish workflow #2 → green → PyPI 0.4.1 live.
 
-## Remaining operator action
+## Trusted Publisher config (one-time, already done)
 
-One step. ~2 minutes in browser.
+PyPI <https://pypi.org/manage/account/publishing/> shows:
+- PyPI Project: `vivory-mcp-verification`
+- Owner: `jayjodev`
+- Repository name: `vivory-mcp`
+- Workflow filename: `publish-mcp-verification.yml`
+- Environment name: `pypi`
 
-**PyPI pending publisher**: <https://pypi.org/manage/account/publishing/> → *Add a new pending publisher*
+GitHub `jayjodev/vivory-mcp` Settings → Environments → `pypi` (no secrets, OIDC only). Same pattern used by `vivory-mcp-korea` and `vivory-mcp-kosis`.
 
-| Field | Exact value |
-|---|---|
-| PyPI Project Name | `vivory-mcp-verification` |
-| Owner | `jayjodev` |
-| Repository name | `vivory-mcp` |
-| Workflow filename | `publish-mcp-verification.yml` |
-| Environment name | `pypi` |
-
-After that, the release tag can be pushed from any `jayjodev/vivory-mcp` clone:
+## Release flow for the next version
 
 ```bash
-git tag mcp-verification-v0.4.0
-git push origin mcp-verification-v0.4.0
+# 1. Bump version in src/mcp-server-verification/pyproject.toml + __init__.py
+# 2. Keep description ≤ 512 chars
+# 3. Local sanity:
+cd src/mcp-server-verification
+python3 -m build
+python3 -m venv /tmp/v && /tmp/v/bin/pip install -e ".[dev]" && /tmp/v/bin/pytest -q tests/
+/tmp/v/bin/vivory-mcp-verification --help
+# 4. Commit + push monorepo (sync workflow mirrors to public repo)
+git add src/mcp-server-verification/{pyproject.toml,src/vivory_mcp_verification/__init__.py}
+git commit -m "feat(mcp-verification): vX.Y.Z — ..."
+git push origin main
+# 5. After sync workflow completes, tag and push on the mirror clone:
+cd /tmp/vivory-mcp && git pull --rebase
+git tag mcp-verification-v<X.Y.Z>
+git push origin mcp-verification-v<X.Y.Z>
+# 6. Watch publish workflow on jayjodev/vivory-mcp Actions tab
+# 7. pip index versions vivory-mcp-verification    # should list new version
 ```
 
-The workflow fires automatically, builds, and publishes via OIDC Trusted Publishing
-(no `PYPI_API_TOKEN` needed).
+## Gotchas
 
-## Verification after publish
-
-```bash
-pip index versions vivory-mcp-verification   # should list 0.4.0
-uvx vivory-mcp-verification --help           # should print server usage
-```
-
-Then in this monorepo, flip the "PyPI publish 대기" note at
-[src/frontend-api/app/mcp/page.tsx:46](../frontend-api/app/mcp/page.tsx#L46) to "v0.4.0 LIVE on PyPI".
-
-## Why no token
-
-PyPI Trusted Publishing uses GitHub OIDC short-lived tokens scoped to the `pypi` environment
-in `jayjodev/vivory-mcp`. Same pattern that already published `vivory-mcp-korea` 0.3.1 and
-`vivory-mcp-kosis` 0.1.0.
+- **PyPI summary 512-char limit** — pyproject `description` field. Long tool lists belong in README (`long_description`), not summary.
+- **`mcp-verification-v0.2.0` stale tag** on the mirror — pre-config attempt, never published. Ignore.
+- **Tag prefix is `mcp-verification-v*`** (not `verification-v*`). Must match the workflow's `on.push.tags` glob.
+- **Rerun-failed-jobs uses the original commit** — if you need to retry with a fresh fix, bump version + new tag rather than relying on rerun.
