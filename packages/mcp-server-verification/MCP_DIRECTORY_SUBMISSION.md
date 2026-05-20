@@ -1,6 +1,6 @@
 # MCP Directory submission — vivory-mcp-verification
 
-> **State as of 2026-05-20**: `vivory-mcp-verification` **v0.5.0 ready locally** (PyPI 0.4.1 live; 0.5.0 publish pending tag push). 53 tools / 22 categories. Install (current): `uvx vivory-mcp-verification` (0.4.1). Remaining operator actions: v0.5.0 PyPI publish → `mcp-publisher publish` → awesome-mcp-servers PRs.
+> **State as of 2026-05-20**: `vivory-mcp-verification` **v0.5.1 LIVE on PyPI + MCP Registry**. 53 tools / 22 categories. Install: `uvx vivory-mcp-verification`. (v0.5.0 was rejected by PyPI 512c summary limit + a mirror race put the pre-trim commit under the v0.5.0 tag → 0.5.1 ships the trimmed description.) Remaining operator action = open the two awesome-mcp-servers PRs.
 
 Submission packet for [MCP Registry](https://registry.modelcontextprotocol.io)
 + punkpeye/awesome-mcp-servers + wong2/awesome-mcp-servers.
@@ -9,7 +9,7 @@ Submission packet for [MCP Registry](https://registry.modelcontextprotocol.io)
 
 - **Name**: `vivory-verification`
 - **MCP Registry ID**: `io.github.jayjodev/vivory-mcp-verification`
-- **Package**: [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) on PyPI (latest live: v0.4.1; v0.5.0 publish pending)
+- **Package**: [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) on PyPI (latest live: v0.5.1)
 - **Maintainer**: Vivory (contact@vivory.app)
 - **License**: MIT
 - **Source (public mirror)**: https://github.com/jayjodev/vivory-mcp (subpath `packages/mcp-server-verification`)
@@ -159,14 +159,15 @@ Markdown line:
 - [vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) - 53 verification tools across 22 categories — DOI / Wayback / C2PA / PDF / hash-chain / peer-review / forecast / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT — under one MCP. Free anonymous tier (100/day/IP).
 ```
 
-### 3️⃣ MCP Registry — `mcp-publisher publish`
+### 3️⃣ MCP Registry — DONE (v0.5.1, 2026-05-20)
 
-Run after `server.json` is final (currently v0.5.0, env-var description points to `/dashboard`):
+Published via `mcp-publisher publish` after `mcp-publisher login github` device flow.
+Visible at:
 ```bash
-cd src/mcp-server-verification
-mcp-publisher publish server.json
+curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=jayjodev" \
+  | python3 -m json.tool
 ```
-Verify with `curl https://registry.modelcontextprotocol.io/v0/servers?search=vivory`.
+Future version bumps follow the same flow — bump pyproject + `__init__.py` + `server.json`, push monorepo, tag the public mirror, then `mcp-publisher publish` once PyPI metadata lands.
 
 ### 4️⃣ Anthropic official `modelcontextprotocol/servers` — defer
 
@@ -174,12 +175,12 @@ Submission bar = traction signal. Re-evaluate after both awesome lists land + �
 
 ### Submission checklist (before any PR)
 
-- [x] PyPI package `vivory-mcp-verification==0.4.1` published — `uvx vivory-mcp-verification` works
+- [x] PyPI package `vivory-mcp-verification==0.5.1` published — `uvx vivory-mcp-verification` works
 - [x] GitHub repo `jayjodev/vivory-mcp` public with package directory at `packages/mcp-server-verification/`
 - [x] README has `## Tier limits` + sample envelope + `## Sister packages`
 - [x] LICENSE file present (MIT)
-- [x] Tool count and category list in README accurate (45 / 18)
-- [x] `server.json` version matches PyPI release (0.4.1)
-- [ ] `mcp-publisher publish server.json` executed → visible in registry search
+- [x] Tool count and category list in README accurate (53 / 22)
+- [x] `server.json` version matches PyPI release (0.5.1)
+- [x] `mcp-publisher publish server.json` executed → visible in registry search
 - [ ] PR to punkpeye/awesome-mcp-servers opened
 - [ ] PR to wong2/awesome-mcp-servers opened

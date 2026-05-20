@@ -26,7 +26,7 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.5.0 claims 53 tools across 22 categories."""
+    """v0.5.1 claims 53 tools across 22 categories."""
     assert len(srv.TOOLS) == 53, f"Expected 53 tools, got {len(srv.TOOLS)}"
 
 

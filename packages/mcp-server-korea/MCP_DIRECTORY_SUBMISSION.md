@@ -2,7 +2,7 @@
 
 Distribution-layer runbook for the Korea MCP umbrella. Code/supply work is done — these are the registry submissions that turn `pip install`-able into discoverable.
 
-**State (2026-05-20)**: **v0.5.0 ready locally** (PyPI 0.4.0 live; 0.5.0 publish pending tag push). 56 tools across 16 sources. `mcp-name` verification comment in README, `server.json` namespace `io.github.jayjodev/vivory-mcp-korea`. Ready for MCP Registry submission after v0.5.0 PyPI publish. Operator action remaining = tag push (mirror) → `mcp-publisher publish` → open the two awesome-mcp-servers PRs.
+**State (2026-05-20)**: **v0.5.0 LIVE on PyPI + MCP Registry**. 56 tools across 16 sources. `mcp-name` verification comment in README, `server.json` namespace `io.github.jayjodev/vivory-mcp-korea`. Remaining operator action = open the two awesome-mcp-servers PRs.
 
 **Submission order (highest leverage first)**:
 1. **Official MCP Registry** (registry.modelcontextprotocol.io) — anchor of the ecosystem, indexed by Smithery + Cursor + Glama
@@ -207,8 +207,8 @@ Run from `src/mcp-server-korea/`:
 - [x] Tool count and source list in README accurate (55 / 15 — added VWorld in v0.4)
 - [x] `<!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->` HTML comment in README (verification anchor)
 - [x] `server.json` at repo root with namespace `io.github.jayjodev/vivory-mcp-korea` (v0.5.0)
-- [ ] **v0.5.0 published to PyPI** (waiting on tag push)
-- [ ] **Registry listing live** (waiting on `mcp-publisher publish`)
+- [x] **v0.5.0 published to PyPI** (`pip index versions vivory-mcp-korea` shows 0.5.0)
+- [x] **Registry listing live** (`mcp-publisher publish` ran 2026-05-20)
 - [ ] **punkpeye PR opened**
 - [ ] **wong2 PR opened**
 
@@ -219,5 +219,5 @@ Run from `src/mcp-server-korea/`:
 - **Order matters**: registry → punkpeye → wong2. Registry is the canonical source of truth that downstream consumers (Smithery, Cursor, Glama) auto-mirror, so it should land first.
 - 🇰🇷 flag emoji in punkpeye line signals geography clearly.
 - Earlier draft `mcp-server-kosis/MCP_DIRECTORY_SUBMISSION.md` is now superseded; the umbrella supersedes the standalone. KOSIS package is EOL 2026-12-31 (final maintenance release 0.1.2).
-- **Sister `vivory-mcp-verification`** is **v0.5.0 ready locally** (PyPI 0.4.1 live; 0.5.0 publish pending) — 53 tools / 22 categories. Together = **109 tools, one unified Pro key**. See [`src/mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md`](../mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md) — submit both packets in the same wave.
+- **Sister `vivory-mcp-verification`** is **v0.5.1 LIVE on PyPI + MCP Registry** — 53 tools / 22 categories. Together = **109 tools, one unified Pro key**. (v0.5.0 was rejected by PyPI summary 512c limit; 0.5.1 ships the trimmed description.) See [`src/mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md`](../mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md) — open both awesome-mcp-servers PRs in the same wave.
 - After all three (registry + 2 community lists) land: discovery via Google "Korea MCP server", "Korean public data API", "MOLIT real estate AI agent" should surface within 2–4 weeks.

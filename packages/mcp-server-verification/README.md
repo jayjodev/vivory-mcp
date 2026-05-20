@@ -18,7 +18,7 @@ blockchain audit trail.
 Built by [Vivory](https://vivory.app) — a verifiable AI work platform.
 Mission: in an age where everything is synthesized, verification trails become trust.
 
-## What's inside (v0.5.0 — 53 tools)
+## What's inside (v0.5.1 — 53 tools)
 
 | Category    | Tools (count) | What it answers                                                      |
 |-------------|---------------|----------------------------------------------------------------------|
