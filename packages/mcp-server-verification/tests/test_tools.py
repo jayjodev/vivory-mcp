@@ -1,10 +1,11 @@
 """Sanity tests for vivory-mcp-verification.
 
 Runs offline (no httpx/network). Mirrors korea test suite — verifies:
-- 45 tool count
+- 53 tool count (v0.5)
 - every tool has handler returning (method, path, params, body) tuple
 - inputSchema is valid JSON Schema
 - error envelope is structured JSON with stable code field
+  (now includes `did_you_mean` fuzzy suggestion list)
 - client request() supports not_found_ok parameter
 
 Run: `pytest -q` from package root.
