@@ -9,20 +9,20 @@
     "source": "github",
     "subfolder": "packages/mcp-server-verification"
   },
-  "version": "0.4.0",
+  "version": "0.4.1",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "vivory-mcp-verification",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "transport": {
         "type": "stdio"
       },
       "environmentVariables": [
         {
           "name": "VIVORY_API_KEY",
-          "description": "Optional Vivory Pro API key for higher daily limits (10,000/day Pro vs 100/day anonymous). Get one at api.vivory.app/dashboard/api-keys.",
+          "description": "Optional Vivory Pro API key for higher daily limits (10,000/day Pro vs 100/day anonymous). Get one at api.vivory.app/dashboard.",
           "isRequired": false,
           "isSecret": true
         },

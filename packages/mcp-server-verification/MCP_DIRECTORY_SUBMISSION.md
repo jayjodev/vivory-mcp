@@ -1,44 +1,46 @@
 # MCP Directory submission — vivory-mcp-verification
 
-> **State as of 2026-05-13 evening**: package is **v0.4.0 / 45 tools / 18 categories**. PyPI publish is still pending; see [`docs/handoffs/MCP_PUBLISH_RUNBOOK_2026_05_13.md`](../../docs/handoffs/MCP_PUBLISH_RUNBOOK_2026_05_13.md) for current operator action. The body of this packet still uses older numbers in some spots — update before opening the actual PR.
+> **State as of 2026-05-20**: `vivory-mcp-verification` **v0.4.1 LIVE on PyPI** — 45 tools / 18 categories. Install: `uvx vivory-mcp-verification`. Submission to MCP Registry + awesome-mcp-servers lists is the remaining operator action (no `mcp-publisher` run yet).
 
-Submission packet for [Anthropic MCP Directory](https://github.com/anthropics/mcp-directory)
+Submission packet for [MCP Registry](https://registry.modelcontextprotocol.io)
 + punkpeye/awesome-mcp-servers + wong2/awesome-mcp-servers.
 
 ## Server identity
 
 - **Name**: `vivory-verification`
-- **Package**: `vivory-mcp-verification` on PyPI
+- **MCP Registry ID**: `io.github.jayjodev/vivory-mcp-verification`
+- **Package**: [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) on PyPI (v0.4.1)
 - **Maintainer**: Vivory (contact@vivory.app)
 - **License**: MIT
-- **Source**: https://github.com/jayjodev/vivory (subpath `src/mcp-server-verification`)
-- **Sister package**: [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/) (already in directory)
+- **Source (public mirror)**: https://github.com/jayjodev/vivory-mcp (subpath `packages/mcp-server-verification`)
+- **Sister package**: [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/) — 55 Korean public-data tools, **shares the same Pro API key**
 
 ## One-line pitch
 
-Umbrella MCP server for verifiable AI work — one registration for 21 verification tools (claim · DOI · archive · repro · provenance · peer review · forecast).
+Umbrella MCP server for verifiable AI work — one registration for 45 tools across 18 categories (claim · DOI · archive · repro · provenance · peer review · forecast · SEC EDGAR · GLEIF · Wikidata · ClinicalTrials · World Bank · USPTO · OSM · DefiLlama · USGS · MOLIT real-estate).
 
 ## Category
 
-Verification / Reference / Citation
+Verification / Reference / Citation / Provenance
 
 ## Why this server is unique
 
-The MCP Directory has nothing in the verification category. Everyone who
-builds an agent that cites things ends up wiring Crossref + Wayback + a
+The MCP Directory has no general-purpose verification server. Agents that
+cite things end up wiring Crossref + Wayback + SEC EDGAR + GLEIF + a
 half-baked C2PA reader by hand. This server gives them a single registration
-for the entire stack:
+for the entire "is this real?" stack:
 
-- 21 tools across 7 categories
-- Real-time backing for DOI / Crossref / OpenAlex / Wayback (no API key needed)
-- Forward-compatible scaffold for C2PA / PDF / repro / peer-review / forecast
-  (envelope shape stable; backing services ship in v0.2)
+- **45 tools across 18 categories** (claim, DOI, archive, repro hash, C2PA/PDF/hash-chain/watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR, GLEIF LEI, OpenAlex works, Wikidata Q-numbers, ClinicalTrials NCT, World Bank, USPTO PatentsView, OSM places, DefiLlama TVL, USGS quakes, MOLIT Korean real-estate)
+- **65 of 69 backing endpoints are v0.1-real** (the remaining 4 are forecast/repro scaffolds shipping in v0.5)
 - Free anonymous tier (100/day/IP) — no signup gate
+- **Unified Pro key** — $29/mo unlocks both `vivory-mcp-verification` AND `vivory-mcp-korea` (100+ tools, one purchase). USDC + card (Stripe/Lemon Squeezy)
 - Self-hostable: `VIVORY_API_BASE` env var redirects to your own gateway
 
 ## Install + register
 
 ```bash
+uvx vivory-mcp-verification
+# or
 pip install vivory-mcp-verification
 ```
 
@@ -52,30 +54,38 @@ pip install vivory-mcp-verification
 }
 ```
 
-## Tool list (21)
+## Tool clusters (18 categories, 45 tools)
 
-```
-verify_claim, extract_citations, archive_claim_sources,
-verify_doi, doi_metadata, doi_retraction_check, doi_author_network,
-verify_archive, wayback_capture, wayback_history,
-verify_repro_hash, repro_hub_lookup, repro_artifact_diff,
-verify_c2pa, verify_pdf_provenance, verify_hash_chain, detect_watermark,
-verify_peer_review, persona_verdict_lookup,
-forecast_track_record, submit_forecast
-```
+| Cluster | Tools | Backing |
+|---|---|---|
+| claim | verify_claim, extract_citations, archive_claim_sources | v0.1-real |
+| doi | verify_doi, doi_metadata, doi_retraction_check, doi_author_network | v0.1-real (Crossref + OpenAlex + ORCID) |
+| archive | verify_archive, wayback_capture, wayback_history | v0.1-real (Wayback) |
+| repro | verify_repro_hash, repro_hub_lookup, repro_artifact_diff | v0.1-real (Vivory Reproducibility Hub) |
+| provenance | verify_c2pa, verify_pdf_provenance, verify_hash_chain, verify_timestamp, detect_watermark | v0.1-real |
+| peer-review | verify_peer_review, persona_verdict_lookup | v0.1-real |
+| forecast | forecast_track_record, submit_forecast | v0.1-scaffold (Phase 3) |
+| entity | sec_edgar_lookup, sec_edgar_filings, gleif_lei_lookup, gleif_lei_match | v0.1-real |
+| work | openalex_work, openalex_author | v0.1-real |
+| wikidata | wikidata_qnumber, wikidata_property | v0.1-real |
+| trial | clinicaltrials_lookup, clinicaltrials_search | v0.1-real |
+| indicator | worldbank_indicator, worldbank_country | v0.1-real |
+| patent | uspto_patent, uspto_search | v0.1-real |
+| place | osm_place, osm_geocode | v0.1-real |
+| tvl | defillama_protocol, defillama_chain | v0.1-real |
+| quake | usgs_quake, usgs_recent | v0.1-real |
+| apt | molit_apt_realtransaction (Korean apartment prices) | v0.1-real |
 
 ## Demo workflow (for review)
 
-The classic agent failure mode: cite a DOI without checking it's still
-valid. Here's how an agent fixes that with vivory-verification:
+Classic agent failure mode: cite a DOI without checking it's still valid.
+Fix with `vivory-verification`:
 
 1. Agent generates a paragraph that cites `10.1038/s41586-021-03819-2`.
-2. Agent calls `verify_doi` → status: active, type: journal-article.
-3. Agent calls `doi_retraction_check` → retracted: false.
-4. Agent calls `doi_author_network` (depth=1) → returns ORCID-validated
-   author list with institutions.
-5. Agent surfaces the citation in its output with a Vivory verification
-   receipt URL.
+2. `verify_doi` → status: active, type: journal-article.
+3. `doi_retraction_check` → retracted: false.
+4. `doi_author_network` (depth=1) → ORCID-validated author list with institutions.
+5. Agent surfaces the citation with a Vivory verification receipt URL.
 
 Total: 3 tool calls, 0 hallucinations, full source trail.
 
@@ -84,18 +94,18 @@ Total: 3 tool calls, 0 hallucinations, full source trail.
 | Tier      | Quota         | Cost                       |
 |-----------|---------------|----------------------------|
 | Anonymous | 100/day/IP    | Free, no signup            |
-| Free      | 500/day       | Free, signup               |
-| Pro       | 10,000/day    | $29/mo USDC (x402 capable) |
+| Free      | 500/day       | Free, signup at api.vivory.app/dashboard |
+| Pro       | 10,000/day    | $29/mo USDC or card (x402 capable); same key unlocks `vivory-mcp-korea` |
 
 Mission: anti-mission #1 (no enterprise sales) — Pro is self-serve flat
-USDC, not a sales-gated SaaS contract.
+USDC/card, not a sales-gated SaaS contract.
 
 ## Sample envelope
 
 ```json
 {
   "implementation_phase": "v0.1-real",
-  "checked_at": "2026-05-06T18:00:00Z",
+  "checked_at": "2026-05-20T18:00:00Z",
   "sources": ["crossref", "openalex"],
   "data": {
     "doi": "10.1038/s41586-021-03819-2",
@@ -112,17 +122,14 @@ USDC, not a sales-gated SaaS contract.
 
 ## Roadmap
 
-- **v0.1 (now)**: 21 tools shipping, 8 fully real / 13 envelope-ready.
-- **v0.2**: Wire C2PA (c2patool subprocess), PDF provenance (pypdf), watermark
-  detectors (invisible-watermark + SynthID surface), Repro Hub DB lookup,
-  Peer Review DB lookup.
-- **v0.3**: Forecast Verify pipeline (intel.forecast write-path + auto-verifier
-  scheduling). Targeted at Phase 3 of the Vivory MCP family carrier.
-- **v1.0**: All 21 tools real, x402 M2M billing live, Pro tier USDC payment.
+- **v0.4.x (now)**: 45 tools shipping, 41 fully real / 4 envelope-ready (forecast + repro scaffolds).
+- **v0.5**: Forecast verifier wired to `crypto.vivory.app/forecast` track record. Repro auto-finalize bound to Reproducibility Hub.
+- **v0.6**: Peer Review MCP split candidate (separate registration if traffic justifies — see `project_peer_review_mcp_planning_2026_05_16.md`).
 
 ## Contact
 
 - Email: contact@vivory.app
+- Public mirror: https://github.com/jayjodev/vivory-mcp
 - Issues: https://github.com/jayjodev/vivory-mcp/issues
 - Maintainer: Vivory (jayjodev)
 
@@ -139,7 +146,7 @@ Section: 🔎 **Search & Data Extraction** (best fit) or 🛡️ **Security** (s
 
 Markdown line:
 ```markdown
-- [jayjodev/vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) 🐍 ☁️ 🏠 - 21 verification tools across 7 categories — claim, DOI (Crossref + retraction watch + ORCID author network), web archive (Wayback + archive.today), reproducibility hash registry, C2PA / PDF / hash-chain provenance, peer-review verdict, forecast track record. Single registration replaces ad-hoc Crossref + Wayback + half-baked C2PA glue. No upstream API keys required. Install: `uvx vivory-mcp-verification`. Ask Claude: *"Verify every DOI in this paragraph and snapshot any URL that's not on Wayback yet."*
+- [jayjodev/vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) 🐍 ☁️ 🏠 - 45 verification tools across 18 categories — claim, DOI (Crossref + retraction watch + ORCID), web archive (Wayback), reproducibility hash, C2PA / PDF / hash-chain / watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR, GLEIF LEI, OpenAlex, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT realestate. Single registration replaces ad-hoc citation glue. No upstream API keys required. Install: `uvx vivory-mcp-verification`. Ask Claude: *"Verify every DOI in this paragraph and snapshot any URL that's not on Wayback yet."*
 ```
 
 ### 2️⃣ wong2/awesome-mcp-servers
@@ -149,18 +156,30 @@ Section: "Reference / Citation" or "Security" — fall back to "Other".
 
 Markdown line:
 ```markdown
-- [vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) - 21 verification tools — DOI / Wayback / C2PA / PDF / hash-chain / peer-review / forecast — under one MCP. Free anonymous tier (100/day/IP).
+- [vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) - 45 verification tools across 18 categories — DOI / Wayback / C2PA / PDF / hash-chain / peer-review / forecast / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT — under one MCP. Free anonymous tier (100/day/IP).
 ```
 
-### 3️⃣ Anthropic official `modelcontextprotocol/servers` — defer
+### 3️⃣ MCP Registry — `mcp-publisher publish`
 
-Submission bar = PyPI release + traction. Re-evaluate after both lists land + ≥100 stars on `jayjodev/vivory-mcp`.
+Run after `server.json` is final (currently v0.4.1, env-var description points to `/dashboard`):
+```bash
+cd src/mcp-server-verification
+mcp-publisher publish server.json
+```
+Verify with `curl https://registry.modelcontextprotocol.io/v0/servers?search=vivory`.
+
+### 4️⃣ Anthropic official `modelcontextprotocol/servers` — defer
+
+Submission bar = traction signal. Re-evaluate after both awesome lists land + ≥100 stars on `jayjodev/vivory-mcp`.
 
 ### Submission checklist (before any PR)
 
-- [ ] PyPI package `vivory-mcp-verification==0.1.0` published — `uvx vivory-mcp-verification` works
-- [x] GitHub repo `jayjodev/vivory-mcp` is public with package directory at `packages/mcp-server-verification/`
+- [x] PyPI package `vivory-mcp-verification==0.4.1` published — `uvx vivory-mcp-verification` works
+- [x] GitHub repo `jayjodev/vivory-mcp` public with package directory at `packages/mcp-server-verification/`
 - [x] README has `## Tier limits` + sample envelope + `## Sister packages`
 - [x] LICENSE file present (MIT)
-- [ ] Self-test: fresh `pip install vivory-mcp-verification` reports tools=21, handlers=21, parity=True
-- [x] Tool count and source list in README accurate (21 / 7 categories)
+- [x] Tool count and category list in README accurate (45 / 18)
+- [x] `server.json` version matches PyPI release (0.4.1)
+- [ ] `mcp-publisher publish server.json` executed → visible in registry search
+- [ ] PR to punkpeye/awesome-mcp-servers opened
+- [ ] PR to wong2/awesome-mcp-servers opened

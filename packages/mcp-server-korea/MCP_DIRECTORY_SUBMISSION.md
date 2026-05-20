@@ -2,7 +2,7 @@
 
 Distribution-layer runbook for the Korea MCP umbrella. Code/supply work is done — these are the registry submissions that turn `pip install`-able into discoverable.
 
-**State (2026-05-09)**: v0.3.1 ready locally. v0.3.0 is on PyPI but predates the `mcp-name` verification comment, so a v0.3.1 re-publish is required before Official MCP Registry can verify ownership.
+**State (2026-05-20)**: **v0.4.0 LIVE on PyPI** — 55 tools across 15 sources. `mcp-name` verification comment in README, `server.json` namespace `io.github.jayjodev/vivory-mcp-korea`. Ready for MCP Registry submission. Operator action remaining = run `mcp-publisher publish` + open the two awesome-mcp-servers PRs.
 
 **Submission order (highest leverage first)**:
 1. **Official MCP Registry** (registry.modelcontextprotocol.io) — anchor of the ecosystem, indexed by Smithery + Cursor + Glama
@@ -14,22 +14,11 @@ Glama.ai crawls public GitHub MCP repos automatically — no submission needed.
 
 ---
 
-## 0️⃣ Pre-flight: publish v0.3.1 to PyPI
+## 0️⃣ Pre-flight: PyPI publish — DONE
 
-The Official MCP Registry verifies PyPI ownership by reading the `<!-- mcp-name: ... -->` HTML comment from the package README on PyPI. v0.3.0 was published before the comment existed, so we need v0.3.1.
+`vivory-mcp-korea==0.4.0` is live on PyPI (verified 2026-05-20). README on PyPI carries the `<!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->` verification comment, and `server.json` namespace matches. No further publish action needed for this submission round.
 
-The public mirror (`jayjodev/vivory-mcp`) has a Trusted Publishing OIDC pipeline triggered by tag pushes. Tag flow:
-
-```bash
-# After the sync-mcp-public.yml workflow mirrors src/mcp-server-korea → vivory-mcp:
-cd <local-clone-of-jayjodev/vivory-mcp>
-git pull origin main
-git tag mcp-korea-v0.3.1
-git push origin mcp-korea-v0.3.1
-# OIDC publish runs in vivory-mcp Actions; verify on https://pypi.org/project/vivory-mcp-korea/
-```
-
-Wait until `pip index versions vivory-mcp-korea` shows `0.3.1` before proceeding to step 1.
+For future version bumps, the release flow is documented in [`src/mcp-server-verification/PYPI_PUBLISH_WORKFLOW.md`](../mcp-server-verification/PYPI_PUBLISH_WORKFLOW.md) — same pattern: bump pyproject + `__init__.py` + `server.json`, push monorepo, then `git tag mcp-korea-v<X.Y.Z>` on the public mirror clone.
 
 ---
 
@@ -211,15 +200,16 @@ Gated marketplace requiring uptime SLA + verified org + security review. Re-eval
 
 Run from `src/mcp-server-korea/`:
 
-- [x] PyPI package `vivory-mcp-korea` published — `uvx vivory-mcp-korea` works (currently 0.3.0; **0.3.1 needed for registry verification**)
+- [x] PyPI package `vivory-mcp-korea==0.4.0` published — `uvx vivory-mcp-korea` works
 - [x] GitHub repo `jayjodev/vivory-mcp` is **public** with package directory at `packages/mcp-server-korea/`
 - [x] README has `## Example prompts` (7 cross-source prompts incl. DART)
 - [x] LICENSE file present (MIT)
-- [x] Tool count and source list in README accurate (51 / 14)
+- [x] Tool count and source list in README accurate (55 / 15 — added VWorld in v0.4)
 - [x] `<!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->` HTML comment in README (verification anchor)
-- [x] `server.json` at repo root with namespace `io.github.jayjodev/vivory-mcp-korea`
-- [ ] **v0.3.1 published to PyPI** (waiting on tag push)
+- [x] `server.json` at repo root with namespace `io.github.jayjodev/vivory-mcp-korea` (v0.4.0)
 - [ ] **Registry listing live** (waiting on `mcp-publisher publish`)
+- [ ] **punkpeye PR opened**
+- [ ] **wong2 PR opened**
 
 ---
 
@@ -227,6 +217,6 @@ Run from `src/mcp-server-korea/`:
 
 - **Order matters**: registry → punkpeye → wong2. Registry is the canonical source of truth that downstream consumers (Smithery, Cursor, Glama) auto-mirror, so it should land first.
 - 🇰🇷 flag emoji in punkpeye line signals geography clearly.
-- Earlier draft `mcp-server-kosis/MCP_DIRECTORY_SUBMISSION.md` is now superseded; the umbrella supersedes the standalone.
-- **Sister `vivory-mcp-verification`** is scaffold-only at v0.2.0 (not yet on PyPI). When it ships, mirror this submission flow: README comment + server.json + registry publish + community PRs.
+- Earlier draft `mcp-server-kosis/MCP_DIRECTORY_SUBMISSION.md` is now superseded; the umbrella supersedes the standalone. KOSIS package is EOL 2026-12-31 (final maintenance release 0.1.2).
+- **Sister `vivory-mcp-verification`** is **v0.4.1 LIVE on PyPI** (45 tools / 18 categories). See [`src/mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md`](../mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md) — submit both packets in the same wave (unified Pro key narrative).
 - After all three (registry + 2 community lists) land: discovery via Google "Korea MCP server", "Korean public data API", "MOLIT real estate AI agent" should surface within 2–4 weeks.

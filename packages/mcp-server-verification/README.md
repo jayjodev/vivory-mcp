@@ -126,7 +126,7 @@ Add to your MCP config (`~/.claude/mcp.json` or Claude Desktop config):
 ```
 
 For a higher rate limit, sign up at
-[https://api.vivory.app/dashboard/api-keys](https://api.vivory.app/dashboard/api-keys)
+[https://api.vivory.app/dashboard](https://api.vivory.app/dashboard)
 and add the key:
 
 ```json
@@ -157,7 +157,7 @@ the same Bearer credential is honored across the entire Vivory MCP family.
 | Tier        | Daily quota  | Notes                                              |
 |-------------|--------------|----------------------------------------------------|
 | Anonymous   | 100/day/IP   | No signup, polite caching                          |
-| Free        | 500/day      | Sign up at api.vivory.app/dashboard/api-keys       |
+| Free        | 500/day      | Sign up at api.vivory.app/dashboard                |
 | Pro         | 10,000/day   | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. Same key unlocks `vivory-mcp-korea` (55 tools) = **100+ tools, one purchase**. |
 | Enterprise  | 100,000/day  | contact@vivory.app (self-serve only, no SaaS sales) |
 
