@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jayjodev/vivory-mcp-verification",
   "title": "Vivory Verification Gateway",
-  "description": "53 MCP tools for verifiable AI work — DOI/ORCID, archive, URL hash + dataset fingerprint, C2PA/PDF/hash-chain provenance, SEC EDGAR, GLEIF, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama TVL, USGS quakes, MOLIT Korean RTMS, RDAP whois + DoH DNS, EVM blockchain audit. Free 100/day per IP — Pro $29/mo unifies with vivory-mcp-korea (56 tools, 109 total) on one key.",
+  "description": "53 MCP tools for verifiable AI work — DOI, archive, provenance, identity, domain, blockchain.",
   "websiteUrl": "https://api.vivory.app",
   "repository": {
     "url": "https://github.com/jayjodev/vivory-mcp",
