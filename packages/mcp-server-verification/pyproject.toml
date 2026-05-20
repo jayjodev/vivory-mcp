@@ -49,6 +49,10 @@ keywords = [
     "evm",
     "anthropic",
     "claude",
+    "verifiable-ai",
+    "source-trail",
+    "ai-agent",
+    "model-context-protocol",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",

@@ -12,7 +12,7 @@ license = "MIT"
 authors = [
     { name = "Vivory", email = "contact@vivory.app" },
 ]
-keywords = ["mcp", "korea", "kosis", "ecos", "neis", "vworld", "spatial", "geocoding", "nts", "business-number", "anthropic", "claude", "public-data"]
+keywords = ["mcp", "korea", "kosis", "ecos", "neis", "vworld", "spatial", "geocoding", "nts", "business-number", "anthropic", "claude", "public-data", "verifiable-ai", "korea-data-gateway", "model-context-protocol", "ai-agent"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
