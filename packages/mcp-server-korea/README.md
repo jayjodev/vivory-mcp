@@ -56,7 +56,7 @@ Korean public-data APIs publish exclusively in Korean, require per-API key issua
 | Use case | Recommended package |
 |---|---|
 | All Korean public data | **`vivory-mcp-korea`** ← this package |
-| Verification (DOI · archive · provenance · peer review · forecast · entities) | `vivory-mcp-verification` — sister umbrella, **53 tools across 22 clusters** (PyPI live, v0.5.0) |
+| Verification (DOI · archive · provenance · peer review · forecast · entities) | `vivory-mcp-verification` — sister umbrella, **53 tools across 22 clusters** (PyPI live, v0.5.1) |
 
 > The earlier `vivory-mcp-kosis` standalone has been deprecated; all KOSIS tools ship inside this umbrella.
 
