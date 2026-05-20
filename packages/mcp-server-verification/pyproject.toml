@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-verification"
-version = "0.6.0"
-description = "MCP for verifiable AI work: DOI/ORCID, archive, repro hash, C2PA/PDF/watermark provenance, peer-review, forecast, SEC EDGAR, GLEIF, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT, RDAP whois + history, EVM audit + contract pollers, npm/PyPI supply chain, Retraction Watch, workflow packs, custom policy. 68 tools / 27 categories."
+version = "0.7.0"
+description = "MCP for verifiable AI work: DOI/ORCID, archive, repro hash, C2PA/PDF/watermark provenance, peer-review, forecast, SEC EDGAR, GLEIF, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT, RDAP whois + history, EVM audit + contract pollers, npm/PyPI supply chain, Retraction Watch, Korean law + case + bill (law.go.kr), OFAC/UN/EU sanctions, openFDA + CPSC recall, DOAJ predatory journal, PR/article fidelity diff. 76 tools / 32 categories."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -54,6 +54,16 @@ keywords = [
     "retraction",
     "workflow",
     "policy",
+    "law",
+    "sanctions",
+    "ofac",
+    "recall",
+    "openfda",
+    "cpsc",
+    "doaj",
+    "predatory-journal",
+    "press-release",
+    "churnalism",
     "anthropic",
     "claude",
     "verifiable-ai",

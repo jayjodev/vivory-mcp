@@ -28,8 +28,8 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.6.0 claims 68 tools across 27 categories."""
-    assert len(srv.TOOLS) == 68, f"Expected 68 tools, got {len(srv.TOOLS)}"
+    """v0.7.0 claims 76 tools across 32 categories."""
+    assert len(srv.TOOLS) == 76, f"Expected 76 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -121,7 +121,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-verification" in captured.err
-    assert "68 tools" in captured.err
+    assert "76 tools" in captured.err
 
 
 def test_client_request_supports_not_found_ok():

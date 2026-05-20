@@ -1,7 +1,7 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.6 ships 68 tools across 27 categories:
+(`vivory-verification`). v0.7 ships 76 tools across 32 categories:
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
@@ -30,6 +30,11 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - retraction  (2) — retraction_watch_recent, retraction_watch_by_journal (Retraction Watch + Crossref crossmark)
 - workflow    (3) — workflow_paper_repro, workflow_crypto_diligence, workflow_ai_output_verify (curated multi-step verification)
 - policy      (2) — policy_list_presets, policy_evaluate (custom verification policy framework)
+- law         (3) — kor_law_lookup, kor_case_search, kor_bill_status (국가법령정보센터 + 열린국회정보)
+- sanctions   (1) — sanctions_screen (OFAC + UN + EU + KR STIC via openSanctions)
+- recall      (2) — drug_recall_check, product_recall_check (openFDA + CPSC SaferProducts)
+- journal     (1) — verify_journal_quality (DOAJ whitelist + predatory heuristic)
+- pr_diff     (1) — verify_pr_article_diff (press-release vs article fidelity diff)
 
 Architecture:
 - Tool definitions live in `tools/{category}.py` per concern
@@ -63,16 +68,21 @@ from .tools import (
     forecast as forecast_tools,
     identity as identity_tools,
     indicator as indicator_tools,
+    journal as journal_tools,
+    law as law_tools,
     npm as npm_tools,
     patent as patent_tools,
     peer_review as peer_review_tools,
     place as place_tools,
     policy as policy_tools,
+    pr_diff as pr_diff_tools,
     provenance as provenance_tools,
     pypi as pypi_tools,
     quake as quake_tools,
+    recall as recall_tools,
     repro as repro_tools,
     retraction as retraction_tools,
+    sanctions as sanctions_tools,
     trial as trial_tools,
     tvl as tvl_tools,
     web as web_tools,
@@ -114,6 +124,11 @@ TOOLS: list[Tool] = [
     *retraction_tools.TOOLS,
     *workflow_tools.TOOLS,
     *policy_tools.TOOLS,
+    *law_tools.TOOLS,
+    *sanctions_tools.TOOLS,
+    *recall_tools.TOOLS,
+    *journal_tools.TOOLS,
+    *pr_diff_tools.TOOLS,
 ]
 
 
@@ -145,6 +160,11 @@ HANDLERS: dict[str, Any] = {
     **retraction_tools.HANDLERS,
     **workflow_tools.HANDLERS,
     **policy_tools.HANDLERS,
+    **law_tools.HANDLERS,
+    **sanctions_tools.HANDLERS,
+    **recall_tools.HANDLERS,
+    **journal_tools.HANDLERS,
+    **pr_diff_tools.HANDLERS,
 }
 
 
@@ -240,7 +260,7 @@ def _startup_banner() -> None:
     if has_key:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Pro tier (Bearer key sent) | "
-            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 124 total)",
+            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 132 total)",
             file=sys.stderr,
             flush=True,
         )
@@ -251,7 +271,7 @@ def _startup_banner() -> None:
             f"  → Tools Pro bridge ($4.99/mo, 1k call/mo) or Vivory API Pro\n"
             f"    ($29/mo USDC, 10k/day, no auto-renew, no custody) at\n"
             f"    https://api.vivory.app/dashboard/public-api — Vivory API Pro key\n"
-            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 124 total).",
+            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 132 total).",
             file=sys.stderr,
             flush=True,
         )
