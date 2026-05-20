@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-verification"
-version = "0.5.0"
+version = "0.5.1"
 description = "MCP for verifiable AI work: DOI/ORCID, archive, URL hash, dataset fingerprint, repro hash, C2PA/PDF/hash-chain provenance, peer-review, forecast, SEC EDGAR, GLEIF, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT, RDAP whois + DoH DNS, EVM blockchain audit. 53 tools / 22 categories."
 readme = "README.md"
 requires-python = ">=3.10"
