@@ -17,7 +17,7 @@ import httpx
 
 DEFAULT_API_BASE = "https://api.vivory.app/api"
 TIMEOUT = httpx.Timeout(45.0, connect=10.0)
-USER_AGENT = "vivory-mcp-verification/0.5.1 (+https://vivory.app)"
+USER_AGENT = "vivory-mcp-verification/0.6.0 (+https://vivory.app)"
 
 
 def get_api_base() -> str:
@@ -27,10 +27,11 @@ def get_api_base() -> str:
 def get_api_key() -> str | None:
     """Optional Vivory API key for tier upgrade.
 
-    Anonymous (no key)        — 100 calls/day per source IP
-    Free   (sign up)          — 500 calls/day, attribution required
-    Pro    ($29/mo USDC)      — 10,000 calls/day, x402 metering optional
-    Sign up at https://api.vivory.app/dashboard.
+    Anonymous (no key)            — 100 calls/day per source IP
+    Tools Pro bridge ($4.99/mo)   — 1,000 calls/month (Tools Pro key)
+    Vivory API Pro ($29/mo USDC)  — 10,000 calls/day, also unlocks sibling
+                                    vivory-mcp-korea (124 tools total)
+    Sign up at https://api.vivory.app/dashboard/public-api.
     """
     raw = os.environ.get("VIVORY_API_KEY")
     return raw.strip() if raw and raw.strip() else None

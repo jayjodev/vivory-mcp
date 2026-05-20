@@ -1,11 +1,12 @@
 """Sanity tests for vivory-mcp-verification.
 
 Runs offline (no httpx/network). Mirrors korea test suite — verifies:
-- 53 tool count (v0.5)
+- 68 tool count (v0.6 = v0.5 + npm + pypi + retraction + workflow + policy
+  + chain pollers + domain history)
 - every tool has handler returning (method, path, params, body) tuple
 - inputSchema is valid JSON Schema
 - error envelope is structured JSON with stable code field
-  (now includes `did_you_mean` fuzzy suggestion list)
+  (includes `did_you_mean` fuzzy suggestion list)
 - client request() supports not_found_ok parameter
 
 Run: `pytest -q` from package root.
@@ -27,8 +28,8 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.5.1 claims 53 tools across 22 categories."""
-    assert len(srv.TOOLS) == 53, f"Expected 53 tools, got {len(srv.TOOLS)}"
+    """v0.6.0 claims 68 tools across 27 categories."""
+    assert len(srv.TOOLS) == 68, f"Expected 68 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -120,7 +121,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-verification" in captured.err
-    assert "53 tools" in captured.err
+    assert "68 tools" in captured.err
 
 
 def test_client_request_supports_not_found_ok():

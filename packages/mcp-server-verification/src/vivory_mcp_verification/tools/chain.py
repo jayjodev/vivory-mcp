@@ -62,6 +62,72 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
+    Tool(
+        name="verify_contract_admin_activity",
+        description=(
+            "Detect recent admin activity on an EVM contract — owner "
+            "transfers, role grants, pauses, upgrades. Scans the contract's "
+            "tx history (last N days, default 30, max 365) via Etherscan v2, "
+            "decodes events from common patterns (Ownable, AccessControl, "
+            "Pausable, UUPS/Transparent proxies), and returns a chronological "
+            "list of admin-flagged events with tx hash + block + decoded "
+            "args. Empty list = no detected admin activity in window. Use "
+            "before signing off on a contract as 'audited and stable'."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "chain": {
+                    "type": "string",
+                    "enum": ["ethereum", "arbitrum", "base", "optimism", "polygon"],
+                },
+                "contract": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{40}$",
+                    "description": "0x-prefixed 20-byte contract address.",
+                },
+                "days": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 365,
+                    "default": 30,
+                    "description": "Lookback window in days.",
+                },
+            },
+            "required": ["chain", "contract"],
+            "additionalProperties": False,
+        },
+    ),
+    Tool(
+        name="verify_proxy_upgrade",
+        description=(
+            "Read the EIP-1967 implementation slot of a proxy contract and "
+            "return the current implementation address + recent Upgraded "
+            "events. For EIP-1967 proxies (UUPS, TransparentUpgradeable), "
+            "the implementation lives at storage slot 0x360894...e103 — we "
+            "read it via eth_getStorageAt and decode the address. Then we "
+            "scan the proxy's logs for `Upgraded(address)` events to build "
+            "the implementation history. Use when an agent is interacting "
+            "with a contract that might be a proxy — knowing the current "
+            "impl + whether it was recently upgraded is critical for trust."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "chain": {
+                    "type": "string",
+                    "enum": ["ethereum", "arbitrum", "base", "optimism", "polygon"],
+                },
+                "contract": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{40}$",
+                    "description": "0x-prefixed proxy contract address.",
+                },
+            },
+            "required": ["chain", "contract"],
+            "additionalProperties": False,
+        },
+    ),
 ]
 
 
@@ -76,6 +142,22 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, str, dict | None, dict | None]]]
         "GET",
         "blockchain-audit/chains",
         None,
+        None,
+    ),
+    "verify_contract_admin_activity": lambda a: (
+        "GET",
+        "blockchain-audit/contract/admin",
+        {
+            "chain": a.get("chain"),
+            "contract": a.get("contract"),
+            "days": a.get("days"),
+        },
+        None,
+    ),
+    "verify_proxy_upgrade": lambda a: (
+        "GET",
+        "blockchain-audit/contract/proxy",
+        {"chain": a.get("chain"), "contract": a.get("contract")},
         None,
     ),
 }

@@ -1,7 +1,7 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.5 ships 53 tools across 22 categories:
+(`vivory-verification`). v0.6 ships 68 tools across 27 categories:
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
@@ -23,8 +23,13 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - apt         (2) — apt_market_snapshot, verify_apt_price (MOLIT RTMS — Korean apartment real-transaction prices, daily nationwide ingest)
 - identity    (2) — verify_orcid, orcid_works (ORCID public API)
 - web         (2) — verify_url_hash, verify_dataset_fingerprint (content-trail + structure probe)
-- domain      (2) — verify_domain_whois, verify_domain_dns (RDAP + Cloudflare DoH)
-- chain       (2) — blockchain_audit_lookup, blockchain_audit_chains (EVM tx signed audit envelope)
+- domain      (4) — verify_domain_whois, verify_domain_dns, verify_domain_owner_change, verify_domain_history (RDAP + Cloudflare DoH + WHOIS history poll)
+- chain       (4) — blockchain_audit_lookup, blockchain_audit_chains, verify_contract_admin_activity, verify_proxy_upgrade (EVM signed audit + contract pollers)
+- npm         (2) — verify_npm_package, verify_npm_typosquat (registry.npmjs.org supply chain)
+- pypi        (2) — verify_pypi_package, verify_pypi_typosquat (pypi.org supply chain)
+- retraction  (2) — retraction_watch_recent, retraction_watch_by_journal (Retraction Watch + Crossref crossmark)
+- workflow    (3) — workflow_paper_repro, workflow_crypto_diligence, workflow_ai_output_verify (curated multi-step verification)
+- policy      (2) — policy_list_presets, policy_evaluate (custom verification policy framework)
 
 Architecture:
 - Tool definitions live in `tools/{category}.py` per concern
@@ -58,17 +63,22 @@ from .tools import (
     forecast as forecast_tools,
     identity as identity_tools,
     indicator as indicator_tools,
+    npm as npm_tools,
     patent as patent_tools,
     peer_review as peer_review_tools,
     place as place_tools,
+    policy as policy_tools,
     provenance as provenance_tools,
+    pypi as pypi_tools,
     quake as quake_tools,
     repro as repro_tools,
+    retraction as retraction_tools,
     trial as trial_tools,
     tvl as tvl_tools,
     web as web_tools,
     wikidata as wikidata_tools,
     work as work_tools,
+    workflow as workflow_tools,
 )
 
 logger = logging.getLogger("vivory_mcp_verification")
@@ -99,6 +109,11 @@ TOOLS: list[Tool] = [
     *web_tools.TOOLS,
     *domain_tools.TOOLS,
     *chain_tools.TOOLS,
+    *npm_tools.TOOLS,
+    *pypi_tools.TOOLS,
+    *retraction_tools.TOOLS,
+    *workflow_tools.TOOLS,
+    *policy_tools.TOOLS,
 ]
 
 
@@ -125,6 +140,11 @@ HANDLERS: dict[str, Any] = {
     **web_tools.HANDLERS,
     **domain_tools.HANDLERS,
     **chain_tools.HANDLERS,
+    **npm_tools.HANDLERS,
+    **pypi_tools.HANDLERS,
+    **retraction_tools.HANDLERS,
+    **workflow_tools.HANDLERS,
+    **policy_tools.HANDLERS,
 }
 
 
@@ -220,7 +240,7 @@ def _startup_banner() -> None:
     if has_key:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Pro tier (Bearer key sent) | "
-            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools)",
+            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 124 total)",
             file=sys.stderr,
             flush=True,
         )
@@ -228,9 +248,10 @@ def _startup_banner() -> None:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Anonymous tier (100/day per IP) | "
             f"gateway={base}\n"
-            f"  → Upgrade to Pro 10k/day ($29/mo USDC, no auto-renew, no custody) at\n"
-            f"    https://api.vivory.app/dashboard/public-api — same key unlocks the\n"
-            f"    sibling `vivory-mcp-korea` (56 Korea tools), 109 tools total.",
+            f"  → Tools Pro bridge ($4.99/mo, 1k call/mo) or Vivory API Pro\n"
+            f"    ($29/mo USDC, 10k/day, no auto-renew, no custody) at\n"
+            f"    https://api.vivory.app/dashboard/public-api — Vivory API Pro key\n"
+            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 124 total).",
             file=sys.stderr,
             flush=True,
         )

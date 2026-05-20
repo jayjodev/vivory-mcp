@@ -75,6 +75,62 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
+    Tool(
+        name="verify_domain_owner_change",
+        description=(
+            "Detect whether a domain has been recently modified at the "
+            "registrar — owner change, registrar transfer, status flip. "
+            "Calls RDAP, reads the `lastChanged` event date, and computes "
+            "`days_since_last_change`. Flags `recently_modified=True` "
+            "when < 30 days (configurable via `recent_window_days`), which "
+            "is a classic phishing-prep signal. Vivory also writes the "
+            "snapshot to its WHOIS history table, so subsequent calls "
+            "return `prior_snapshot_at` + `registrar_changed_since_last`. "
+            "First call seeds the baseline; subsequent calls return diff."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "domain": _DOMAIN,
+                "recent_window_days": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 365,
+                    "default": 30,
+                    "description": "Threshold for `recently_modified=True` flag.",
+                },
+            },
+            "required": ["domain"],
+            "additionalProperties": False,
+        },
+    ),
+    Tool(
+        name="verify_domain_history",
+        description=(
+            "Return Vivory's recorded WHOIS history for a domain — every "
+            "snapshot we've taken (registrar, status flags, nameservers, "
+            "lastChanged) in reverse chronological order. Useful for proving "
+            "or refuting 'the domain owner has been the same since X'. "
+            "First-ever call on a fresh domain returns at most the single "
+            "current snapshot (no prior history); repeat lookups build up "
+            "the timeline. Pair with `verify_domain_owner_change` to detect "
+            "ongoing change."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "domain": _DOMAIN,
+                "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 20,
+                },
+            },
+            "required": ["domain"],
+            "additionalProperties": False,
+        },
+    ),
 ]
 
 
@@ -89,6 +145,21 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, str, dict | None, dict | None]]]
         "GET",
         "verify/domain/dns",
         {"domain": a.get("domain"), "types": a.get("types")},
+        None,
+    ),
+    "verify_domain_owner_change": lambda a: (
+        "GET",
+        "verify/domain/owner-change",
+        {
+            "domain": a.get("domain"),
+            "recent_window_days": a.get("recent_window_days"),
+        },
+        None,
+    ),
+    "verify_domain_history": lambda a: (
+        "GET",
+        "verify/domain/history",
+        {"domain": a.get("domain"), "limit": a.get("limit")},
         None,
     ),
 }
