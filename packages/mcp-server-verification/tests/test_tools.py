@@ -26,8 +26,8 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.4.0 claims 45 tools across 18 categories."""
-    assert len(srv.TOOLS) == 45, f"Expected 45 tools, got {len(srv.TOOLS)}"
+    """v0.5.0 claims 53 tools across 22 categories."""
+    assert len(srv.TOOLS) == 53, f"Expected 53 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -77,6 +77,25 @@ def test_error_envelope_unknown_tool():
     assert payload["tool"] == "definitely_not_a_real_tool_xyz"
     assert payload["gateway"] == "vivory-mcp-verification"
     assert "error" in payload
+    assert "did_you_mean" in payload
+    assert isinstance(payload["did_you_mean"], list)
+
+
+def test_did_you_mean_suggests_close_match():
+    """A typo like `verify_dio` should suggest `verify_doi`."""
+    out = asyncio.run(srv.call_tool("verify_dio", {}))
+    payload = json.loads(out[0].text)
+    assert "verify_doi" in payload["did_you_mean"], (
+        f"Expected verify_doi suggestion, got {payload['did_you_mean']}"
+    )
+
+
+def test_did_you_mean_empty_for_garbage():
+    """Random gibberish should not crash and just return [] or low-quality suggestions."""
+    out = asyncio.run(srv.call_tool("xqzplv9999", {}))
+    payload = json.loads(out[0].text)
+    assert isinstance(payload["did_you_mean"], list)
+    assert payload["code"] == "UNKNOWN_TOOL"
 
 
 def test_error_classification():
@@ -100,7 +119,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-verification" in captured.err
-    assert "45 tools" in captured.err
+    assert "53 tools" in captured.err
 
 
 def test_client_request_supports_not_found_ok():

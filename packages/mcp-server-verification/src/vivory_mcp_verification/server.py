@@ -1,7 +1,7 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.4 ships 45 tools across 18 categories:
+(`vivory-verification`). v0.5 ships 53 tools across 22 categories:
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
@@ -21,6 +21,10 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - tvl         (2) — verify_protocol_tvl, verify_chain_tvl (DefiLlama crypto TVL)
 - quake       (2) — verify_quake, recent_quakes (USGS Earthquake)
 - apt         (2) — apt_market_snapshot, verify_apt_price (MOLIT RTMS — Korean apartment real-transaction prices, daily nationwide ingest)
+- identity    (2) — verify_orcid, orcid_works (ORCID public API)
+- web         (2) — verify_url_hash, verify_dataset_fingerprint (content-trail + structure probe)
+- domain      (2) — verify_domain_whois, verify_domain_dns (RDAP + Cloudflare DoH)
+- chain       (2) — blockchain_audit_lookup, blockchain_audit_chains (EVM tx signed audit envelope)
 
 Architecture:
 - Tool definitions live in `tools/{category}.py` per concern
@@ -31,6 +35,7 @@ Architecture:
 from __future__ import annotations
 
 import asyncio
+import difflib
 import json
 import logging
 import sys
@@ -44,11 +49,14 @@ from . import client
 from .tools import (
     apt as apt_tools,
     archive as archive_tools,
+    chain as chain_tools,
     claim as claim_tools,
     doi as doi_tools,
+    domain as domain_tools,
     entity as entity_tools,
     filing as filing_tools,
     forecast as forecast_tools,
+    identity as identity_tools,
     indicator as indicator_tools,
     patent as patent_tools,
     peer_review as peer_review_tools,
@@ -58,6 +66,7 @@ from .tools import (
     repro as repro_tools,
     trial as trial_tools,
     tvl as tvl_tools,
+    web as web_tools,
     wikidata as wikidata_tools,
     work as work_tools,
 )
@@ -86,6 +95,10 @@ TOOLS: list[Tool] = [
     *tvl_tools.TOOLS,
     *quake_tools.TOOLS,
     *apt_tools.TOOLS,
+    *identity_tools.TOOLS,
+    *web_tools.TOOLS,
+    *domain_tools.TOOLS,
+    *chain_tools.TOOLS,
 ]
 
 
@@ -108,6 +121,10 @@ HANDLERS: dict[str, Any] = {
     **tvl_tools.HANDLERS,
     **quake_tools.HANDLERS,
     **apt_tools.HANDLERS,
+    **identity_tools.HANDLERS,
+    **web_tools.HANDLERS,
+    **domain_tools.HANDLERS,
+    **chain_tools.HANDLERS,
 }
 
 
@@ -141,16 +158,31 @@ def _error_envelope(tool: str, exc: BaseException) -> dict[str, Any]:
     }
 
 
+def _did_you_mean(name: str, registry: dict[str, Any], k: int = 3) -> list[str]:
+    """Fuzzy-match an unknown tool name against the registered catalog.
+
+    Uses difflib.get_close_matches with a permissive cutoff so agents that
+    mistype `verify_doi_metadata` → `doi_metadata` (or vice versa) get a
+    useful hint instead of just `UNKNOWN_TOOL`. Returns up to k candidates,
+    most-similar first.
+    """
+    if not name:
+        return []
+    return difflib.get_close_matches(name, list(registry.keys()), n=k, cutoff=0.55)
+
+
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any] | None) -> list[TextContent]:
     args = arguments or {}
     handler = HANDLERS.get(name)
     if handler is None:
+        suggestions = _did_you_mean(name, HANDLERS)
         envelope = {
             "error": f"Unknown tool: {name}",
             "code": "UNKNOWN_TOOL",
             "tool": name,
             "gateway": "vivory-mcp-verification",
+            "did_you_mean": suggestions,
         }
         return [TextContent(type="text", text=json.dumps(envelope, ensure_ascii=False))]
 
@@ -188,7 +220,7 @@ def _startup_banner() -> None:
     if has_key:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Pro tier (Bearer key sent) | "
-            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 55 Korea tools)",
+            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools)",
             file=sys.stderr,
             flush=True,
         )
@@ -198,7 +230,7 @@ def _startup_banner() -> None:
             f"gateway={base}\n"
             f"  → Upgrade to Pro 10k/day ($29/mo USDC, no auto-renew, no custody) at\n"
             f"    https://api.vivory.app/dashboard/public-api — same key unlocks the\n"
-            f"    sibling `vivory-mcp-korea` (55 Korea tools), 100+ tools total.",
+            f"    sibling `vivory-mcp-korea` (56 Korea tools), 109 tools total.",
             file=sys.stderr,
             flush=True,
         )

@@ -26,8 +26,8 @@ from vivory_mcp_korea import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.4.0 claims 55 tools across 15 sources."""
-    assert len(srv.TOOLS) == 55, f"Expected 55 tools, got {len(srv.TOOLS)}"
+    """v0.5.0 claims 56 tools across 16 sources."""
+    assert len(srv.TOOLS) == 56, f"Expected 56 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -79,6 +79,17 @@ def test_error_envelope_unknown_tool():
     assert payload["tool"] == "definitely_not_a_real_tool_xyz"
     assert payload["gateway"] == "vivory-mcp-korea"
     assert "error" in payload
+    assert "did_you_mean" in payload
+    assert isinstance(payload["did_you_mean"], list)
+
+
+def test_did_you_mean_suggests_close_match():
+    """A typo like `kosis_populaton` should suggest `kosis_population`."""
+    out = asyncio.run(srv.call_tool("kosis_populaton", {}))
+    payload = json.loads(out[0].text)
+    assert "kosis_population" in payload["did_you_mean"], (
+        f"Expected kosis_population suggestion, got {payload['did_you_mean']}"
+    )
 
 
 def test_error_classification():
@@ -104,7 +115,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-korea" in captured.err
-    assert "55 tools" in captured.err
+    assert "56 tools" in captured.err
 
 
 def test_client_get_api_base_default():

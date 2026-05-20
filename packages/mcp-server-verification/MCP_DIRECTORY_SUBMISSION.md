@@ -1,6 +1,6 @@
 # MCP Directory submission — vivory-mcp-verification
 
-> **State as of 2026-05-20**: `vivory-mcp-verification` **v0.4.1 LIVE on PyPI** — 45 tools / 18 categories. Install: `uvx vivory-mcp-verification`. Submission to MCP Registry + awesome-mcp-servers lists is the remaining operator action (no `mcp-publisher` run yet).
+> **State as of 2026-05-20**: `vivory-mcp-verification` **v0.5.0 ready locally** (PyPI 0.4.1 live; 0.5.0 publish pending tag push). 53 tools / 22 categories. Install (current): `uvx vivory-mcp-verification` (0.4.1). Remaining operator actions: v0.5.0 PyPI publish → `mcp-publisher publish` → awesome-mcp-servers PRs.
 
 Submission packet for [MCP Registry](https://registry.modelcontextprotocol.io)
 + punkpeye/awesome-mcp-servers + wong2/awesome-mcp-servers.
@@ -9,7 +9,7 @@ Submission packet for [MCP Registry](https://registry.modelcontextprotocol.io)
 
 - **Name**: `vivory-verification`
 - **MCP Registry ID**: `io.github.jayjodev/vivory-mcp-verification`
-- **Package**: [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) on PyPI (v0.4.1)
+- **Package**: [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) on PyPI (latest live: v0.4.1; v0.5.0 publish pending)
 - **Maintainer**: Vivory (contact@vivory.app)
 - **License**: MIT
 - **Source (public mirror)**: https://github.com/jayjodev/vivory-mcp (subpath `packages/mcp-server-verification`)
@@ -17,7 +17,7 @@ Submission packet for [MCP Registry](https://registry.modelcontextprotocol.io)
 
 ## One-line pitch
 
-Umbrella MCP server for verifiable AI work — one registration for 45 tools across 18 categories (claim · DOI · archive · repro · provenance · peer review · forecast · SEC EDGAR · GLEIF · Wikidata · ClinicalTrials · World Bank · USPTO · OSM · DefiLlama · USGS · MOLIT real-estate).
+Umbrella MCP server for verifiable AI work — one registration for 53 tools across 22 categories (claim · DOI · archive · repro · provenance · peer review · forecast · SEC EDGAR · GLEIF · Wikidata · ClinicalTrials · World Bank · USPTO · OSM · DefiLlama · USGS · MOLIT real-estate).
 
 ## Category
 
@@ -30,7 +30,7 @@ cite things end up wiring Crossref + Wayback + SEC EDGAR + GLEIF + a
 half-baked C2PA reader by hand. This server gives them a single registration
 for the entire "is this real?" stack:
 
-- **45 tools across 18 categories** (claim, DOI, archive, repro hash, C2PA/PDF/hash-chain/watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR, GLEIF LEI, OpenAlex works, Wikidata Q-numbers, ClinicalTrials NCT, World Bank, USPTO PatentsView, OSM places, DefiLlama TVL, USGS quakes, MOLIT Korean real-estate)
+- **53 tools across 22 categories** (claim, DOI, archive, repro hash, C2PA/PDF/hash-chain/watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR, GLEIF LEI, OpenAlex works, Wikidata Q-numbers, ClinicalTrials NCT, World Bank, USPTO PatentsView, OSM places, DefiLlama TVL, USGS quakes, MOLIT Korean real-estate)
 - **65 of 69 backing endpoints are v0.1-real** (the remaining 4 are forecast/repro scaffolds shipping in v0.5)
 - Free anonymous tier (100/day/IP) — no signup gate
 - **Unified Pro key** — $29/mo unlocks both `vivory-mcp-verification` AND `vivory-mcp-korea` (100+ tools, one purchase). USDC + card (Stripe/Lemon Squeezy)
@@ -122,7 +122,7 @@ USDC/card, not a sales-gated SaaS contract.
 
 ## Roadmap
 
-- **v0.4.x (now)**: 45 tools shipping, 41 fully real / 4 envelope-ready (forecast + repro scaffolds).
+- **v0.5.x (now)**: 53 tools across 22 categories, 49 fully real / 4 envelope-ready (forecast + repro scaffolds). New in v0.5: Identity (ORCID), Web (URL hash + dataset fingerprint), Domain (RDAP whois + DoH DNS), Chain (EVM blockchain audit).
 - **v0.5**: Forecast verifier wired to `crypto.vivory.app/forecast` track record. Repro auto-finalize bound to Reproducibility Hub.
 - **v0.6**: Peer Review MCP split candidate (separate registration if traffic justifies — see `project_peer_review_mcp_planning_2026_05_16.md`).
 
@@ -146,7 +146,7 @@ Section: 🔎 **Search & Data Extraction** (best fit) or 🛡️ **Security** (s
 
 Markdown line:
 ```markdown
-- [jayjodev/vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) 🐍 ☁️ 🏠 - 45 verification tools across 18 categories — claim, DOI (Crossref + retraction watch + ORCID), web archive (Wayback), reproducibility hash, C2PA / PDF / hash-chain / watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR, GLEIF LEI, OpenAlex, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT realestate. Single registration replaces ad-hoc citation glue. No upstream API keys required. Install: `uvx vivory-mcp-verification`. Ask Claude: *"Verify every DOI in this paragraph and snapshot any URL that's not on Wayback yet."*
+- [jayjodev/vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) 🐍 ☁️ 🏠 - 53 verification tools across 22 categories — claim, DOI (Crossref + retraction watch + ORCID), web archive (Wayback), reproducibility hash, C2PA / PDF / hash-chain / watermark provenance, peer-review verdicts, forecast track record, SEC EDGAR, GLEIF LEI, OpenAlex, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT realestate. Single registration replaces ad-hoc citation glue. No upstream API keys required. Install: `uvx vivory-mcp-verification`. Ask Claude: *"Verify every DOI in this paragraph and snapshot any URL that's not on Wayback yet."*
 ```
 
 ### 2️⃣ wong2/awesome-mcp-servers
@@ -156,12 +156,12 @@ Section: "Reference / Citation" or "Security" — fall back to "Other".
 
 Markdown line:
 ```markdown
-- [vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) - 45 verification tools across 18 categories — DOI / Wayback / C2PA / PDF / hash-chain / peer-review / forecast / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT — under one MCP. Free anonymous tier (100/day/IP).
+- [vivory-mcp-verification](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-verification) - 53 verification tools across 22 categories — DOI / Wayback / C2PA / PDF / hash-chain / peer-review / forecast / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT — under one MCP. Free anonymous tier (100/day/IP).
 ```
 
 ### 3️⃣ MCP Registry — `mcp-publisher publish`
 
-Run after `server.json` is final (currently v0.4.1, env-var description points to `/dashboard`):
+Run after `server.json` is final (currently v0.5.0, env-var description points to `/dashboard`):
 ```bash
 cd src/mcp-server-verification
 mcp-publisher publish server.json

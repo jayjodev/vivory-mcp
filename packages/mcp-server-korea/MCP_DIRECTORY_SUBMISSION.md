@@ -2,7 +2,7 @@
 
 Distribution-layer runbook for the Korea MCP umbrella. Code/supply work is done — these are the registry submissions that turn `pip install`-able into discoverable.
 
-**State (2026-05-20)**: **v0.4.0 LIVE on PyPI** — 55 tools across 15 sources. `mcp-name` verification comment in README, `server.json` namespace `io.github.jayjodev/vivory-mcp-korea`. Ready for MCP Registry submission. Operator action remaining = run `mcp-publisher publish` + open the two awesome-mcp-servers PRs.
+**State (2026-05-20)**: **v0.5.0 ready locally** (PyPI 0.4.0 live; 0.5.0 publish pending tag push). 56 tools across 16 sources. `mcp-name` verification comment in README, `server.json` namespace `io.github.jayjodev/vivory-mcp-korea`. Ready for MCP Registry submission after v0.5.0 PyPI publish. Operator action remaining = tag push (mirror) → `mcp-publisher publish` → open the two awesome-mcp-servers PRs.
 
 **Submission order (highest leverage first)**:
 1. **Official MCP Registry** (registry.modelcontextprotocol.io) — anchor of the ecosystem, indexed by Smithery + Cursor + Glama
@@ -67,7 +67,7 @@ Repo: https://github.com/punkpeye/awesome-mcp-servers (~86.5k stars, ~10k forks,
 
 **PR title**:
 ```
-Add vivory-mcp-korea (55 tools across 15 Korean public-data sources)
+Add vivory-mcp-korea (56 tools across 16 Korean public-data sources)
 ```
 
 **Markdown line to add** (alphabetical within section):
@@ -144,9 +144,9 @@ $EDITOR README.md
 
 # 4. Commit + push + open PR
 git checkout -b add-vivory-mcp-korea
-git commit -am "Add vivory-mcp-korea (55 tools across 15 Korean public-data sources)"
+git commit -am "Add vivory-mcp-korea (56 tools across 16 Korean public-data sources)"
 git push -u origin add-vivory-mcp-korea
-gh pr create --title "Add vivory-mcp-korea (55 tools across 15 Korean public-data sources)" \
+gh pr create --title "Add vivory-mcp-korea (56 tools across 16 Korean public-data sources)" \
   --body-file ../scripts/mcp_pr_body_punkpeye.md  # see scripts/mcp_registry_submit.sh
 ```
 
@@ -160,7 +160,7 @@ Section: `Community Servers` (only third-party section currently; no geographic 
 
 **Markdown line**:
 ```markdown
-- [vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) - Umbrella MCP for Korean public data — 55 tools across 15 sources (KOSIS · BOK · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul · VWorld). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings, VWorld geocoder + 1,534 museums. No upstream API keys required.
+- [vivory-mcp-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea) - Umbrella MCP for Korean public data — 56 tools across 16 sources (KOSIS · BOK · DART · KMA · AirKorea · Opinet · HIRA · NMC · MOLIT · KTO · MFDS · MOIS · NEIS · Seoul · VWorld). Realtime ER beds, apartment transactions, KMA forecasts, gas-price rankings, VWorld geocoder + 1,534 museums. No upstream API keys required.
 ```
 
 Submit ~3 days after punkpeye/awesome PR lands cleanly (avoid double-spam appearance).
@@ -206,7 +206,8 @@ Run from `src/mcp-server-korea/`:
 - [x] LICENSE file present (MIT)
 - [x] Tool count and source list in README accurate (55 / 15 — added VWorld in v0.4)
 - [x] `<!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->` HTML comment in README (verification anchor)
-- [x] `server.json` at repo root with namespace `io.github.jayjodev/vivory-mcp-korea` (v0.4.0)
+- [x] `server.json` at repo root with namespace `io.github.jayjodev/vivory-mcp-korea` (v0.5.0)
+- [ ] **v0.5.0 published to PyPI** (waiting on tag push)
 - [ ] **Registry listing live** (waiting on `mcp-publisher publish`)
 - [ ] **punkpeye PR opened**
 - [ ] **wong2 PR opened**
@@ -218,5 +219,5 @@ Run from `src/mcp-server-korea/`:
 - **Order matters**: registry → punkpeye → wong2. Registry is the canonical source of truth that downstream consumers (Smithery, Cursor, Glama) auto-mirror, so it should land first.
 - 🇰🇷 flag emoji in punkpeye line signals geography clearly.
 - Earlier draft `mcp-server-kosis/MCP_DIRECTORY_SUBMISSION.md` is now superseded; the umbrella supersedes the standalone. KOSIS package is EOL 2026-12-31 (final maintenance release 0.1.2).
-- **Sister `vivory-mcp-verification`** is **v0.4.1 LIVE on PyPI** (45 tools / 18 categories). See [`src/mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md`](../mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md) — submit both packets in the same wave (unified Pro key narrative).
+- **Sister `vivory-mcp-verification`** is **v0.5.0 ready locally** (PyPI 0.4.1 live; 0.5.0 publish pending) — 53 tools / 22 categories. Together = **109 tools, one unified Pro key**. See [`src/mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md`](../mcp-server-verification/MCP_DIRECTORY_SUBMISSION.md) — submit both packets in the same wave.
 - After all three (registry + 2 community lists) land: discovery via Google "Korea MCP server", "Korean public data API", "MOLIT real estate AI agent" should surface within 2–4 weeks.

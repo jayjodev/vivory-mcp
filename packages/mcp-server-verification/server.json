@@ -2,20 +2,20 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jayjodev/vivory-mcp-verification",
   "title": "Vivory Verification Gateway",
-  "description": "45 MCP tools for verifiable AI work — DOI, archive, provenance, SEC, GLEIF, Wikidata, MOLIT Korean apartment prices, +11. Free 100 calls/day per IP — Pro $29/mo unifies with vivory-mcp-korea (55 tools, 100+ total) on one key.",
+  "description": "53 MCP tools for verifiable AI work — DOI/ORCID, archive, URL hash + dataset fingerprint, C2PA/PDF/hash-chain provenance, SEC EDGAR, GLEIF, Wikidata, ClinicalTrials, World Bank, USPTO, OSM, DefiLlama TVL, USGS quakes, MOLIT Korean RTMS, RDAP whois + DoH DNS, EVM blockchain audit. Free 100/day per IP — Pro $29/mo unifies with vivory-mcp-korea (56 tools, 109 total) on one key.",
   "websiteUrl": "https://api.vivory.app",
   "repository": {
     "url": "https://github.com/jayjodev/vivory-mcp",
     "source": "github",
     "subfolder": "packages/mcp-server-verification"
   },
-  "version": "0.4.1",
+  "version": "0.5.0",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "vivory-mcp-verification",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "transport": {
         "type": "stdio"
       },
@@ -42,8 +42,8 @@
       "categories": ["research", "verification", "provenance"],
       "regions": ["global"],
       "license": "MIT",
-      "tool_count": 45,
-      "category_count": 18,
+      "tool_count": 53,
+      "category_count": 22,
       "pricing": {
         "anonymous": "100/day per IP, no signup",
         "free_signup": "500/day with attribution",

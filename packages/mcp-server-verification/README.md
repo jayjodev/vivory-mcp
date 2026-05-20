@@ -5,18 +5,20 @@
 > **Verifiable AI work — one MCP server for every "is this real?" question.**
 
 An umbrella MCP (Model Context Protocol) server that gives AI agents a single
-registration for **45 verification tools** across 18 categories: claim
-verification, DOI resolution, web archive lookup, reproducibility hash
-registry, media + document provenance, peer-review verdict, forecast track
-record, SEC EDGAR filings, GLEIF Legal Entity Identifier, OpenAlex works,
-Wikidata Q-numbers, ClinicalTrials.gov, World Bank macro indicators, USPTO
-patents, OpenStreetMap places, DefiLlama TVL, USGS earthquakes, and MOLIT
-Korean apartment real-transaction prices.
+registration for **53 verification tools** across 22 categories: claim
+verification, DOI + ORCID resolution, web archive lookup, URL hash +
+dataset fingerprint, reproducibility hash registry, media + document
+provenance, peer-review verdict, forecast track record, SEC EDGAR filings,
+GLEIF Legal Entity Identifier, OpenAlex works, Wikidata Q-numbers,
+ClinicalTrials.gov, World Bank macro indicators, USPTO patents,
+OpenStreetMap places, DefiLlama TVL, USGS earthquakes, MOLIT Korean
+apartment real-transaction prices, RDAP whois + DoH DNS, and EVM
+blockchain audit trail.
 
 Built by [Vivory](https://vivory.app) — a verifiable AI work platform.
 Mission: in an age where everything is synthesized, verification trails become trust.
 
-## What's inside (v0.4.1 — 45 tools)
+## What's inside (v0.5.0 — 53 tools)
 
 | Category    | Tools (count) | What it answers                                                      |
 |-------------|---------------|----------------------------------------------------------------------|
@@ -38,6 +40,10 @@ Mission: in an age where everything is synthesized, verification trails become t
 | TVL         | 2             | DefiLlama — crypto protocol + chain TVL verification                 |
 | Quake       | 2             | USGS Earthquake — seismic event verification                         |
 | Apt         | 2             | MOLIT RTMS — Korean apartment real-transaction prices (매매·전월세). Aggregate stats + claim verification. Raw transaction lists + price trend live in sister `vivory-mcp-korea` (`molit_*`). Same data, different axes. |
+| Identity    | 2             | ORCID author identity — resolve iD to name + works, chain into DOI verdicts |
+| Web         | 2             | URL hash + dataset fingerprint — sha256 + size + ETag + structure probe |
+| Domain      | 2             | Domain reputation — RDAP whois (registrar + age) + Cloudflare DoH DNS (A/MX/TXT/CAA) |
+| Chain       | 2             | EVM blockchain audit — signed envelope over confirmed tx (Ethereum, Arbitrum, Base, Optimism, Polygon) |
 
 ### Full tool list
 
@@ -76,6 +82,14 @@ Mission: in an age where everything is synthesized, verification trails become t
 **Quake**: `verify_quake` · `recent_quakes`
 
 **Apt**: `apt_market_snapshot` · `verify_apt_price` (MOLIT RTMS — sigungu × month × {trade, rent}, daily nationwide ingest from 국토교통부)
+
+**Identity**: `verify_orcid` · `orcid_works`
+
+**Web**: `verify_url_hash` · `verify_dataset_fingerprint`
+
+**Domain**: `verify_domain_whois` · `verify_domain_dns`
+
+**Chain**: `blockchain_audit_lookup` · `blockchain_audit_chains` (EVM tx → Ed25519-signed audit envelope; same trust anchor as Vivory tool verification receipts)
 
 ## Why this exists
 
@@ -151,14 +165,14 @@ claude mcp add vivory-verification vivory-mcp-verification
 ## Tier limits — Vivory API Pro
 
 **One $29/mo key unlocks BOTH MCPs.** A Pro key issued for `vivory-mcp-verification`
-also unlocks `vivory-mcp-korea` (55 Korean public-data tools) and vice versa —
+also unlocks `vivory-mcp-korea` (56 Korean public-data tools) and vice versa —
 the same Bearer credential is honored across the entire Vivory MCP family.
 
 | Tier        | Daily quota  | Notes                                              |
 |-------------|--------------|----------------------------------------------------|
 | Anonymous   | 100/day/IP   | No signup, polite caching                          |
 | Free        | 500/day      | Sign up at api.vivory.app/dashboard                |
-| Pro         | 10,000/day   | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. Same key unlocks `vivory-mcp-korea` (55 tools) = **100+ tools, one purchase**. |
+| Pro         | 10,000/day   | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. Same key unlocks `vivory-mcp-korea` (56 tools) = **109 tools, one purchase**. |
 | Enterprise  | 100,000/day  | contact@vivory.app (self-serve only, no SaaS sales) |
 
 Sign up at **[api.vivory.app/dashboard/public-api](https://api.vivory.app/dashboard/public-api)**.
@@ -213,13 +227,14 @@ VIVORY_API_BASE=https://my-gateway.example.com/api vivory-mcp-verification
 ## Sister packages in the Vivory MCP family
 
 - **[vivory-mcp-korea](https://pypi.org/project/vivory-mcp-korea/)** —
-  Korean public data (KOSIS / BoK / DART / NEIS / Opinet / KMA / 14 sources,
-  51 tools).
-- **vivory-mcp-verification** — this package (verification, 45 tools
-  spanning DOI/Crossref/OpenAlex, web archive, SEC EDGAR + GLEIF + USPTO
-  as global sisters to DART/KIPRIS, Wikidata grounding, ClinicalTrials.gov,
-  World Bank macro, OpenStreetMap, DefiLlama, USGS earthquake, MOLIT RTMS
-  Korean apartment real-transaction prices).
+  Korean public data (KOSIS / BoK / DART / NEIS / Opinet / KMA / NTS /
+  16 sources, 56 tools).
+- **vivory-mcp-verification** — this package (verification, 53 tools
+  spanning DOI/Crossref/OpenAlex, ORCID identity, web archive, URL hash +
+  dataset fingerprint, SEC EDGAR + GLEIF + USPTO as global sisters to
+  DART/KIPRIS, Wikidata grounding, ClinicalTrials.gov, World Bank macro,
+  OpenStreetMap, DefiLlama, USGS earthquake, MOLIT RTMS Korean apartment
+  real-transaction prices, RDAP whois + DoH DNS, EVM blockchain audit).
 - More coming under the same `api.vivory.app` umbrella.
 
 ## License

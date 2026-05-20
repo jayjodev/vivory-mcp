@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->
 
-**Umbrella MCP server bundling Korean public-data sources into a single installation.** 55 tools across 15 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
+**Umbrella MCP server bundling Korean public-data sources into a single installation.** 56 tools across 16 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
 
 Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend handles auth, caching, attribution, JS-literal parsing, and rate-limit gating.
 
@@ -10,7 +10,7 @@ Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend h
 
 ## What's included
 
-### v0.4 — 15 sources, 55 tools
+### v0.5 — 16 sources, 56 tools
 
 | Source | Tools | What it covers |
 |---|---|---|
@@ -30,6 +30,7 @@ Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend h
 | **Seoul OpenData** (서울시) | 2 | Public parking lots (~2,300 with realtime), Seoul Bike (따릉이) stations. |
 | **MoE EV** (환경부) | 1 | EV chargers per SIDO with realtime status. |
 | **VWorld** (국토교통부 공간정보) | 4 | Place / address autocomplete, geocoder (address → WGS84), 박물관·미술관 1,534 venue listing + detail (Wikipedia + Google Places enrichment). |
+| **NTS** (국세청) | 1 | Korean business registration number (사업자등록번호) — checksum + live 국세청 status lookup (계속/휴업/폐업 + 일반/간이/면세 + tax type change date). |
 
 Tools are namespaced by source (`kosis_*`, `kma_*`, `dart_*`, `hira_*`, …) so Claude can pick the right one automatically.
 
@@ -55,7 +56,7 @@ Korean public-data APIs publish exclusively in Korean, require per-API key issua
 | Use case | Recommended package |
 |---|---|
 | All Korean public data | **`vivory-mcp-korea`** ← this package |
-| Verification (DOI · archive · provenance · peer review · forecast) | `vivory-mcp-verification` — sister umbrella scaffold, 21 tools (PyPI ship pending) |
+| Verification (DOI · archive · provenance · peer review · forecast · entities) | `vivory-mcp-verification` — sister umbrella, **53 tools across 22 clusters** (PyPI live, v0.5.0) |
 
 > The earlier `vivory-mcp-kosis` standalone has been deprecated; all KOSIS tools ship inside this umbrella.
 
@@ -86,7 +87,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-Restart Claude Desktop. All 51 Korean data tools appear in the tool palette.
+Restart Claude Desktop. All 56 Korean data tools appear in the tool palette.
 
 ### pip / pipx
 
@@ -107,12 +108,12 @@ pip install "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=package
 
 The server runs anonymously by default — **100 calls/day per IP**, no signup. Works for casual use.
 
-For higher limits, sign up at **[api.vivory.app/dashboard/public-api](https://api.vivory.app/dashboard/public-api)** and set `VIVORY_API_KEY`. **One key unlocks both MCPs**: a Pro key for `vivory-mcp-korea` also unlocks the sibling [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) (45 verification tools across 18 clusters — DOI / Wayback / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT realestate, etc.).
+For higher limits, sign up at **[api.vivory.app/dashboard/public-api](https://api.vivory.app/dashboard/public-api)** and set `VIVORY_API_KEY`. **One key unlocks both MCPs**: a Pro key for `vivory-mcp-korea` also unlocks the sibling [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) (53 verification tools across 22 clusters — DOI / ORCID / Wayback / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT realestate / RDAP+DoH / EVM blockchain audit, etc.).
 
 | Tier | Daily limit | How to enable |
 |---|---|---|
 | Anonymous | 100/day per IP | Default — no setup |
-| Pro | 10,000/day shared across 100+ tools | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. `VIVORY_API_KEY=…` env var. |
+| Pro | 10,000/day shared across 109 tools | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. `VIVORY_API_KEY=…` env var. |
 | Enterprise | 100,000/day | Contact contact@vivory.app (self-serve only, no SaaS sales) |
 
 ```json
@@ -151,7 +152,7 @@ Requires a working Vivory backend with upstream API keys configured (KOSIS / KMA
 > *"What festivals are happening in Seoul between May 1 and May 15?"*
 > *"How many bikes are currently available at Seoul Bike stations in Mapo-gu?"*
 
-Claude picks the right tool automatically from the 51-tool catalog.
+Claude picks the right tool automatically from the 56-tool catalog.
 
 For Korean listed-company queries (DART):
 
@@ -182,7 +183,7 @@ Every response includes an `attribution` block — source, license, citation req
 
 ## Project status
 
-- **Version**: 0.4.0 (15 sources / 55 tools — added VWorld 공간정보: search/geocode + 박물관·미술관 1,534건)
+- **Version**: 0.5.0 (16 sources / 56 tools — added NTS 사업자등록 진위 + 활성 status lookup)
 - **Source**: [github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea)
 - **License**: MIT (wrapper) / per-source license for upstream data
 - **Roadmap**: see "Coming next" above

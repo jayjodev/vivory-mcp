@@ -15,6 +15,7 @@ Architecture:
 from __future__ import annotations
 
 import asyncio
+import difflib
 import json
 import logging
 import sys
@@ -28,6 +29,7 @@ from . import client
 from .tools import (
     air_quality as air_quality_tools,
     bok as bok_tools,
+    business as business_tools,
     dart as dart_tools,
     healthcare as healthcare_tools,
     kosis as kosis_tools,
@@ -59,6 +61,7 @@ TOOLS: list[Tool] = [
     *mobility_tools.TOOLS,
     *vworld_tools.TOOLS,
     *misc_tools.TOOLS,
+    *business_tools.TOOLS,
 ]
 
 # Aggregate handlers from all sources
@@ -75,6 +78,7 @@ HANDLERS: dict[str, Any] = {
     **mobility_tools.HANDLERS,
     **vworld_tools.HANDLERS,
     **misc_tools.HANDLERS,
+    **business_tools.HANDLERS,
 }
 
 
@@ -115,16 +119,25 @@ def _error_envelope(tool: str, exc: BaseException) -> dict[str, Any]:
     }
 
 
+def _did_you_mean(name: str, registry: dict[str, Any], k: int = 3) -> list[str]:
+    """Fuzzy-match an unknown tool name against the registered catalog."""
+    if not name:
+        return []
+    return difflib.get_close_matches(name, list(registry.keys()), n=k, cutoff=0.55)
+
+
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any] | None) -> list[TextContent]:
     args = arguments or {}
     handler = HANDLERS.get(name)
     if handler is None:
+        suggestions = _did_you_mean(name, HANDLERS)
         envelope = {
             "error": f"Unknown tool: {name}",
             "code": "UNKNOWN_TOOL",
             "tool": name,
             "gateway": "vivory-mcp-korea",
+            "did_you_mean": suggestions,
         }
         return [TextContent(type="text", text=json.dumps(envelope, ensure_ascii=False))]
 
@@ -161,18 +174,18 @@ def _startup_banner() -> None:
     tool_count = len(TOOLS)
     if has_key:
         print(
-            f"[vivory-mcp-korea] {tool_count} tools across 15 sources | Pro tier (Bearer key sent) | "
-            f"gateway={base} | sibling: `uvx vivory-mcp-verification` (same key unlocks 45 verification tools)",
+            f"[vivory-mcp-korea] {tool_count} tools across 16 sources | Pro tier (Bearer key sent) | "
+            f"gateway={base} | sibling: `uvx vivory-mcp-verification` (same key unlocks 53 verification tools)",
             file=sys.stderr,
             flush=True,
         )
     else:
         print(
-            f"[vivory-mcp-korea] {tool_count} tools across 15 sources | Anonymous tier (100/day per IP) | "
+            f"[vivory-mcp-korea] {tool_count} tools across 16 sources | Anonymous tier (100/day per IP) | "
             f"gateway={base}\n"
             f"  → Upgrade to Pro 10k/day ($29/mo USDC, no auto-renew, no custody) at\n"
             f"    https://api.vivory.app/dashboard/public-api — same key unlocks the\n"
-            f"    sibling `vivory-mcp-verification` (45 tools), 100+ tools total.",
+            f"    sibling `vivory-mcp-verification` (53 tools), 109 tools total.",
             file=sys.stderr,
             flush=True,
         )
