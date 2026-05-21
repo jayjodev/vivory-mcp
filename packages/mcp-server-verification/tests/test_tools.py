@@ -1,8 +1,8 @@
 """Sanity tests for vivory-mcp-verification.
 
 Runs offline (no httpx/network). Mirrors korea test suite — verifies:
-- 89 tool count (v0.9 = v0.8.1 + peer-review Phase A: bulk_peer_review_lookup
-  + reviewer_registry + peer_review_stats)
+- 98 tool count (v0.10 = v0.9 + provenance Phase A: 9 standards-backed
+  who/when/where/what verification tools across image/video/PDF)
 - every tool has handler returning (method, path, params, body) tuple
 - inputSchema is valid JSON Schema
 - error envelope is structured JSON with stable code field
@@ -28,8 +28,8 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.9.0 claims 89 tools across 36 categories."""
-    assert len(srv.TOOLS) == 89, f"Expected 89 tools, got {len(srv.TOOLS)}"
+    """v0.10.0 claims 98 tools across 36 categories."""
+    assert len(srv.TOOLS) == 98, f"Expected 98 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -121,7 +121,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-verification" in captured.err
-    assert "89 tools" in captured.err
+    assert "98 tools" in captured.err
 
 
 def test_client_request_supports_not_found_ok():
@@ -167,6 +167,94 @@ def test_peer_review_cluster_has_5_tools():
     names = {t.name for t in srv.TOOLS}
     missing = expected - names
     assert not missing, f"Peer-review cluster missing tools: {missing}"
+
+
+def test_provenance_phase_a_cluster_has_13_tools():
+    """v0.10.0 Phase A — provenance cluster expanded 4 → 13.
+
+    Adds standards-backed who/when/where/what verification across image/
+    video/PDF: EXIF + perceptual hash + video ffprobe + frame hash + PDF
+    metadata + file hash + CID v1 + AI generator signature + combined
+    summary + RFC 3161 timestamp wrapper. All zero-new-deps.
+    """
+    expected = {
+        # Phase 0 (pre-existing)
+        "verify_c2pa",
+        "verify_pdf_provenance",
+        "verify_hash_chain",
+        "detect_watermark",
+        # Phase A (2026-05-21)
+        "verify_timestamp_rfc3161",
+        "extract_image_exif",
+        "image_perceptual_hash",
+        "extract_video_metadata",
+        "video_frame_hash_sample",
+        "extract_pdf_metadata",
+        "compute_file_hash",
+        "ai_generator_signature_lookup",
+        "provenance_summary",
+    }
+    names = {t.name for t in srv.TOOLS}
+    missing = expected - names
+    assert not missing, f"Provenance Phase A missing tools: {missing}"
+
+
+def test_provenance_phase_a_routing():
+    """All 9 new Phase A provenance tools route to /verify/* gateway paths."""
+    # EXIF
+    out = srv.HANDLERS["extract_image_exif"]({"image_url": "https://x/img.jpg"})
+    assert out == ("POST", "verify/exif", None, {"image_url": "https://x/img.jpg"})
+
+    # Perceptual hash with default size
+    out = srv.HANDLERS["image_perceptual_hash"]({"image_url": "https://x/img.jpg"})
+    method, path, _, body = out
+    assert method == "POST" and path == "verify/perceptual-hash"
+    assert body["size"] == 8
+    assert body["compare_dhash"] is None and body["compare_ahash"] is None
+
+    # Perceptual hash with compare
+    out = srv.HANDLERS["image_perceptual_hash"]({
+        "image_url": "https://x/img.jpg",
+        "size": 16,
+        "compare_dhash": "deadbeefcafebabe1234567890abcdef",
+    })
+    body = out[3]
+    assert body["size"] == 16
+    assert body["compare_dhash"] == "deadbeefcafebabe1234567890abcdef"
+
+    # Video metadata
+    out = srv.HANDLERS["extract_video_metadata"]({"video_url": "https://x/v.mp4"})
+    assert out == ("POST", "verify/video-metadata", None, {"video_url": "https://x/v.mp4"})
+
+    # Video frame hash sample with default count
+    out = srv.HANDLERS["video_frame_hash_sample"]({"video_url": "https://x/v.mp4"})
+    assert out[3]["sample_count"] == 5
+
+    # PDF metadata
+    out = srv.HANDLERS["extract_pdf_metadata"]({"pdf_url": "https://x/doc.pdf"})
+    assert out == ("POST", "verify/pdf-metadata", None, {"pdf_url": "https://x/doc.pdf"})
+
+    # File hash
+    out = srv.HANDLERS["compute_file_hash"]({"file_url": "https://x/anything"})
+    assert out == ("POST", "verify/file-hash", None, {"file_url": "https://x/anything"})
+
+    # AI generator signature lookup
+    out = srv.HANDLERS["ai_generator_signature_lookup"]({"image_url": "https://x/img.png"})
+    assert out == ("POST", "verify/ai-generator-signature", None, {"image_url": "https://x/img.png"})
+
+    # Provenance summary
+    out = srv.HANDLERS["provenance_summary"]({"file_url": "https://x/anything", "mime_hint": "image/jpeg"})
+    assert out == ("POST", "verify/provenance-summary", None, {"file_url": "https://x/anything", "mime_hint": "image/jpeg"})
+
+    # RFC 3161 timestamp wrapper
+    digest = "a" * 64
+    out = srv.HANDLERS["verify_timestamp_rfc3161"]({"digest_hex": digest})
+    assert out == ("POST", "verify/timestamp", None, {"digest_hex": digest, "digest_algorithm": "sha256"})
+
+    # Case-insensitive normalize on digest_hex
+    digest_upper = "B" * 64
+    out = srv.HANDLERS["verify_timestamp_rfc3161"]({"digest_hex": digest_upper})
+    assert out[3]["digest_hex"] == "b" * 64
 
 
 # ---------------------------------------------------------------------------

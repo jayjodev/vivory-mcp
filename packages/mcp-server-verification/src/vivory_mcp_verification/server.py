@@ -1,13 +1,13 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.9 ships 89 tools across 36 categories:
+(`vivory-verification`). v0.10 ships 98 tools across 36 categories:
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
 - archive     (3) — verify_archive, wayback_capture, wayback_history
 - repro       (3) — verify_repro_hash, repro_hub_lookup, repro_artifact_diff
-- provenance  (4) — verify_c2pa, verify_pdf_provenance, verify_hash_chain, detect_watermark
+- provenance  (13) — verify_c2pa, verify_pdf_provenance, verify_hash_chain, detect_watermark, verify_timestamp_rfc3161, extract_image_exif, image_perceptual_hash, extract_video_metadata, video_frame_hash_sample, extract_pdf_metadata, compute_file_hash, ai_generator_signature_lookup, provenance_summary (Phase A standards-backed: who/when/where/what across image/video/PDF, no ML, no new deps)
 - peer-review (5) — verify_peer_review, persona_verdict_lookup, bulk_peer_review_lookup, reviewer_registry, peer_review_stats (Universal Peer Review trail — panel registry + bulk lookup + service-level stats)
 - forecast    (4) — forecast_track_record (crypto.vivory.app/forecast), submit_forecast, forecast_ensemble (Polymarket+Kalshi+Manifold consensus), forecast_calibration (ECE/MCE/Brier)
 - filing      (3) — verify_filing, filing_recent, filing_facts (SEC EDGAR — sister of Korea DART)
