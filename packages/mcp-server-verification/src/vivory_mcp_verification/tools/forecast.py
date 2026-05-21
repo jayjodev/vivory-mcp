@@ -114,6 +114,66 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
+    Tool(
+        name="forecast_ensemble",
+        description=(
+            "Compute a consensus probability across prediction markets. "
+            "Provide any subset of {polymarket_slug, kalshi_ticker, "
+            "manifold_slug}; the tool fetches each leg's live YES "
+            "probability and reports the mean consensus + dispersion "
+            "(max-min spread) + agreement label (high / moderate / low). "
+            "Use as a market-grounded sanity check against a single "
+            "forecaster's number. Polymarket + Manifold are keyless; "
+            "Kalshi market data is public read."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "polymarket_slug": {"type": "string", "maxLength": 200, "description": "Polymarket market slug."},
+                "kalshi_ticker": {"type": "string", "maxLength": 50, "description": "Kalshi market ticker."},
+                "manifold_slug": {"type": "string", "maxLength": 200, "description": "Manifold market slug."},
+            },
+            "anyOf": [
+                {"required": ["polymarket_slug"]},
+                {"required": ["kalshi_ticker"]},
+                {"required": ["manifold_slug"]},
+            ],
+            "additionalProperties": False,
+        },
+    ),
+    Tool(
+        name="forecast_calibration",
+        description=(
+            "Compute calibration metrics from a list of (probability, "
+            "outcome) pairs. Returns ECE (expected calibration error), MCE "
+            "(max calibration error), Brier score, base rate, mean "
+            "predicted, a verdict (well / moderately / poorly calibrated), "
+            "and the reliability-diagram bins. Use to self-audit a "
+            "forecaster's track record — is the 70% bucket actually "
+            "resolving 70% of the time? Pure local computation."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "predictions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "p": {"type": "number", "minimum": 0, "maximum": 1},
+                            "outcome": {"type": "integer", "enum": [0, 1]},
+                        },
+                        "required": ["p", "outcome"],
+                    },
+                    "minItems": 1,
+                    "description": "List of {p: probability in [0,1], outcome: 0 or 1}.",
+                },
+                "bins": {"type": "integer", "minimum": 3, "maximum": 30, "default": 10},
+            },
+            "required": ["predictions"],
+            "additionalProperties": False,
+        },
+    ),
 ]
 
 
@@ -140,6 +200,25 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, str, dict | None, dict | None]]]
             "evidence_urls": a.get("evidence_urls") or [],
             "forecaster_id": a.get("forecaster_id"),
             "confidence": a.get("confidence"),
+        },
+    ),
+    "forecast_ensemble": lambda a: (
+        "POST",
+        "verify/forecast/ensemble",
+        None,
+        {
+            "polymarket_slug": a.get("polymarket_slug"),
+            "kalshi_ticker": a.get("kalshi_ticker"),
+            "manifold_slug": a.get("manifold_slug"),
+        },
+    ),
+    "forecast_calibration": lambda a: (
+        "POST",
+        "verify/forecast/calibration",
+        None,
+        {
+            "predictions": a.get("predictions") or [],
+            "bins": a.get("bins") or 10,
         },
     ),
 }

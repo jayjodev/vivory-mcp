@@ -1,7 +1,7 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.7 ships 76 tools across 32 categories:
+(`vivory-verification`). v0.8 ships 83 tools across 36 categories:
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
@@ -9,10 +9,10 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - repro       (3) — verify_repro_hash, repro_hub_lookup, repro_artifact_diff
 - provenance  (4) — verify_c2pa, verify_pdf_provenance, verify_hash_chain, detect_watermark
 - peer-review (2) — verify_peer_review, persona_verdict_lookup
-- forecast    (2) — forecast_track_record (crypto.vivory.app/forecast), submit_forecast
+- forecast    (4) — forecast_track_record (crypto.vivory.app/forecast), submit_forecast, forecast_ensemble (Polymarket+Kalshi+Manifold consensus), forecast_calibration (ECE/MCE/Brier)
 - filing      (3) — verify_filing, filing_recent, filing_facts (SEC EDGAR — sister of Korea DART)
 - entity      (3) — verify_lei, entity_search, entity_relationships (GLEIF LEI)
-- work        (2) — verify_work, search_works (OpenAlex academic citation graph)
+- work        (3) — verify_work, search_works, verify_salami_slicing (OpenAlex academic citation graph + author near-dup screen)
 - wikidata    (2) — verify_qid, wikidata_search (entity grounding via Q-numbers)
 - trial       (2) — verify_trial, trial_search (ClinicalTrials.gov v2)
 - indicator   (2) — verify_indicator, indicator_series (World Bank Open Data)
@@ -35,6 +35,10 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - recall      (2) — drug_recall_check, product_recall_check (openFDA + CPSC SaferProducts)
 - journal     (1) — verify_journal_quality (DOAJ whitelist + predatory heuristic)
 - pr_diff     (1) — verify_pr_article_diff (press-release vs article fidelity diff)
+- pubpeer     (1) — verify_pubpeer_status (PubPeer post-publication peer-review commentary)
+- opencitations (1) — verify_doi_citations (OpenCitations COCI citation context + self-citation count)
+- funder      (1) — verify_funder (Crossref Funder Registry resolver)
+- wikipedia   (1) — verify_wikipedia_cite_health (Wikipedia external-link liveness audit)
 
 Architecture:
 - Tool definitions live in `tools/{category}.py` per concern
@@ -71,12 +75,14 @@ from .tools import (
     journal as journal_tools,
     law as law_tools,
     npm as npm_tools,
+    opencitations as opencitations_tools,
     patent as patent_tools,
     peer_review as peer_review_tools,
     place as place_tools,
     policy as policy_tools,
     pr_diff as pr_diff_tools,
     provenance as provenance_tools,
+    pubpeer as pubpeer_tools,
     pypi as pypi_tools,
     quake as quake_tools,
     recall as recall_tools,
@@ -87,8 +93,10 @@ from .tools import (
     tvl as tvl_tools,
     web as web_tools,
     wikidata as wikidata_tools,
+    wikipedia as wikipedia_tools,
     work as work_tools,
     workflow as workflow_tools,
+    funder as funder_tools,
 )
 
 logger = logging.getLogger("vivory_mcp_verification")
@@ -129,6 +137,10 @@ TOOLS: list[Tool] = [
     *recall_tools.TOOLS,
     *journal_tools.TOOLS,
     *pr_diff_tools.TOOLS,
+    *pubpeer_tools.TOOLS,
+    *opencitations_tools.TOOLS,
+    *funder_tools.TOOLS,
+    *wikipedia_tools.TOOLS,
 ]
 
 
@@ -165,6 +177,10 @@ HANDLERS: dict[str, Any] = {
     **recall_tools.HANDLERS,
     **journal_tools.HANDLERS,
     **pr_diff_tools.HANDLERS,
+    **pubpeer_tools.HANDLERS,
+    **opencitations_tools.HANDLERS,
+    **funder_tools.HANDLERS,
+    **wikipedia_tools.HANDLERS,
 }
 
 
@@ -260,7 +276,7 @@ def _startup_banner() -> None:
     if has_key:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Pro tier (Bearer key sent) | "
-            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 132 total)",
+            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 139 total)",
             file=sys.stderr,
             flush=True,
         )
@@ -271,7 +287,7 @@ def _startup_banner() -> None:
             f"  → Tools Pro bridge ($4.99/mo, 1k call/mo) or Vivory API Pro\n"
             f"    ($29/mo USDC, 10k/day, no auto-renew, no custody) at\n"
             f"    https://api.vivory.app/dashboard/public-api — Vivory API Pro key\n"
-            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 132 total).",
+            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 139 total).",
             file=sys.stderr,
             flush=True,
         )

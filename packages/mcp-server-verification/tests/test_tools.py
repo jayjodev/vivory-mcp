@@ -1,8 +1,8 @@
 """Sanity tests for vivory-mcp-verification.
 
 Runs offline (no httpx/network). Mirrors korea test suite — verifies:
-- 68 tool count (v0.6 = v0.5 + npm + pypi + retraction + workflow + policy
-  + chain pollers + domain history)
+- 83 tool count (v0.8 = v0.7 + pubpeer + opencitations + funder + salami
+  + forecast ensemble/calibration + wikipedia cite-health)
 - every tool has handler returning (method, path, params, body) tuple
 - inputSchema is valid JSON Schema
 - error envelope is structured JSON with stable code field
@@ -28,8 +28,8 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.7.0 claims 76 tools across 32 categories."""
-    assert len(srv.TOOLS) == 76, f"Expected 76 tools, got {len(srv.TOOLS)}"
+    """v0.8.0 claims 83 tools across 36 categories."""
+    assert len(srv.TOOLS) == 83, f"Expected 83 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -121,7 +121,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-verification" in captured.err
-    assert "76 tools" in captured.err
+    assert "83 tools" in captured.err
 
 
 def test_client_request_supports_not_found_ok():
