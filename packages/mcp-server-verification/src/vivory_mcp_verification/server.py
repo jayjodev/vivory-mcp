@@ -276,7 +276,7 @@ def _startup_banner() -> None:
     if has_key:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Pro tier (Bearer key sent) | "
-            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 145 total)",
+            f"gateway={base} | Korean sources are bundled inside verdicts (kor_law_currency, kor_company_status, doi_retraction_status, …)",
             file=sys.stderr,
             flush=True,
         )
@@ -286,8 +286,9 @@ def _startup_banner() -> None:
             f"gateway={base}\n"
             f"  → Tools Pro bridge ($4.99/mo, 1k call/mo) or Vivory API Pro\n"
             f"    ($29/mo USDC, 10k/day, no auto-renew, no custody) at\n"
-            f"    https://api.vivory.app/dashboard/public-api — Vivory API Pro key\n"
-            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 145 total).",
+            f"    https://api.vivory.app/dashboard/public-api — Korean sources\n"
+            f"    are bundled inside verdicts (kor_law_currency, kor_company_status,\n"
+            f"    doi_retraction_status, …).",
             file=sys.stderr,
             flush=True,
         )
