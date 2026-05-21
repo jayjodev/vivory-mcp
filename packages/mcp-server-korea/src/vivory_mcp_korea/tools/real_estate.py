@@ -38,33 +38,10 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
-    Tool(
-        name="molit_apt_trade",
-        description=(
-            "MOLIT apartment sale (매매) transactions for a region in one month. "
-            "Returns building name, deal price (한국 만원 단위), area (㎡), floor, "
-            "build year. Both lawd_cd and deal_ymd are required."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {"lawd_cd": _LAWD_CD, "deal_ymd": _DEAL_YMD},
-            "required": ["lawd_cd", "deal_ymd"],
-            "additionalProperties": False,
-        },
-    ),
-    Tool(
-        name="molit_apt_rent",
-        description=(
-            "MOLIT apartment lease (전세/월세) transactions for a region in one "
-            "month. Distinguishes 전세 (deposit-only) from 월세 (deposit + monthly)."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {"lawd_cd": _LAWD_CD, "deal_ymd": _DEAL_YMD},
-            "required": ["lawd_cd", "deal_ymd"],
-            "additionalProperties": False,
-        },
-    ),
+    # NOTE: molit_apt_trade + molit_apt_rent removed v0.6.0 — region/month 단위
+    # raw transaction list 가 sweep abuse 패턴 + 거래자 정보 인접. molit_apt_
+    # price_trend (aggregate 만) 는 유지. 단건 verdict 형태 ("이 단지 최근 30일
+    # 평균가") 는 verification MCP 에 재추가 검토.
     Tool(
         name="molit_apt_price_trend",
         description=(
@@ -103,14 +80,7 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, dict]]] = {
         "real-estate/regions",
         lambda a: {"q": a.get("q")},
     ),
-    "molit_apt_trade": _h(
-        "real-estate/apt-trade",
-        lambda a: {"lawd_cd": a.get("lawd_cd"), "deal_ymd": a.get("deal_ymd")},
-    ),
-    "molit_apt_rent": _h(
-        "real-estate/apt-rent",
-        lambda a: {"lawd_cd": a.get("lawd_cd"), "deal_ymd": a.get("deal_ymd")},
-    ),
+    # molit_apt_trade + molit_apt_rent handlers removed v0.6.0 (see TOOLS comment)
     "molit_apt_price_trend": _h(
         "real-estate/apt-trend",
         lambda a: {

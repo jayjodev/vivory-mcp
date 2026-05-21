@@ -64,26 +64,10 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
-    Tool(
-        name="vworld_museums",
-        description=(
-            "Korean museums and art galleries (박물관·미술관) — 1,534 venues "
-            "nationwide from LT_P_DGMUSEUMART, enriched with Wikipedia + Google "
-            "Places where available. Filter by sido/sigungu. Returns venue summary "
-            "with lat/lng, image, rating. Use vworld_museum_detail for full record."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "sido": {"type": "string", "maxLength": 40, "description": _SIDO_HINT},
-                "sigungu": {"type": "string", "maxLength": 80, "description": "Sigungu (시/군/구) — e.g. 강남구."},
-                "has_image": {"type": "boolean", "default": False, "description": "Only enriched venues (Wikipedia or Google match)."},
-                "page": {"type": "integer", "minimum": 1, "maximum": 100, "default": 1},
-                "per_page": {"type": "integer", "minimum": 1, "maximum": 100, "default": 30},
-            },
-            "additionalProperties": False,
-        },
-    ),
+    # NOTE: vworld_museums removed v0.6.0 — 1,534 venue bulk list 는 VWorld 약관
+    # 제12조 4항 *데이터 무단 저장 금지* 와 *bulk 재배포* 해석에 걸림. 단건 조회
+    # (vworld_museum_detail by venue_id) 는 fetch-on-call proxy 라 유지. life.
+    # vivory.app 가 등록 도메인이므로 backend proxy 호출은 약관 정합.
     Tool(
         name="vworld_museum_detail",
         description=(
@@ -126,16 +110,7 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, dict]]] = {
             "prefer": a.get("prefer"),
         },
     ),
-    "vworld_museums": _h(
-        "vworld/museums",
-        lambda a: {
-            "sido": a.get("sido"),
-            "sigungu": a.get("sigungu"),
-            "has_image": a.get("has_image"),
-            "page": a.get("page"),
-            "per_page": a.get("per_page"),
-        },
-    ),
+    # vworld_museums handler removed v0.6.0 (see TOOLS comment)
     "vworld_museum_detail": _h(
         "vworld/museums/{venue_id}",
         lambda a: {},

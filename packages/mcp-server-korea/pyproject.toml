@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-korea"
-version = "0.5.0"
-description = "Umbrella MCP server for Korean public data — KOSIS + BOK + DART + KMA + AirKorea + Opinet + HIRA + NMC + MOLIT + KTO + MFDS + MOIS + NEIS + Seoul OpenData + VWorld + NTS business validator. 56 tools across 16 sources, single registration point for AI agents."
+version = "0.6.0"
+description = "DEPRECATED v0.6.0 — migrate: uvx vivory-mcp-verification. Korean raw-data wrappers retired (they redistributed data rather than verified it). Vivory's verifiable-AI-work mission uses Korean sources (법령정보센터·NTS·DART·KMA·KOSIS) as evidence for verdicts inside vivory-mcp-verification, not raw passthrough. Korean verdict tools already shipped: kor_law_currency, kor_company_status, doi_retraction_status. Same $29/mo Pro key. Migration release only — no new functionality."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"

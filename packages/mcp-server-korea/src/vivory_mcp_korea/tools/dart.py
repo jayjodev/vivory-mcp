@@ -95,36 +95,9 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
-    Tool(
-        name="dart_disclosures",
-        description=(
-            "Search DART filings by date range, company, market segment, or "
-            "filing type. Use bgn_de + end_de in YYYYMMDD format; for a single "
-            "day's RSS feed pass bgn_de=end_de. Filing types (pblntf_ty): "
-            "A=periodic / B=major-events / C=securities-issue / D=ownership / "
-            "E=fundraising / F=audits / G=corporate-governance / H=others / "
-            "I=external-audits / J=foreign-companies. Market (corp_cls): "
-            "Y=KOSPI / K=KOSDAQ / N=KONEX / E=non-listed."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "bgn_de": {"type": "string", "pattern": "^\\d{8}$"},
-                "end_de": {"type": "string", "pattern": "^\\d{8}$"},
-                "corp_code": _CORP_CODE,
-                "corp_cls": {"type": "string", "enum": ["Y", "K", "N", "E"]},
-                "pblntf_ty": {"type": "string", "enum": list("ABCDEFGHIJ")},
-                "last_reprt_at": {
-                    "type": "string",
-                    "enum": ["Y"],
-                    "description": "Set to Y to return only the latest amendment of each filing.",
-                },
-                "page_no": {"type": "integer", "minimum": 1, "default": 1},
-                "page_count": {"type": "integer", "minimum": 1, "maximum": 100, "default": 50},
-            },
-            "additionalProperties": False,
-        },
-    ),
+    # NOTE: dart_disclosures removed v0.6.0 — bulk filing search 형태가 DART 약관의
+    # 대량 다운로드 패턴에 해당. 단건 (corp_code 특정) 조회는 dart_company_detail /
+    # dart_financials 가 그대로 지원.
     Tool(
         name="dart_financials",
         description=(
@@ -151,26 +124,9 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
-    Tool(
-        name="dart_major_shareholders",
-        description=(
-            "Major shareholder disclosure (대주주 현황) — every party holding "
-            "5%+ of voting shares plus their related parties (특수관계인) and "
-            "the relation type. Sourced from the 사업보고서 (annual report); "
-            "use reprt_code=11011 for canonical filing. Share count, percentage, "
-            "and change-since-prior-period included."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "corp_code": _CORP_CODE,
-                "bsns_year": _BSNS_YEAR,
-                "reprt_code": _REPRT_CODE,
-            },
-            "required": ["corp_code", "bsns_year"],
-            "additionalProperties": False,
-        },
-    ),
+    # NOTE: dart_major_shareholders removed v0.6.0 — 주주 *개인 이름* (특수관계인
+    # 포함) 직접 노출은 PIPA 영역. 공시 의무 정보지만 *MCP 통한 글로벌 재배포*는
+    # 별개 risk. 필요 시 verification MCP 의 verdict-only tool 로 재추가 검토.
 ]
 
 
@@ -191,19 +147,7 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, dict]]] = {
         },
     ),
     "dart_company_detail": _h("dart/companies/{corp_code}"),
-    "dart_disclosures": _h(
-        "dart/disclosures",
-        lambda a: {
-            "bgn_de": a.get("bgn_de"),
-            "end_de": a.get("end_de"),
-            "corp_code": a.get("corp_code"),
-            "corp_cls": a.get("corp_cls"),
-            "pblntf_ty": a.get("pblntf_ty"),
-            "last_reprt_at": a.get("last_reprt_at"),
-            "page_no": a.get("page_no"),
-            "page_count": a.get("page_count"),
-        },
-    ),
+    # dart_disclosures handler removed v0.6.0 (see TOOLS comment above)
     "dart_financials": _h(
         "dart/companies/{corp_code}/financials",
         lambda a: {
@@ -212,11 +156,5 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, dict]]] = {
             "fs_div": a.get("fs_div"),
         },
     ),
-    "dart_major_shareholders": _h(
-        "dart/companies/{corp_code}/major-shareholders",
-        lambda a: {
-            "bsns_year": a.get("bsns_year"),
-            "reprt_code": a.get("reprt_code"),
-        },
-    ),
+    # dart_major_shareholders handler removed v0.6.0 (see TOOLS comment above)
 }

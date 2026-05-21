@@ -1,14 +1,33 @@
-"""Vivory umbrella MCP server for Korean public data.
+"""vivory-mcp-korea — DEPRECATED as of v0.6.0.
 
-56 tools across 16 official Korean government APIs, normalized to English JSON
-with per-response source attribution. Powered by the Vivory Korea Data Gateway
-(api.vivory.app).
+This package is deprecated. **Install vivory-mcp-verification instead.**
 
-Sources covered (v0.5): KOSIS · BOK ECOS · DART · KMA · AirKorea · Opinet ·
-HIRA · NMC E-gen · MOLIT · KTO TourAPI · MFDS · MOIS LOCALDATA · NEIS · Seoul
-OpenData · VWorld (국토교통부 공간정보 — search/geocode + 박물관·미술관 1,534건) ·
-NTS 사업자등록번호 checksum + live 활성 status.
-See README.md for the full tool catalog.
+    uvx vivory-mcp-verification
+
+Why deprecated
+==============
+Korea raw-data wrappers conflicted with Vivory's mission of *verifiable AI
+work*. Vivory's value is verifying claims, not redistributing data. The
+verification MCP now uses Korean sources (법령정보센터, NTS, DART, KMA,
+KOSIS, etc.) as *underlying evidence* for verdicts — consistent with both
+the mission and each source's terms of service.
+
+Migration
+=========
+Korean verdict tools already in verification MCP (v0.9.0+):
+  - kor_law_currency       — 한국 법령 현행여부 verdict (law.go.kr)
+  - kor_company_status     — KYB cross-verification (NTS + CSL)
+  - doi_retraction_status  — DOI retraction (Crossref + OpenAlex + PubPeer)
+
+Future Korean verdict candidates (added based on demand signal):
+  - macro-claim verdict (KOSIS + BOK)
+  - listed-company health verdict (DART)
+  - weather-claim verdict (KMA)
+  - etc.
+
+Same $29/mo Pro key works for vivory-mcp-verification. No new functionality
+will ship in vivory-mcp-korea — this v0.6.0 release contains only a
+migration notice tool.
 """
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"

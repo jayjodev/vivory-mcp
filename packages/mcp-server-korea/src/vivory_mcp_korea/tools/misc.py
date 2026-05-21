@@ -68,27 +68,9 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
-    Tool(
-        name="neis_school_search",
-        description=(
-            "K-12 school search across all 12,555 Korean schools registered in "
-            "NEIS (교육부 나이스). Filter by name partial match, SIDO, and/or "
-            "school kind (초등학교 / 중학교 / 고등학교)."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "name": {"type": "string", "description": "School name partial match (Korean)."},
-                "sido": {"type": "string", "description": "SIDO Korean name (e.g. 서울)."},
-                "kind": {
-                    "type": "string",
-                    "enum": ["초등학교", "중학교", "고등학교"],
-                    "description": "Elementary / middle / high.",
-                },
-            },
-            "additionalProperties": False,
-        },
-    ),
+    # NOTE: neis_school_search removed v0.6.0 — NEIS 약관 *재판매·벌크 덤프
+    # 금지* 명시 위반. 12,555개 학교 *검색 자체*가 벌크 경로. 필요 시 단건
+    # 학교 verdict (실재 + 운영 중) 형태로 verification MCP 에 재추가 검토.
     Tool(
         name="kma_living_weather",
         description=(
@@ -135,14 +117,7 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, dict]]] = {
         "restroom/region",
         lambda a: {"addr": a.get("addr"), "max_pages": a.get("max_pages")},
     ),
-    "neis_school_search": _h(
-        "school/search",
-        lambda a: {
-            "name": a.get("name"),
-            "sido": a.get("sido"),
-            "kind": a.get("kind"),
-        },
-    ),
+    # neis_school_search handler removed v0.6.0 (see TOOLS comment above)
     "kma_living_weather": _h(
         "living-weather/all",
         lambda a: {"area_no": a.get("area_no"), "city": a.get("city")},
