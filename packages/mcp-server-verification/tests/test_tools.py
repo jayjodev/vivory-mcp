@@ -1,8 +1,8 @@
 """Sanity tests for vivory-mcp-verification.
 
 Runs offline (no httpx/network). Mirrors korea test suite — verifies:
-- 83 tool count (v0.8 = v0.7 + pubpeer + opencitations + funder + salami
-  + forecast ensemble/calibration + wikipedia cite-health)
+- 89 tool count (v0.9 = v0.8.1 + peer-review Phase A: bulk_peer_review_lookup
+  + reviewer_registry + peer_review_stats)
 - every tool has handler returning (method, path, params, body) tuple
 - inputSchema is valid JSON Schema
 - error envelope is structured JSON with stable code field
@@ -28,8 +28,8 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.8.0 claims 83 tools across 36 categories."""
-    assert len(srv.TOOLS) == 83, f"Expected 83 tools, got {len(srv.TOOLS)}"
+    """v0.9.0 claims 89 tools across 36 categories."""
+    assert len(srv.TOOLS) == 89, f"Expected 89 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -121,7 +121,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-verification" in captured.err
-    assert "83 tools" in captured.err
+    assert "89 tools" in captured.err
 
 
 def test_client_request_supports_not_found_ok():
@@ -138,6 +138,35 @@ def test_client_api_key_strip(monkeypatch):
     assert cli.get_api_key() == "test-key"
     monkeypatch.setenv("VIVORY_API_KEY", "   ")
     assert cli.get_api_key() is None
+
+
+def test_peer_review_phase_a_routing():
+    """v0.9.0 Phase A expansion — 3 new peer-review tools route to gateway."""
+    bulk = srv.HANDLERS["bulk_peer_review_lookup"]({"article_ids": ["1", "2"]})
+    assert bulk == ("POST", "verify/peer-review/bulk", None, {"article_ids": ["1", "2"]})
+
+    registry = srv.HANDLERS["reviewer_registry"]({})
+    assert registry == ("GET", "verify/peer-review/reviewers", None, None)
+
+    stats_all = srv.HANDLERS["peer_review_stats"]({})
+    assert stats_all == ("GET", "verify/peer-review/stats", {"service": None}, None)
+
+    stats_life = srv.HANDLERS["peer_review_stats"]({"service": "life"})
+    assert stats_life == ("GET", "verify/peer-review/stats", {"service": "life"}, None)
+
+
+def test_peer_review_cluster_has_5_tools():
+    """Peer-review cluster grew 2 → 5 in v0.9.0 (Phase A of Peer Review MCP planning)."""
+    expected = {
+        "verify_peer_review",
+        "persona_verdict_lookup",
+        "bulk_peer_review_lookup",
+        "reviewer_registry",
+        "peer_review_stats",
+    }
+    names = {t.name for t in srv.TOOLS}
+    missing = expected - names
+    assert not missing, f"Peer-review cluster missing tools: {missing}"
 
 
 # ---------------------------------------------------------------------------

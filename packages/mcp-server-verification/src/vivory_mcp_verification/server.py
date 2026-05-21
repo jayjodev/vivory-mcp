@@ -1,14 +1,14 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.8 ships 83 tools across 36 categories:
+(`vivory-verification`). v0.9 ships 89 tools across 36 categories:
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
 - archive     (3) — verify_archive, wayback_capture, wayback_history
 - repro       (3) — verify_repro_hash, repro_hub_lookup, repro_artifact_diff
 - provenance  (4) — verify_c2pa, verify_pdf_provenance, verify_hash_chain, detect_watermark
-- peer-review (2) — verify_peer_review, persona_verdict_lookup
+- peer-review (5) — verify_peer_review, persona_verdict_lookup, bulk_peer_review_lookup, reviewer_registry, peer_review_stats (Universal Peer Review trail — panel registry + bulk lookup + service-level stats)
 - forecast    (4) — forecast_track_record (crypto.vivory.app/forecast), submit_forecast, forecast_ensemble (Polymarket+Kalshi+Manifold consensus), forecast_calibration (ECE/MCE/Brier)
 - filing      (3) — verify_filing, filing_recent, filing_facts (SEC EDGAR — sister of Korea DART)
 - entity      (3) — verify_lei, entity_search, entity_relationships (GLEIF LEI)
@@ -27,10 +27,10 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - chain       (4) — blockchain_audit_lookup, blockchain_audit_chains, verify_contract_admin_activity, verify_proxy_upgrade (EVM signed audit + contract pollers)
 - npm         (2) — verify_npm_package, verify_npm_typosquat (registry.npmjs.org supply chain)
 - pypi        (2) — verify_pypi_package, verify_pypi_typosquat (pypi.org supply chain)
-- retraction  (2) — retraction_watch_recent, retraction_watch_by_journal (Retraction Watch + Crossref crossmark)
+- retraction  (3) — doi_retraction_status, retraction_watch_recent, retraction_watch_by_journal (Retraction Watch + Crossref crossmark)
 - workflow    (3) — workflow_paper_repro, workflow_crypto_diligence, workflow_ai_output_verify (curated multi-step verification)
 - policy      (2) — policy_list_presets, policy_evaluate (custom verification policy framework)
-- law         (3) — kor_law_lookup, kor_case_search, kor_bill_status (국가법령정보센터 + 열린국회정보)
+- law         (5) — kor_law_lookup, kor_law_currency, kor_case_search, kor_bill_status, kor_company_status (국가법령정보센터 + 열린국회정보 + NTS×CSL Verified Fact corpus first two verticals)
 - sanctions   (1) — sanctions_screen (OFAC + UN + EU + KR STIC via openSanctions)
 - recall      (2) — drug_recall_check, product_recall_check (openFDA + CPSC SaferProducts)
 - journal     (1) — verify_journal_quality (DOAJ whitelist + predatory heuristic)
@@ -276,7 +276,7 @@ def _startup_banner() -> None:
     if has_key:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Pro tier (Bearer key sent) | "
-            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 139 total)",
+            f"gateway={base} | sibling: `uvx vivory-mcp-korea` (same key unlocks 56 Korea tools, 145 total)",
             file=sys.stderr,
             flush=True,
         )
@@ -287,7 +287,7 @@ def _startup_banner() -> None:
             f"  → Tools Pro bridge ($4.99/mo, 1k call/mo) or Vivory API Pro\n"
             f"    ($29/mo USDC, 10k/day, no auto-renew, no custody) at\n"
             f"    https://api.vivory.app/dashboard/public-api — Vivory API Pro key\n"
-            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 139 total).",
+            f"    also unlocks sibling `vivory-mcp-korea` (56 Korea tools, 145 total).",
             file=sys.stderr,
             flush=True,
         )

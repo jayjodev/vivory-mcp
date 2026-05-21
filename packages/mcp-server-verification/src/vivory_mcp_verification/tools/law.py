@@ -65,6 +65,40 @@ TOOLS: list[Tool] = [
         },
     ),
     Tool(
+        name="kor_law_currency",
+        description=(
+            "Check whether a cited Korean statute is **currently in force** — "
+            "the single hardest fact for an LLM to get right about Korean law, "
+            "since statutes are amended/repealed constantly and models quote "
+            "stale versions. Returns a verdict (current / not_yet_effective / "
+            "amended_since / superseded / repealed / not_found) plus 시행일자 "
+            "(effective date), 제개정구분 (amendment kind), and a tamper-evident "
+            "provenance hash. Pass `cited_effective_date` to detect that an LLM "
+            "is quoting an outdated version (verdict='amended_since'). Use AFTER "
+            "kor_law_lookup confirms the law exists, to confirm the cited "
+            "version is still valid. Source: 국가법령정보센터 (law.go.kr). The "
+            "result is persisted as a citable, re-verifiable dated record."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "law_name": _LAW_NAME,
+                "cited_effective_date": {
+                    "type": "string",
+                    "maxLength": 12,
+                    "description": (
+                        "Optional 시행일자 of the version the LLM/agent cited "
+                        "(YYYYMMDD or YYYY-MM-DD). If the current version is "
+                        "newer, verdict='amended_since' — the cited version is "
+                        "outdated."
+                    ),
+                },
+            },
+            "required": ["law_name"],
+            "additionalProperties": False,
+        },
+    ),
+    Tool(
         name="kor_case_search",
         description=(
             "Search Korean court cases (판례) by keyword via the 종합법률정보 "
@@ -148,6 +182,37 @@ TOOLS: list[Tool] = [
             "additionalProperties": False,
         },
     ),
+    Tool(
+        name="kor_company_status",
+        description=(
+            "Verify a Korean company's regulatory status before transacting — "
+            "KYB / due-diligence. Cross-references 국세청 business registration "
+            "(사업자등록번호 → active 계속사업자 / suspended 휴업 / closed 폐업) "
+            "with the US Consolidated Screening List (sanctions). Returns a "
+            "verdict (active / suspended / closed / sanctioned / "
+            "invalid_registration / registered_unverified / not_found), a "
+            "discrepancy flag (e.g. active-but-sanctioned), and a tamper-"
+            "evident provenance hash. Pass both biz_no AND name for the full "
+            "two-source cross-check. Sources: 국세청 (api.odcloud.kr) + "
+            "data.trade.gov CSL. Result is persisted as a citable dated record."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "biz_no": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "description": "사업자등록번호 — 10 digits, hyphens optional (e.g. '124-81-00998').",
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "description": "Company name / 상호 — used for sanctions screening. Provide biz_no and/or name (at least one).",
+                },
+            },
+            "additionalProperties": False,
+        },
+    ),
 ]
 
 
@@ -156,6 +221,15 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, str, dict | None, dict | None]]]
         "GET",
         "verify/law/lookup",
         {"law_name": a.get("law_name"), "article": a.get("article")},
+        None,
+    ),
+    "kor_law_currency": lambda a: (
+        "GET",
+        "verify/law/currency",
+        {
+            "query": a.get("law_name"),
+            "cited_effective_date": a.get("cited_effective_date"),
+        },
         None,
     ),
     "kor_case_search": lambda a: (
@@ -176,6 +250,12 @@ HANDLERS: dict[str, Callable[[dict], tuple[str, str, dict | None, dict | None]]]
             "era": a.get("era"),
             "limit": a.get("limit") or 10,
         },
+        None,
+    ),
+    "kor_company_status": lambda a: (
+        "GET",
+        "verify/company/status",
+        {"biz_no": a.get("biz_no"), "name": a.get("name")},
         None,
     ),
 }

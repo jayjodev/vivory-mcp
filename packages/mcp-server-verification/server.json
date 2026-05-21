@@ -2,20 +2,20 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jayjodev/vivory-mcp-verification",
   "title": "Vivory Verification Gateway",
-  "description": "83 MCP tools for verifiable AI work — citations, law, sanctions, recall, forecast.",
+  "description": "89 MCP tools for verifiable AI work — citations, KYB, law, sanctions, recall, peer review, forecast.",
   "websiteUrl": "https://api.vivory.app",
   "repository": {
     "url": "https://github.com/jayjodev/vivory-mcp",
     "source": "github",
     "subfolder": "packages/mcp-server-verification"
   },
-  "version": "0.8.0",
+  "version": "0.9.0",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "vivory-mcp-verification",
-      "version": "0.8.0",
+      "version": "0.9.0",
       "transport": {
         "type": "stdio"
       },
@@ -42,7 +42,7 @@
       "categories": ["research", "verification", "provenance", "supply-chain", "policy", "law", "sanctions", "recall", "forecast", "citations"],
       "regions": ["global"],
       "license": "MIT",
-      "tool_count": 83,
+      "tool_count": 89,
       "category_count": 36,
       "pricing": {
         "anonymous": "100/day per IP, no signup",

@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-verification"
-version = "0.8.0"
-description = "MCP for verifiable AI work: DOI/ORCID/OpenAlex, OpenCitations context, PubPeer review, Funder Registry, salami screen, archive, repro hash, C2PA/PDF/watermark, peer-review, forecast track-record + ensemble + calibration, SEC EDGAR, GLEIF, Wikidata, Wikipedia cite-health, trials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT, RDAP, EVM audit, npm/PyPI supply chain, Retraction Watch, Korean law/case/bill, OFAC/UN/EU sanctions, openFDA+CPSC recall, DOAJ journal, PR/article diff. 83 tools / 36 cats."
+version = "0.9.0"
+description = "MCP for verifiable AI work: DOI/ORCID/OpenAlex, OpenCitations context, PubPeer review, Funder Registry, salami screen, archive, repro hash, C2PA/PDF/watermark, peer-review panel + bulk + stats, forecast track-record + ensemble + calibration, SEC EDGAR, GLEIF, Wikidata, Wikipedia cite-health, trials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT, RDAP, EVM audit, npm/PyPI supply chain, Retraction Watch, Korean law/case/bill/KYB, OFAC sanctions, openFDA+CPSC recall, DOAJ, PR diff. 89 tools / 36 cats."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"

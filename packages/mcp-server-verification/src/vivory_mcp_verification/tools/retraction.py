@@ -1,19 +1,20 @@
-"""Retraction Watch poller — recent retractions stream.
+"""Retraction status — single-DOI 3-source reconcile + corpus streams.
 
-`verify_doi` already returns a single DOI's retraction status (via Crossref
-crossmark + OpenAlex). This cluster adds the *reverse direction*: "what was
-retracted recently?" — useful for agents auditing a corpus or watching a
-journal.
+Three tools, two directions:
 
-- `retraction_watch_recent` — last N days of retraction events, optionally
-  filtered by reason category (data-fabrication / image-manipulation /
-  authorship-dispute / publisher-error / honest-error).
-- `retraction_watch_by_journal` — retractions for a specific journal (ISSN
-  or name), useful when an agent is about to cite multiple papers from the
-  same venue.
+- `doi_retraction_status` — *single DOI* 3-source reconcile (Crossref
+  crossmark + OpenAlex is_retracted + PubPeer post-pub commentary). Returns
+  a Verified Fact corpus record (verdict + discrepancy + provenance hash)
+  persisted with (doi, as_of) idempotency. Use before citing a paper in a
+  brief, a literature review, or a RAG corpus.
+- `retraction_watch_recent` — *reverse direction* — last N days of
+  retraction events. Use to audit a corpus you already cited.
+- `retraction_watch_by_journal` — retractions filtered to a single journal
+  (ISSN or name). Use before publishing a set of citations from one venue.
 
-Backed by /api/verify/retraction/* on api.vivory.app. Upstream =
-Retraction Watch database (Crossref-mirrored, public).
+Backed by /api/verify/doi/retraction-status + /api/verify/retraction/* on
+api.vivory.app. Upstream = api.crossref.org + api.openalex.org +
+pubpeer.com + Retraction Watch (Crossref-mirrored, public).
 """
 from __future__ import annotations
 
@@ -22,6 +23,41 @@ from typing import Callable
 from mcp.types import Tool
 
 TOOLS: list[Tool] = [
+    Tool(
+        name="doi_retraction_status",
+        description=(
+            "Reconciled 3-source retraction status for a single DOI: "
+            "Crossref crossmark (`update-to` with type retraction / "
+            "withdrawal / expression_of_concern) × OpenAlex `is_retracted` "
+            "× PubPeer post-publication commentary. Returns a Verified "
+            "Fact corpus record — `verdict` (retracted / disputed / "
+            "flagged_few_comments / clean / not_found), `discrepancy` "
+            "(true when Crossref XOR OpenAlex disagree, or when no formal "
+            "retraction exists yet but PubPeer is actively flagging the "
+            "paper), a tamper-evident `provenance_hash`, and `as_of`. "
+            "Persisted with (doi, as_of) idempotency so the same DOI on "
+            "the same day reuses the record. Use this before citing a "
+            "paper in a brief, a literature review, or ingesting it into "
+            "a RAG corpus; single-source checks (crossmark only, OpenAlex "
+            "only) routinely false-pass real retractions."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "doi": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 200,
+                    "description": (
+                        "DOI of the paper to verify. With or without "
+                        "`https://doi.org/` or `doi:` prefix."
+                    ),
+                },
+            },
+            "required": ["doi"],
+            "additionalProperties": False,
+        },
+    ),
     Tool(
         name="retraction_watch_recent",
         description=(
@@ -112,6 +148,12 @@ TOOLS: list[Tool] = [
 
 
 HANDLERS: dict[str, Callable[[dict], tuple[str, str, dict | None, dict | None]]] = {
+    "doi_retraction_status": lambda a: (
+        "GET",
+        "verify/doi/retraction-status",
+        {"doi": a.get("doi")},
+        None,
+    ),
     "retraction_watch_recent": lambda a: (
         "GET",
         "verify/retraction/recent",
