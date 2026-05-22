@@ -28,8 +28,8 @@ from vivory_mcp_verification import client as cli  # noqa: E402
 
 
 def test_tool_count_matches_version_claim():
-    """v0.10.0 claims 98 tools across 36 categories."""
-    assert len(srv.TOOLS) == 98, f"Expected 98 tools, got {len(srv.TOOLS)}"
+    """v0.11.0 claims 101 tools across 37 categories (v0.10 + reconcile cluster of 3)."""
+    assert len(srv.TOOLS) == 101, f"Expected 101 tools, got {len(srv.TOOLS)}"
 
 
 def test_every_tool_has_handler():
@@ -108,6 +108,75 @@ def test_error_classification():
     assert srv._classify_error(RuntimeError("upstream 500")) == "UPSTREAM"
 
 
+def test_error_classification_422_is_validation():
+    # 0.10.1: 422 Unprocessable Entity from the backend means the caller's
+    # params didn't satisfy the schema — classify as VALIDATION (not UPSTREAM)
+    # so an agent retrying with different inputs can branch correctly.
+    assert srv._classify_error(RuntimeError("Client error '422 Unprocessable Entity'")) == "VALIDATION"
+    assert srv._classify_error(RuntimeError("400 Bad Request")) == "VALIDATION"
+    assert srv._classify_error(RuntimeError("Unprocessable entity")) == "VALIDATION"
+
+
+def test_missing_required_args_short_circuits_with_validation_envelope():
+    # 0.10.1: server validates inputSchema.required before dispatching to the
+    # backend, so an agent that forgets `doi` gets a clear VALIDATION error
+    # instead of a confusing UPSTREAM 422.
+    out = asyncio.run(srv.call_tool("verify_doi", {}))
+    payload = json.loads(out[0].text)
+    assert payload["code"] == "VALIDATION"
+    assert "doi" in payload.get("missing", [])
+    assert "Missing required argument" in payload["error"]
+
+
+def test_missing_required_treats_empty_string_as_missing():
+    out = asyncio.run(srv.call_tool("verify_doi", {"doi": ""}))
+    payload = json.loads(out[0].text)
+    assert payload["code"] == "VALIDATION"
+    assert "doi" in payload.get("missing", [])
+
+
+def test_required_args_allow_dispatch():
+    # Sanity: if all required args are present, validation passes through
+    # (we don't actually network here — just confirm we don't trip on
+    # the VALIDATION short-circuit when caller is well-formed). The handler
+    # will attempt the HTTP call and likely raise during the offline test;
+    # both outcomes (success envelope or UPSTREAM error) are acceptable.
+    missing = srv._missing_required("verify_doi", {"doi": "10.1038/x"})
+    assert missing == []
+
+
+def test_api_key_format_warning(capsys, monkeypatch):
+    # 0.10.1: malformed VIVORY_API_KEY (no vk_live_/vk_test_ prefix) is
+    # treated as anonymous + warns once on stderr instead of being silently
+    # downgraded by the backend.
+    monkeypatch.setenv("VIVORY_API_KEY", "garbage_token_no_prefix")
+    monkeypatch.delenv("VIVORY_MCP_QUIET", raising=False)
+    cli._format_warned = False  # reset module-level guard for the test
+    result = cli.get_api_key()
+    captured = capsys.readouterr()
+    assert result is None
+    assert "vk_live_" in captured.err
+    assert "anonymous tier" in captured.err
+
+
+def test_api_key_format_warning_silenced_by_quiet(capsys, monkeypatch):
+    monkeypatch.setenv("VIVORY_API_KEY", "garbage_token_no_prefix")
+    monkeypatch.setenv("VIVORY_MCP_QUIET", "1")
+    cli._format_warned = False
+    cli.get_api_key()
+    captured = capsys.readouterr()
+    assert captured.err == ""
+
+
+def test_api_key_valid_prefix_passes_through(monkeypatch):
+    monkeypatch.setenv("VIVORY_API_KEY", "vk_live_aaaaaaaaaaaaaaaa")
+    cli._format_warned = False
+    assert cli.get_api_key() == "vk_live_aaaaaaaaaaaaaaaa"
+    monkeypatch.setenv("VIVORY_API_KEY", "vk_test_bbbbbbbbbbbbbbbb")
+    cli._format_warned = False
+    assert cli.get_api_key() == "vk_test_bbbbbbbbbbbbbbbb"
+
+
 def test_quiet_banner_env(capsys, monkeypatch):
     monkeypatch.setenv("VIVORY_MCP_QUIET", "1")
     srv._startup_banner()
@@ -121,7 +190,7 @@ def test_banner_emits_by_default(capsys, monkeypatch):
     srv._startup_banner()
     captured = capsys.readouterr()
     assert "vivory-mcp-verification" in captured.err
-    assert "98 tools" in captured.err
+    assert "101 tools" in captured.err
 
 
 def test_client_request_supports_not_found_ok():
@@ -134,9 +203,12 @@ def test_client_request_supports_not_found_ok():
 
 
 def test_client_api_key_strip(monkeypatch):
-    monkeypatch.setenv("VIVORY_API_KEY", "  test-key  ")
-    assert cli.get_api_key() == "test-key"
+    # 0.11.0: valid-prefix keys are returned trimmed; whitespace-only is None.
+    monkeypatch.setenv("VIVORY_API_KEY", "  vk_live_padded_key  ")
+    cli._format_warned = False
+    assert cli.get_api_key() == "vk_live_padded_key"
     monkeypatch.setenv("VIVORY_API_KEY", "   ")
+    cli._format_warned = False
     assert cli.get_api_key() is None
 
 

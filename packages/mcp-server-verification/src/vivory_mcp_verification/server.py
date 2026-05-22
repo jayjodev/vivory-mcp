@@ -1,7 +1,10 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.10 ships 98 tools across 36 categories:
+(`vivory-verification`). v0.11 ships 101 tools across 37 categories:
+
+- reconcile   (3) — company_reconcile, recall_reconcile, person_reconcile (cross-source 2-4 registry consensus with deterministic provenance hash). LOCKED 2026-05-22.
+
 
 - claim       (3) — verify_claim, extract_citations, archive_claim_sources
 - doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
@@ -86,6 +89,7 @@ from .tools import (
     pypi as pypi_tools,
     quake as quake_tools,
     recall as recall_tools,
+    reconcile as reconcile_tools,
     repro as repro_tools,
     retraction as retraction_tools,
     sanctions as sanctions_tools,
@@ -141,6 +145,7 @@ TOOLS: list[Tool] = [
     *opencitations_tools.TOOLS,
     *funder_tools.TOOLS,
     *wikipedia_tools.TOOLS,
+    *reconcile_tools.TOOLS,
 ]
 
 
@@ -181,6 +186,7 @@ HANDLERS: dict[str, Any] = {
     **opencitations_tools.HANDLERS,
     **funder_tools.HANDLERS,
     **wikipedia_tools.HANDLERS,
+    **reconcile_tools.HANDLERS,
 }
 
 
@@ -194,6 +200,11 @@ def _classify_error(exc: BaseException) -> str:
     msg = str(exc).lower()
     if "rate limit" in msg or "429" in msg:
         return "RATE_LIMIT"
+    # 422/400 from upstream = the caller's params didn't satisfy the backend
+    # schema. Surface as VALIDATION (not UPSTREAM) so an agent retrying with
+    # different inputs knows it's a parameter problem, not a server outage.
+    if "422" in msg or "unprocessable" in msg or "400" in msg or "bad request" in msg:
+        return "VALIDATION"
     if "rejected" in msg or "401" in msg or "auth" in msg:
         return "AUTH"
     if "timeout" in msg or "timed out" in msg or isinstance(exc, TimeoutError):
@@ -203,6 +214,17 @@ def _classify_error(exc: BaseException) -> str:
     if isinstance(exc, ValueError):
         return "VALIDATION"
     return "UPSTREAM"
+
+
+_REQUIRED_BY_TOOL: dict[str, list[str]] = {
+    t.name: list(t.inputSchema.get("required", []) or [])
+    for t in TOOLS
+}
+
+
+def _missing_required(name: str, args: dict[str, Any]) -> list[str]:
+    required = _REQUIRED_BY_TOOL.get(name, [])
+    return [k for k in required if k not in args or args.get(k) in (None, "")]
 
 
 def _error_envelope(tool: str, exc: BaseException) -> dict[str, Any]:
@@ -239,6 +261,17 @@ async def call_tool(name: str, arguments: dict[str, Any] | None) -> list[TextCon
             "tool": name,
             "gateway": "vivory-mcp-verification",
             "did_you_mean": suggestions,
+        }
+        return [TextContent(type="text", text=json.dumps(envelope, ensure_ascii=False))]
+
+    missing = _missing_required(name, args)
+    if missing:
+        envelope = {
+            "error": f"Missing required argument(s): {', '.join(missing)}",
+            "code": "VALIDATION",
+            "tool": name,
+            "gateway": "vivory-mcp-verification",
+            "missing": missing,
         }
         return [TextContent(type="text", text=json.dumps(envelope, ensure_ascii=False))]
 

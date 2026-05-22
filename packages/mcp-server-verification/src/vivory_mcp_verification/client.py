@@ -11,13 +11,17 @@ Self-hosting: set `VIVORY_API_BASE` to override the default endpoint.
 from __future__ import annotations
 
 import os
+import sys
 from typing import Any
 
 import httpx
 
 DEFAULT_API_BASE = "https://api.vivory.app/api"
 TIMEOUT = httpx.Timeout(45.0, connect=10.0)
-USER_AGENT = "vivory-mcp-verification/0.6.0 (+https://vivory.app)"
+USER_AGENT = "vivory-mcp-verification/0.11.0 (+https://vivory.app)"
+
+_VIVORY_KEY_PREFIXES = ("vk_live_", "vk_test_")
+_format_warned = False
 
 
 def get_api_base() -> str:
@@ -32,9 +36,30 @@ def get_api_key() -> str | None:
     Vivory API Pro ($29/mo USDC)  — 10,000 calls/day, also unlocks sibling
                                     vivory-mcp-korea (124 tools total)
     Sign up at https://api.vivory.app/dashboard/public-api.
+
+    If the env var is set but doesn't begin with `vk_live_` / `vk_test_`,
+    print a one-time stderr warning and treat as anonymous — the backend
+    would otherwise silently downgrade the request to free tier, leaving
+    paying users wondering why they hit 429s after 100 calls.
     """
+    global _format_warned
     raw = os.environ.get("VIVORY_API_KEY")
-    return raw.strip() if raw and raw.strip() else None
+    if not raw or not raw.strip():
+        return None
+    key = raw.strip()
+    if not key.startswith(_VIVORY_KEY_PREFIXES):
+        if not _format_warned and os.environ.get("VIVORY_MCP_QUIET", "").strip() not in ("1", "true", "yes"):
+            print(
+                f"[vivory-mcp-verification] WARNING: VIVORY_API_KEY does not start with "
+                f"'vk_live_' or 'vk_test_' — treated as malformed, request will fall back "
+                f"to anonymous tier (100/day per IP). Rotate at "
+                f"https://api.vivory.app/dashboard/public-api.",
+                file=sys.stderr,
+                flush=True,
+            )
+            _format_warned = True
+        return None
+    return key
 
 
 _client: httpx.AsyncClient | None = None

@@ -5,91 +5,66 @@
 > **Verifiable AI work — one MCP server for every "is this real?" question.**
 
 An umbrella MCP (Model Context Protocol) server that gives AI agents a single
-registration for **53 verification tools** across 22 categories: claim
-verification, DOI + ORCID resolution, web archive lookup, URL hash +
-dataset fingerprint, reproducibility hash registry, media + document
-provenance, peer-review verdict, forecast track record, SEC EDGAR filings,
-GLEIF Legal Entity Identifier, OpenAlex works, Wikidata Q-numbers,
-ClinicalTrials.gov, World Bank macro indicators, USPTO patents,
-OpenStreetMap places, DefiLlama TVL, USGS earthquakes, MOLIT Korean
-apartment real-transaction prices, RDAP whois + DoH DNS, and EVM
-blockchain audit trail.
+registration for **98 verification tools** across 36 categories: claim
+verification, DOI + ORCID + Crossref Funder + OpenCitations + PubPeer
+post-publication review, web archive lookup, URL hash + dataset
+fingerprint, reproducibility hash registry, media + document provenance
+(C2PA / EXIF / pHash / video / PDF / AI-generator signature / CID v1 /
+RFC 3161 timestamp), Universal Peer Review (panel + bulk + stats),
+forecast track record + ensemble + calibration, SEC EDGAR, GLEIF,
+Wikidata, Wikipedia cite-health, ClinicalTrials.gov, World Bank macro,
+USPTO patents, OpenStreetMap, DefiLlama TVL, USGS, MOLIT RTMS, RDAP +
+DoH DNS, EVM blockchain audit + proxy upgrade poll, npm + PyPI
+supply-chain, Retraction Watch, Korean law + KYB (NTS × CSL Verified
+Fact corpus), OFAC + UN + EU sanctions, openFDA + CPSC recall, DOAJ
+journal quality, PR-vs-article diff, and curated multi-step workflows.
 
 Built by [Vivory](https://vivory.app) — a verifiable AI work platform.
 Mission: in an age where everything is synthesized, verification trails become trust.
 
-## What's inside (v0.5.1 — 53 tools)
+## What's inside (v0.10.0 — 98 tools / 36 categories)
 
-| Category    | Tools (count) | What it answers                                                      |
-|-------------|---------------|----------------------------------------------------------------------|
-| Claim       | 3             | Extract / verify / archive citations from arbitrary text             |
-| DOI         | 4             | Resolve, retraction-check, author network (Crossref + OpenAlex)      |
-| Archive     | 3             | Wayback Machine snapshot lookup, capture, history                    |
-| Repro       | 3             | Vivory Repro Hub hash registry — match, lookup, diff                 |
-| Provenance  | 4             | C2PA, PDF metadata, hash chain, AI-watermark detection               |
-| Peer review | 2             | Vivory Research peer-review verdict + per-persona lookup             |
-| Forecast    | 2             | Vivory forecast track record + agent submission                      |
-| Filing      | 3             | SEC EDGAR — ticker → CIK, recent filings, XBRL company facts         |
-| Entity      | 3             | GLEIF — LEI lookup, name search, corporate hierarchy                 |
-| Work        | 2             | OpenAlex academic works + citation graph (sister of DOI)             |
-| Wikidata    | 2             | Q-number entity grounding — global hallucination backbone            |
-| Trial       | 2             | ClinicalTrials.gov v2 — NCT registry verify + search                 |
-| Indicator   | 2             | World Bank Open Data — macro indicators + time series                |
-| Patent      | 2             | USPTO PatentsView — US patent registry (sister of KIPRIS)            |
-| Place       | 2             | OpenStreetMap Nominatim — geo verification by ID / coords / name     |
-| TVL         | 2             | DefiLlama — crypto protocol + chain TVL verification                 |
-| Quake       | 2             | USGS Earthquake — seismic event verification                         |
-| Apt         | 2             | MOLIT RTMS — Korean apartment real-transaction prices (매매·전월세). Aggregate stats + claim verification. Raw transaction lists + price trend live in sister `vivory-mcp-korea` (`molit_*`). Same data, different axes. |
-| Identity    | 2             | ORCID author identity — resolve iD to name + works, chain into DOI verdicts |
-| Web         | 2             | URL hash + dataset fingerprint — sha256 + size + ETag + structure probe |
-| Domain      | 2             | Domain reputation — RDAP whois (registrar + age) + Cloudflare DoH DNS (A/MX/TXT/CAA) |
-| Chain       | 2             | EVM blockchain audit — signed envelope over confirmed tx (Ethereum, Arbitrum, Base, Optimism, Polygon) |
+| Category       | # | What it answers                                                                          |
+|----------------|---|------------------------------------------------------------------------------------------|
+| Claim          | 3 | Extract / verify / archive citations from arbitrary text                                 |
+| DOI            | 4 | Resolve, retraction-check, author network (Crossref + OpenAlex)                          |
+| Archive        | 3 | Wayback Machine snapshot lookup, capture, history                                        |
+| Repro          | 3 | Vivory Repro Hub hash registry — match, lookup, diff                                     |
+| **Provenance** | **13** | C2PA, PDF provenance, hash chain, watermark, RFC 3161 timestamp, EXIF, perceptual hash, video metadata + frame-hash, PDF metadata, file hash, AI-generator signature DB, combined summary — who/when/where/what across image/video/PDF |
+| **Peer review**| **5** | Vivory Universal Peer Review — verdict + per-persona + bulk + reviewer panel + stats    |
+| Forecast       | 4 | Vivory crypto.vivory.app/forecast track record + submit + Polymarket/Kalshi/Manifold ensemble + ECE/MCE/Brier calibration |
+| Filing         | 3 | SEC EDGAR — ticker → CIK, recent filings, XBRL company facts                             |
+| Entity         | 3 | GLEIF — LEI lookup, name search, corporate hierarchy                                     |
+| Work           | 3 | OpenAlex academic works + citation graph + salami-slicing near-dup screen                |
+| Wikidata       | 2 | Q-number entity grounding — global hallucination backbone                                |
+| Trial          | 2 | ClinicalTrials.gov v2 — NCT registry verify + search                                     |
+| Indicator      | 2 | World Bank Open Data — macro indicators + time series                                    |
+| Patent         | 2 | USPTO PatentsView — US patent registry (sister of KIPRIS)                                |
+| Place          | 2 | OpenStreetMap Nominatim — geo verification by ID / coords / name                         |
+| TVL            | 2 | DefiLlama — crypto protocol + chain TVL verification                                     |
+| Quake          | 2 | USGS Earthquake — seismic event verification                                             |
+| Apt            | 2 | MOLIT RTMS — Korean apartment real-transaction prices (sigungu × month × trade/rent)     |
+| Identity       | 2 | ORCID author identity — resolve iD to name + works, chain into DOI verdicts              |
+| Web            | 2 | URL hash + dataset fingerprint — sha256 + size + ETag + structure probe                  |
+| Domain         | 4 | RDAP whois + Cloudflare DoH DNS + owner-change + WHOIS history                           |
+| Chain          | 4 | EVM blockchain audit envelope + contract-admin activity + proxy-upgrade poll (Eth/Arb/Base/Op/Polygon) |
+| npm            | 2 | Package metadata + maintainer history + typosquat heuristic                              |
+| PyPI           | 2 | Package metadata + maintainer history + typosquat heuristic                              |
+| Retraction     | 3 | Retraction Watch DOI status + recent retractions + by-journal feed                       |
+| Workflow       | 3 | Curated multi-step recipes — paper repro, crypto diligence, AI-output verify             |
+| Policy         | 2 | Custom verification policy framework — list presets + evaluate                           |
+| **Law (KR)**   | **5** | NTS × CSL Verified Fact corpus — law lookup + currency + case search + bill status + company KYB |
+| Sanctions      | 1 | OFAC + UN + EU + KR STIC consolidated screen (via OpenSanctions)                         |
+| Recall         | 2 | openFDA drug recall + CPSC SaferProducts consumer-product recall                         |
+| Journal        | 1 | DOAJ whitelist + predatory-publisher heuristic                                           |
+| PR diff        | 1 | Press-release vs published-article fidelity diff (local n-gram)                          |
+| PubPeer        | 1 | Post-publication peer-review commentary on a DOI                                         |
+| OpenCitations  | 1 | COCI citation context + self-citation count                                              |
+| Funder         | 1 | Crossref Funder Registry resolver (grant chain provenance)                               |
+| Wikipedia      | 1 | External-link liveness audit for a Wikipedia article                                     |
 
-### Full tool list
-
-**Claim**: `verify_claim` · `extract_citations` · `archive_claim_sources`
-
-**DOI**: `verify_doi` · `doi_metadata` · `doi_retraction_check` · `doi_author_network`
-
-**Archive**: `verify_archive` · `wayback_capture` · `wayback_history`
-
-**Repro**: `verify_repro_hash` · `repro_hub_lookup` · `repro_artifact_diff`
-
-**Provenance**: `verify_c2pa` · `verify_pdf_provenance` · `verify_hash_chain` · `detect_watermark`
-
-**Peer review**: `verify_peer_review` · `persona_verdict_lookup`
-
-**Forecast**: `forecast_track_record` · `submit_forecast`
-
-**Filing**: `verify_filing` · `filing_recent` · `filing_facts`
-
-**Entity**: `verify_lei` · `entity_search` · `entity_relationships`
-
-**Work**: `verify_work` · `search_works`
-
-**Wikidata**: `verify_qid` · `wikidata_search`
-
-**Trial**: `verify_trial` · `trial_search`
-
-**Indicator**: `verify_indicator` · `indicator_series`
-
-**Patent**: `verify_patent` · `patent_search`
-
-**Place**: `verify_place` · `place_search`
-
-**TVL**: `verify_protocol_tvl` · `verify_chain_tvl`
-
-**Quake**: `verify_quake` · `recent_quakes`
-
-**Apt**: `apt_market_snapshot` · `verify_apt_price` (MOLIT RTMS — sigungu × month × {trade, rent}, daily nationwide ingest from 국토교통부)
-
-**Identity**: `verify_orcid` · `orcid_works`
-
-**Web**: `verify_url_hash` · `verify_dataset_fingerprint`
-
-**Domain**: `verify_domain_whois` · `verify_domain_dns`
-
-**Chain**: `blockchain_audit_lookup` · `blockchain_audit_chains` (EVM tx → Ed25519-signed audit envelope; same trust anchor as Vivory tool verification receipts)
+Per-tool name list: see [`src/vivory_mcp_verification/server.py`](src/vivory_mcp_verification/server.py)
+module docstring (the source-of-truth catalog).
 
 ## Why this exists
 
@@ -162,17 +137,29 @@ and add the key:
 claude mcp add vivory-verification vivory-mcp-verification
 ```
 
-## Tier limits — Vivory API Pro
+## Drop into your agent
 
-**One $29/mo key unlocks BOTH MCPs.** A Pro key issued for `vivory-mcp-verification`
-also unlocks `vivory-mcp-korea` (56 Korean public-data tools) and vice versa —
-the same Bearer credential is honored across the entire Vivory MCP family.
+Ready-to-copy recipes that wire Vivory verification into the most common
+agent stacks:
+
+| Agent stack            | Recipe                                                                        |
+|------------------------|-------------------------------------------------------------------------------|
+| Claude Code subagent   | [`examples/claude-code-verify-before-publish.md`](examples/claude-code-verify-before-publish.md) |
+| Cursor rule            | [`examples/cursor-verify.mdc`](examples/cursor-verify.mdc)                    |
+| LangGraph node         | [`examples/langgraph-verification-node.py`](examples/langgraph-verification-node.py) |
+| Plain MCP client       | [`examples/quickstart.md`](examples/quickstart.md)                            |
+
+Each recipe is small (~30–60 lines), MIT-licensed, and battle-tested
+against the live `api.vivory.app` gateway. Use them as-is or fork the
+checks to your workflow.
+
+## Tier limits — Vivory API Pro
 
 | Tier        | Daily quota  | Notes                                              |
 |-------------|--------------|----------------------------------------------------|
 | Anonymous   | 100/day/IP   | No signup, polite caching                          |
 | Free        | 500/day      | Sign up at api.vivory.app/dashboard                |
-| Pro         | 10,000/day   | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. Same key unlocks `vivory-mcp-korea` (56 tools) = **109 tools, one purchase**. |
+| Pro         | 10,000/day   | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. Same key also extends REST gateway quotas at `api.vivory.app/api/public-tools/*` (Korean public-data passthroughs that used to live in the retired `vivory-mcp-korea`). |
 | Enterprise  | 100,000/day  | contact@vivory.app (self-serve only, no SaaS sales) |
 
 Sign up at **[api.vivory.app/dashboard/public-api](https://api.vivory.app/dashboard/public-api)**.
@@ -198,21 +185,29 @@ Every endpoint returns a uniform envelope:
 
 - `v0.1-real`     — full implementation, results trustworthy
 - `v0.1-partial`  — partial (e.g. core works, advanced sub-feature pending)
-- `v0.1-scaffold` — envelope shape stable, backing service ships in v0.2
+- `v0.1-scaffold` — envelope shape stable, backing service ships in a later release
 
-Real today: extract_citations · hash_chain (sha256) · verify_doi · doi_metadata
-· doi_retraction_check · doi_author_network (depth=1) · verify_archive ·
-wayback_history · verify_filing · filing_recent · filing_facts · verify_lei
-· entity_search · entity_relationships · verify_work · search_works ·
-verify_qid · wikidata_search · verify_trial · trial_search · verify_indicator
-· indicator_series · verify_patent · patent_search · verify_place ·
-place_search · verify_protocol_tvl · verify_chain_tvl · verify_quake ·
-recent_quakes.
+Every tool returns its own phase so an agent can branch on it. The
+live count per phase is exposed at
+[https://api.vivory.app/api/verify/manifest](https://api.vivory.app/api/verify/manifest)
+and never needs a package upgrade to stay in sync.
 
-Scaffold today (envelope ready, full backing in a later release): verify_claim
-full pipeline · archive_claim_sources batch capture · wayback_capture SPN2
-dispatch · repro lookup · c2pa · pdf-provenance · watermark · peer-review
-verdict · forecast submit.
+## Error envelope (so agents can branch)
+
+When a tool name is unknown or an upstream call fails, the MCP returns a
+structured envelope instead of raising:
+
+```json
+{
+  "error": "ConnectionError: ...",
+  "code": "RATE_LIMIT|AUTH|TIMEOUT|NOT_FOUND|VALIDATION|UPSTREAM|UNKNOWN_TOOL",
+  "tool": "verify_doi",
+  "gateway": "vivory-mcp-verification",
+  "did_you_mean": ["verify_dataset_fingerprint"]
+}
+```
+
+Branch on `code` (stable) — not the human `error` string.
 
 ## Self-hosting
 
@@ -224,18 +219,18 @@ source — `src/backend/app/routers/verify.py` in
 VIVORY_API_BASE=https://my-gateway.example.com/api vivory-mcp-verification
 ```
 
-## Sister packages in the Vivory MCP family
+## The Vivory MCP family
 
-- **[vivory-mcp-korea](https://pypi.org/project/vivory-mcp-korea/)** —
-  Korean public data (KOSIS / BoK / DART / NEIS / Opinet / KMA / NTS /
-  16 sources, 56 tools).
-- **vivory-mcp-verification** — this package (verification, 53 tools
-  spanning DOI/Crossref/OpenAlex, ORCID identity, web archive, URL hash +
-  dataset fingerprint, SEC EDGAR + GLEIF + USPTO as global sisters to
-  DART/KIPRIS, Wikidata grounding, ClinicalTrials.gov, World Bank macro,
-  OpenStreetMap, DefiLlama, USGS earthquake, MOLIT RTMS Korean apartment
-  real-transaction prices, RDAP whois + DoH DNS, EVM blockchain audit).
-- More coming under the same `api.vivory.app` umbrella.
+- **vivory-mcp-verification** (this package) — 98 universal verification
+  tools across 36 categories. Korean public sources are bundled inside
+  verdict evidence (`kor_law_currency`, `kor_company_status`,
+  `doi_retraction_status`, …) instead of as a separate Korea-only MCP.
+- **vivory-mcp-korea** — **retired 2026-05-21.** v0.6.0 ships a single
+  `deprecation_notice` tool. Raw Korean-public-data passthrough was
+  removed because re-distributing third-party data mismatched the
+  *verifiable-AI-work* motto. The Korean sources are still accessible
+  as REST endpoints at `api.vivory.app/api/public-tools/*` (free
+  anonymous 100/day per IP).
 
 ## License
 

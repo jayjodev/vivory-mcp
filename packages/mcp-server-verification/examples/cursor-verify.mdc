@@ -1,0 +1,102 @@
+---
+description: When generating content that includes citations (DOIs), external URLs, embedded images, PDFs, or forecasts, the agent must verify them via the Vivory Verification MCP before presenting the output to the user.
+globs:
+  - "**/*.md"
+  - "**/*.mdx"
+  - "**/blog/**"
+  - "**/content/**"
+  - "**/posts/**"
+  - "**/articles/**"
+alwaysApply: false
+---
+
+# Vivory Verification Rule
+
+Before any response that ships content with checkable claims, you must
+call the `vivory-verification` MCP. Treat unverified citations as a
+build-time error, not a stylistic preference.
+
+## Required MCP
+
+Register `vivory-mcp-verification` in `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "vivory-verification": {
+      "command": "vivory-mcp-verification"
+    }
+  }
+}
+```
+
+Install: `pip install vivory-mcp-verification` (or `uv tool install`).
+
+## When this rule fires
+
+You are generating, editing, or summarizing content that contains:
+
+- a DOI (`10.xxxx/...`)
+- an external URL (`https?://...`)
+- an embedded image (`.jpg`, `.jpeg`, `.png`, `.webp`)
+- a PDF attachment
+- a forecast or prediction ("X% chance of Y by Z")
+- a corporate identity reference (LEI, ticker, company name as fact)
+- a Wikipedia article reference
+- a Wikidata Q-number
+
+## What to do
+
+1. For each artifact above, call the matching Vivory tool:
+
+   | Artifact            | Tool                                                  |
+   |---------------------|-------------------------------------------------------|
+   | DOI                 | `verify_doi`, then `doi_retraction_check`             |
+   | URL                 | `verify_archive` (Wayback presence)                   |
+   | Image (existing)    | `extract_image_exif` + `ai_generator_signature_lookup`|
+   | PDF                 | `verify_pdf_provenance` + `extract_pdf_metadata`      |
+   | Forecast            | `forecast_track_record` for the issuer                |
+   | LEI                 | `verify_lei` (GLEIF status)                           |
+   | Q-number            | `verify_qid` (Wikidata)                               |
+   | Wikipedia article   | `verify_wikipedia_cite_health` (link liveness)        |
+   | Korean company      | `kor_company_status` (NTS business-status)            |
+   | Korean law citation | `kor_law_currency` (still in force?)                  |
+
+2. If any tool returns a failure (retracted DOI, dead URL, AI-generated
+   image presented as photo, expired LEI, retracted law), **do not
+   include the failing artifact** in the output. Surface the failure
+   to the user with the citation source so they can correct or omit.
+
+3. If a tool returns `implementation_phase: v0.1-scaffold`, treat the
+   result as advisory only and label the claim "Verification pending".
+
+4. At the end of the response, append:
+
+   ```
+   ---
+   Verified via Vivory: <N> tools, sources [crossref, openalex, ...]
+   ```
+
+   This is the user's trust anchor. Don't fake the citation list.
+
+## Anti-patterns
+
+- **Don't** call the MCP after the user reviews the output. Call
+  *before*. The point is to catch hallucinations before they ship.
+- **Don't** silently drop a failing artifact. The user needs to know
+  why their citation was rejected so they can either swap it or
+  override the verdict consciously.
+- **Don't** invent tool names. The full catalog is in `vivory-mcp-verification`'s
+  README (`https://pypi.org/project/vivory-mcp-verification/`).
+
+## Why
+
+Most LLM citations are unchecked. The Vivory MCP closes that gap with
+98 verification tools across 36 categories. One pip install, one
+`mcp.json` entry, every output gets a verification trail.
+
+Rate limit: anonymous tier = 100/day per IP. Sign up at
+`api.vivory.app/dashboard` for free 500/day, or $29/mo Pro for 10k/day
+(USDC, no auto-renew, no custody).
+
+License: MIT.
