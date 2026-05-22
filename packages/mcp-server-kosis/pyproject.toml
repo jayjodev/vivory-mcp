@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-kosis"
-version = "0.1.2"
-description = "DEPRECATED (EOL 2026-12-31) — superseded by vivory-mcp-korea (umbrella, 56 tools across 16 sources). Install vivory-mcp-korea instead. v0.1.2 = final maintenance release (Bearer key fwd-compat + schema fix)."
+version = "0.1.3"
+description = "DEPRECATED (EOL 2026-12-31) — superseded by vivory-mcp-korea (umbrella, 56 tools across 16 sources). Install vivory-mcp-korea instead. v0.1.3 = squat-lock reclaim after v0.1.2 hard-delete (PyPI burns deleted version numbers, so the name was re-published at the next patch)."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"

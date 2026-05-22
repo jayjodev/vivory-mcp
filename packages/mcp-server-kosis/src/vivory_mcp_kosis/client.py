@@ -16,7 +16,7 @@ import httpx
 
 DEFAULT_API_BASE = "https://api.vivory.app/api"
 TIMEOUT = httpx.Timeout(30.0, connect=10.0)
-USER_AGENT = "vivory-mcp-kosis/0.1.2 (+https://vivory.app)"
+USER_AGENT = "vivory-mcp-kosis/0.1.3 (+https://vivory.app)"
 
 
 def get_api_base() -> str:

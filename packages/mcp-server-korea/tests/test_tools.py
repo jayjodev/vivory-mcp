@@ -25,8 +25,10 @@ import vivory_mcp_korea  # noqa: E402
 
 
 def test_version_is_deprecation_release():
-    """v0.6.0 = deprecation final release."""
-    assert vivory_mcp_korea.__version__ == "0.6.0"
+    """v0.6.x = deprecation maintenance line. v0.6.1 = squat-lock reclaim
+    after PyPI hard-delete burned v0.6.0; same functional surface, just a
+    version bump because PyPI refuses to re-publish a deleted version."""
+    assert vivory_mcp_korea.__version__ == "0.6.1"
 
 
 def test_tools_reduced_to_deprecation_notice():

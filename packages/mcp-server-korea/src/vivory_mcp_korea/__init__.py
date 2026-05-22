@@ -27,7 +27,7 @@ Future Korean verdict candidates (added based on demand signal):
 
 Same $29/mo Pro key works for vivory-mcp-verification. No new functionality
 will ship in vivory-mcp-korea — this v0.6.0 release contains only a
-migration notice tool.
+migration notice tool. v0.6.1 = squat-lock reclaim after v0.6.0 hard-delete.
 """
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
