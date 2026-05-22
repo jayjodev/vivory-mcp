@@ -18,7 +18,7 @@ import httpx
 
 DEFAULT_API_BASE = "https://api.vivory.app/api"
 TIMEOUT = httpx.Timeout(45.0, connect=10.0)
-USER_AGENT = "vivory-mcp-verification/0.11.0 (+https://vivory.app)"
+USER_AGENT = "vivory-mcp-verification/0.11.1 (+https://vivory.app)"
 
 _VIVORY_KEY_PREFIXES = ("vk_live_", "vk_test_")
 _format_warned = False

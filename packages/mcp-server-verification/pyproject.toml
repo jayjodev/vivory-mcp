@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-verification"
-version = "0.11.0"
-description = "MCP for verifiable AI: DOI/ORCID/OpenAlex, OpenCitations, PubPeer, Funder, salami screen, archive, repro hash, media provenance (C2PA/EXIF/pHash/video/PDF/AI-gen sig/CID/RFC 3161), peer-review, forecast, SEC EDGAR, GLEIF, Wikidata, Wikipedia cite-health, trials, World Bank, USPTO, OSM, DefiLlama, USGS, MOLIT, RDAP, EVM audit, npm/PyPI supply chain, Retraction Watch, Korean law/KYB, OFAC sanctions, openFDA/CPSC recall, DOAJ, PR diff, cross-source reconcile. 101 tools / 37 cats."
+version = "0.11.1"
+description = "MCP for verifiable AI: DOI/ORCID/OpenAlex, OpenCitations, PubPeer, Funder, salami screen, archive, repro hash, media provenance (C2PA/EXIF/pHash/video/PDF/AI-gen sig/CID), peer-review, forecast, SEC EDGAR, GLEIF, Wikidata, Wikipedia cite-health, trials, World Bank, OSM, DefiLlama, USGS, MOLIT, RDAP, EVM audit, npm/PyPI supply chain, Retraction Watch, Korean law/KYB, OFAC sanctions, openFDA/CPSC recall, DOAJ, PR diff, cross-source reconcile. 99 tools / 36 cats. v0.11.1 retires USPTO patent."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -41,7 +41,6 @@ keywords = [
     "wikidata",
     "clinicaltrials",
     "worldbank",
-    "uspto",
     "openstreetmap",
     "defillama",
     "usgs",
