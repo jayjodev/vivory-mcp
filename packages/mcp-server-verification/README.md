@@ -13,7 +13,7 @@ fingerprint, reproducibility hash registry, media + document provenance
 RFC 3161 timestamp), Universal Peer Review (panel + bulk + stats),
 forecast track record + ensemble + calibration, SEC EDGAR, GLEIF,
 Wikidata, Wikipedia cite-health, ClinicalTrials.gov, World Bank macro,
-USPTO patents, OpenStreetMap, DefiLlama TVL, USGS, MOLIT RTMS, RDAP +
+OpenStreetMap, DefiLlama TVL, USGS, MOLIT RTMS, RDAP +
 DoH DNS, EVM blockchain audit + proxy upgrade poll, npm + PyPI
 supply-chain, Retraction Watch, Korean law + KYB (NTS × CSL Verified
 Fact corpus), OFAC + UN + EU sanctions, openFDA + CPSC recall, DOAJ
@@ -39,7 +39,6 @@ Mission: in an age where everything is synthesized, verification trails become t
 | Wikidata       | 2 | Q-number entity grounding — global hallucination backbone                                |
 | Trial          | 2 | ClinicalTrials.gov v2 — NCT registry verify + search                                     |
 | Indicator      | 2 | World Bank Open Data — macro indicators + time series                                    |
-| Patent         | 2 | USPTO PatentsView — US patent registry (sister of KIPRIS)                                |
 | Place          | 2 | OpenStreetMap Nominatim — geo verification by ID / coords / name                         |
 | TVL            | 2 | DefiLlama — crypto protocol + chain TVL verification                                     |
 | Quake          | 2 | USGS Earthquake — seismic event verification                                             |

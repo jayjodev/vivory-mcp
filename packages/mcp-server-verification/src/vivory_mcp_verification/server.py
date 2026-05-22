@@ -1,7 +1,7 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.11 ships 101 tools across 37 categories:
+(`vivory-verification`). v0.11 ships 99 tools across 36 categories:
 
 - reconcile   (3) — company_reconcile, recall_reconcile, person_reconcile (cross-source 2-4 registry consensus with deterministic provenance hash). LOCKED 2026-05-22.
 
@@ -19,7 +19,6 @@ Aggregates verifiable-AI-work tools under a single MCP server name
 - wikidata    (2) — verify_qid, wikidata_search (entity grounding via Q-numbers)
 - trial       (2) — verify_trial, trial_search (ClinicalTrials.gov v2)
 - indicator   (2) — verify_indicator, indicator_series (World Bank Open Data)
-- patent      (2) — verify_patent, patent_search (USPTO PatentsView)
 - place       (2) — verify_place, place_search (OpenStreetMap Nominatim)
 - tvl         (2) — verify_protocol_tvl, verify_chain_tvl (DefiLlama crypto TVL)
 - quake       (2) — verify_quake, recent_quakes (USGS Earthquake)
@@ -79,7 +78,6 @@ from .tools import (
     law as law_tools,
     npm as npm_tools,
     opencitations as opencitations_tools,
-    patent as patent_tools,
     peer_review as peer_review_tools,
     place as place_tools,
     policy as policy_tools,
@@ -122,7 +120,6 @@ TOOLS: list[Tool] = [
     *wikidata_tools.TOOLS,
     *trial_tools.TOOLS,
     *indicator_tools.TOOLS,
-    *patent_tools.TOOLS,
     *place_tools.TOOLS,
     *tvl_tools.TOOLS,
     *quake_tools.TOOLS,
@@ -163,7 +160,6 @@ HANDLERS: dict[str, Any] = {
     **wikidata_tools.HANDLERS,
     **trial_tools.HANDLERS,
     **indicator_tools.HANDLERS,
-    **patent_tools.HANDLERS,
     **place_tools.HANDLERS,
     **tvl_tools.HANDLERS,
     **quake_tools.HANDLERS,
