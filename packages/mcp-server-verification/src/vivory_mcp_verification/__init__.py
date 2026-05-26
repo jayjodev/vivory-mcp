@@ -1,15 +1,22 @@
 """Vivory umbrella MCP server for verifiable AI work.
 
 Aggregates verification tools under a single MCP server name
-(`vivory-verification`). v0.10.0 ships 98 tools across 36 categories —
-provenance cluster expanded 4→13 (Phase A standards-backed who/when/
-where/what verification across image/video/PDF: EXIF + perceptual hash
-+ video ffprobe + video frame hash + PDF metadata + file hash + CID v1
-+ AI generator signature lookup + combined provenance summary + RFC
-3161 timestamp wrapper). All Phase A tools are standards-only — no ML
-inference, no new Python deps, no new system binaries beyond
-ffmpeg/ffprobe. Honest about scope: signature match only, absence of
-match does NOT prove human-created.
+(`vivory-verification`). v0.11.1 ships 99 tools across 36 categories.
+
+Cluster history:
+- v0.10.0: provenance cluster expanded 4→13 (Phase A standards-backed
+  who/when/where/what verification across image/video/PDF: EXIF +
+  perceptual hash + video ffprobe + video frame hash + PDF metadata +
+  file hash + CID v1 + AI generator signature lookup + combined
+  provenance summary + RFC 3161 timestamp wrapper).
+- v0.11.0: reconcile cluster (Crossref + OpenAlex + Semantic Scholar +
+  arXiv with deterministic provenance hash) — 98→101 tools.
+- v0.11.1: USPTO PatentsView cluster retired (2026-05-29 decommission
+  pre-emptive) — 101→99 tools.
+
+All Phase A tools are standards-only — no ML inference, no new Python
+deps, no new system binaries beyond ffmpeg/ffprobe. Honest about scope:
+signature match only, absence of match does NOT prove human-created.
 
 See `vivory_mcp_verification.server` module docstring for the full
 cluster list. All tools are HTTP wrappers over `api.vivory.app/api/verify/*`
