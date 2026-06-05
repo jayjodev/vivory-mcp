@@ -1,6 +1,6 @@
 # MCP Directory Submission Drafts (HISTORICAL — superseded by umbrella)
 
-> **⚠ Superseded 2026-05-06 / KOSIS EOL 2026-12-31**: First-submission target is the umbrella package `vivory-mcp-korea` (**v0.4.0 LIVE on PyPI** — 15 sources / 55 tools, includes KOSIS as one cluster). `vivory-mcp-kosis` is now a deprecated stub (final maintenance release 0.1.2). See [`mcp-server-korea/MCP_DIRECTORY_SUBMISSION.md`](../mcp-server-korea/MCP_DIRECTORY_SUBMISSION.md) for active submission drafts. This document remains historical only — do **not** submit kosis-only to any directory.
+> **⚠ Superseded 2026-05-28**: Both `vivory-mcp-kosis` (v0.1.4) AND the intermediate `vivory-mcp-korea` (v0.6.2) are now deprecation-only. The active first-submission target is **`vivory-mcp-verification`** (Korean verdict tools bundled). This document remains historical only — do **not** submit kosis-only or korea-only to any directory.
 
 Ready-to-submit entries for community MCP server directories. Pick one or multiple to maximize discovery.
 

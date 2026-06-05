@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-verification"
-version = "0.11.1"
-description = "MCP for verifiable AI: DOI/ORCID/OpenAlex, OpenCitations, PubPeer, Funder, salami screen, archive, repro hash, media provenance (C2PA/EXIF/pHash/video/PDF/AI-gen sig/CID), peer-review, forecast, SEC EDGAR, GLEIF, Wikidata, Wikipedia cite-health, trials, World Bank, OSM, DefiLlama, USGS, MOLIT, RDAP, EVM audit, npm/PyPI supply chain, Retraction Watch, Korean law/KYB, OFAC sanctions, openFDA/CPSC recall, DOAJ, PR diff, cross-source reconcile. 99 tools / 36 cats. v0.11.1 retires USPTO patent."
+version = "0.14.0"
+description = "MCP for verifiable AI — the Vivory moat: Korean law/KYB verdicts (국가법령정보센터 + 열린국회정보 + NTS×CSL), deterministic-provenance-hash cross-source reconcile, DOI verdict + retraction gate, and an offline-verifiable receipt backbone (C2PA + file hash + hash chain). 13 tools / 4 categories (v0.14.0 moat collapse 2026-06-05: narrowed 87→13). Tools Pro $4.99/mo single key."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -41,7 +41,6 @@ keywords = [
     "wikidata",
     "clinicaltrials",
     "worldbank",
-    "openstreetmap",
     "defillama",
     "usgs",
     "molit",
@@ -59,7 +58,6 @@ keywords = [
     "typosquat",
     "retraction",
     "workflow",
-    "policy",
     "law",
     "sanctions",
     "ofac",

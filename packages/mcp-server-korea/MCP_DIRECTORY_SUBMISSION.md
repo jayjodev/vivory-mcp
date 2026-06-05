@@ -2,7 +2,7 @@
 
 Distribution-layer runbook for the Korea MCP umbrella. Code/supply work is done — these are the registry submissions that turn `pip install`-able into discoverable.
 
-**State (2026-05-20)**: **v0.5.0 LIVE on PyPI + MCP Registry**. 56 tools across 16 sources. `mcp-name` verification comment in README, `server.json` namespace `io.github.jayjodev/vivory-mcp-korea`. Remaining operator action = open the two awesome-mcp-servers PRs.
+**Current state (2026-05-28)**: **v0.6.2 — DEPRECATION-ONLY**. The package now ships a single migration-notice tool that routes all calls (including legacy `kosis_*`, `dart_*`, `kma_*`, `vworld_*`, `nts_*`, …) to a deprecation payload pointing at `vivory-mcp-verification`. The v0.5.0 historical state below is preserved for archival reference. **Do not re-submit to MCP Registry / awesome lists** — submit `vivory-mcp-verification` instead.
 
 **Submission order (highest leverage first)**:
 1. **Official MCP Registry** (registry.modelcontextprotocol.io) — anchor of the ecosystem, indexed by Smithery + Cursor + Glama

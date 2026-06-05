@@ -37,8 +37,10 @@ pip install vivory-mcp-verification          # or: uv tool install
 
 That's it. The MCP server proxies the public gateway at
 `api.vivory.app/api/verify/*` — 100 anonymous calls/day per IP, no
-signup required. Add an API key (`VIVORY_API_KEY` env) for 10k/day Pro
-tier ($29/mo USDC, no auto-renew, no custody).
+signup required. Add an API key (`VIVORY_API_KEY` env) for 10k/day Tools
+Pro tier ($4.99/mo USDC, no auto-renew, no custody — single key across
+both tools.vivory.app utilities and the Verification MCP after bundle
+absorb 2026-06-01).
 
 ## Contributing a recipe
 

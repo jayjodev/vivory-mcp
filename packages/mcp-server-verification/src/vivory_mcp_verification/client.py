@@ -18,7 +18,7 @@ import httpx
 
 DEFAULT_API_BASE = "https://api.vivory.app/api"
 TIMEOUT = httpx.Timeout(45.0, connect=10.0)
-USER_AGENT = "vivory-mcp-verification/0.11.1 (+https://vivory.app)"
+USER_AGENT = "vivory-mcp-verification/0.11.2 (+https://vivory.app)"
 
 _VIVORY_KEY_PREFIXES = ("vk_live_", "vk_test_")
 _format_warned = False
@@ -32,9 +32,12 @@ def get_api_key() -> str | None:
     """Optional Vivory API key for tier upgrade.
 
     Anonymous (no key)            — 100 calls/day per source IP
-    Tools Pro bridge ($4.99/mo)   — 1,000 calls/month (Tools Pro key)
-    Vivory API Pro ($29/mo USDC)  — 10,000 calls/day, also unlocks sibling
-                                    vivory-mcp-korea (124 tools total)
+    Tools Pro ($4.99/mo)          — 10,000 calls/day across 13 verification
+                                    tools (single paid tier after bundle absorb
+                                    2026-06-01; standalone $29/mo Vivory API Pro
+                                    tier retired). Sibling vivory-mcp-korea and
+                                    vivory-mcp-kosis are deprecated — Korean
+                                    verdict tools live in this package.
     Sign up at https://api.vivory.app/dashboard/public-api.
 
     If the env var is set but doesn't begin with `vk_live_` / `vk_test_`,

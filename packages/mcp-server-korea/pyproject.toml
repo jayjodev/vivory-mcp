@@ -4,17 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vivory-mcp-korea"
-version = "0.6.1"
-description = "DEPRECATED v0.6.1 — migrate: uvx vivory-mcp-verification. Korean raw-data wrappers retired (they redistributed data rather than verified it). Vivory's verifiable-AI-work mission uses Korean sources (법령정보센터·NTS·DART·KMA·KOSIS) as evidence for verdicts inside vivory-mcp-verification, not raw passthrough. Korean verdict tools already shipped: kor_law_currency, kor_company_status, doi_retraction_status. Same $29/mo Pro key. v0.6.1 = name re-claim (v0.6.0 burned by prior delete)."
+version = "0.6.2"
+description = "DEPRECATED v0.6.2 — migrate: uvx vivory-mcp-verification (Korean verdict tools included; Tools Pro $4.99/mo key, bundle absorb 2026-06-01)."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
     { name = "Vivory", email = "contact@vivory.app" },
 ]
-keywords = ["mcp", "korea", "kosis", "ecos", "neis", "vworld", "spatial", "geocoding", "nts", "business-number", "anthropic", "claude", "public-data", "verifiable-ai", "korea-data-gateway", "model-context-protocol", "ai-agent"]
+keywords = ["mcp", "korea", "anthropic", "claude", "deprecated", "verifiable-ai", "model-context-protocol", "ai-agent"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -25,7 +25,6 @@ classifiers = [
 ]
 dependencies = [
     "mcp>=1.0.0",
-    "httpx>=0.27.0",
 ]
 
 [project.optional-dependencies]
@@ -38,7 +37,7 @@ dev = [
 Homepage = "https://vivory.app"
 Repository = "https://github.com/jayjodev/vivory-mcp"
 Issues = "https://github.com/jayjodev/vivory-mcp/issues"
-"Korea Data Gateway" = "https://api.vivory.app"
+"Successor (vivory-mcp-verification)" = "https://pypi.org/project/vivory-mcp-verification/"
 
 [project.scripts]
 vivory-mcp-korea = "vivory_mcp_korea.__main__:main"

@@ -5,7 +5,7 @@ it conflicted with Vivory's mission of *verifiable AI work* — raw wrappers
 redistributed data rather than verified it.
 
 Migration:
-  uvx vivory-mcp-verification    # 139 tools, including Korean verdict tools
+  uvx vivory-mcp-verification    # 89 tools, including Korean verdict tools
 
 Korean verdict tools (already in verification MCP):
   - kor_law_currency       — 한국 법령 현행여부 verdict (law.go.kr)
@@ -14,11 +14,14 @@ Korean verdict tools (already in verification MCP):
 
 Korean public-data sources (KOSIS, BOK, DART, KMA, etc.) are now used as
 *underlying evidence* for verdicts inside vivory-mcp-verification — not as
-raw passthrough. Single $29/mo Pro key.
+raw passthrough. Authenticated with the Tools Pro $4.99/mo key.
 
 Why this package still exists as a release:
   - Existing v0.5.0 users see a deprecation notice on first call → smooth migration.
   - No actual data is served — any tool call returns the migration payload.
+  - v0.6.2: dead raw-wrapper source modules removed from wheel (were
+    unused since v0.6.0 but still bundled; deleted to avoid shipping
+    retired-by-ToS source code).
 """
 from __future__ import annotations
 
@@ -55,7 +58,7 @@ _DEPRECATION_NOTICE: dict[str, Any] = {
         "underlying evidence for verdicts, which is consistent with Vivory's "
         "verifiable-AI-work mission and the source ToS of each provider."
     ),
-    "pricing": "Same $29/mo Pro key works for vivory-mcp-verification",
+    "pricing": "Tools Pro $4.99/mo key works for vivory-mcp-verification (bundle absorb 2026-06-01; standalone $29/mo Vivory API Pro tier retired)",
     "docs": "https://api.vivory.app/mcp",
 }
 
@@ -113,7 +116,7 @@ def _startup_banner() -> None:
     if os.environ.get("VIVORY_MCP_QUIET", "").strip() in ("1", "true", "yes"):
         return
     print(
-        "[vivory-mcp-korea] ⚠ DEPRECATED v0.6.0\n"
+        "[vivory-mcp-korea] ⚠ DEPRECATED v0.6.2\n"
         "  → migrate to:  uvx vivory-mcp-verification\n"
         "  Korean verdict tools (kor_law_currency / kor_company_status /\n"
         "  doi_retraction_status) are in vivory-mcp-verification. Same Pro key.\n"

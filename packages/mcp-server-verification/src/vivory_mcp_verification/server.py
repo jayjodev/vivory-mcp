@@ -1,46 +1,26 @@
 """Vivory Verification umbrella MCP server.
 
 Aggregates verifiable-AI-work tools under a single MCP server name
-(`vivory-verification`). v0.11 ships 99 tools across 36 categories:
+(`vivory-verification`). v0.14.0 ships 13 tools across 4 categories — the
+**moat collapse** (2026-06-05): the agent surface narrows to what only Vivory
+can offer (Korean public-data verdicts + the deterministic-provenance-hash
+reconcile engine + the offline-verifiable receipt backbone), dropping ~74
+commodity public-API wrappers (LEI, SEC EDGAR, World Bank, USGS, DefiLlama,
+Wikidata, ClinicalTrials, ORCID, npm/PyPI, sanctions, archive/wayback, …) and
+the surface-internal tools (repro·peer-review tied to the now-personal Repro
+Hub, forecast tied to the retired forecast surface). Web Tools keep their
+breadth as an SEO discovery funnel — the parity invariant is decoupled to
+`web ⊇ MCP` (MCP = the curated moat subset, see policies/verification-parity.md).
 
-- reconcile   (3) — company_reconcile, recall_reconcile, person_reconcile (cross-source 2-4 registry consensus with deterministic provenance hash). LOCKED 2026-05-22.
+Prior retires: v0.13.0 dropped 2 forecast tools (forecast_track_record,
+submit_forecast); v0.12.0 dropped 10 low-uptake tools (4 Tier-U composers +
+6 parity-debt MCP-only). Bundle absorb 2026-06-01 collapsed the prior $29/mo
+Vivory API Pro tier into Tools Pro $4.99/mo single key.
 
-
-- claim       (3) — verify_claim, extract_citations, archive_claim_sources
-- doi         (4) — verify_doi, doi_metadata, doi_retraction_check, doi_author_network
-- archive     (3) — verify_archive, wayback_capture, wayback_history
-- repro       (3) — verify_repro_hash, repro_hub_lookup, repro_artifact_diff
-- provenance  (13) — verify_c2pa, verify_pdf_provenance, verify_hash_chain, detect_watermark, verify_timestamp_rfc3161, extract_image_exif, image_perceptual_hash, extract_video_metadata, video_frame_hash_sample, extract_pdf_metadata, compute_file_hash, ai_generator_signature_lookup, provenance_summary (Phase A standards-backed: who/when/where/what across image/video/PDF, no ML, no new deps)
-- peer-review (5) — verify_peer_review, persona_verdict_lookup, bulk_peer_review_lookup, reviewer_registry, peer_review_stats (Universal Peer Review trail — panel registry + bulk lookup + service-level stats)
-- forecast    (4) — forecast_track_record (crypto.vivory.app/forecast), submit_forecast, forecast_ensemble (Polymarket+Kalshi+Manifold consensus), forecast_calibration (ECE/MCE/Brier)
-- filing      (3) — verify_filing, filing_recent, filing_facts (SEC EDGAR — sister of Korea DART)
-- entity      (3) — verify_lei, entity_search, entity_relationships (GLEIF LEI)
-- work        (3) — verify_work, search_works, verify_salami_slicing (OpenAlex academic citation graph + author near-dup screen)
-- wikidata    (2) — verify_qid, wikidata_search (entity grounding via Q-numbers)
-- trial       (2) — verify_trial, trial_search (ClinicalTrials.gov v2)
-- indicator   (2) — verify_indicator, indicator_series (World Bank Open Data)
-- place       (2) — verify_place, place_search (OpenStreetMap Nominatim)
-- tvl         (2) — verify_protocol_tvl, verify_chain_tvl (DefiLlama crypto TVL)
-- quake       (2) — verify_quake, recent_quakes (USGS Earthquake)
-- apt         (2) — apt_market_snapshot, verify_apt_price (MOLIT RTMS — Korean apartment real-transaction prices, daily nationwide ingest)
-- identity    (2) — verify_orcid, orcid_works (ORCID public API)
-- web         (2) — verify_url_hash, verify_dataset_fingerprint (content-trail + structure probe)
-- domain      (4) — verify_domain_whois, verify_domain_dns, verify_domain_owner_change, verify_domain_history (RDAP + Cloudflare DoH + WHOIS history poll)
-- chain       (4) — blockchain_audit_lookup, blockchain_audit_chains, verify_contract_admin_activity, verify_proxy_upgrade (EVM signed audit + contract pollers)
-- npm         (2) — verify_npm_package, verify_npm_typosquat (registry.npmjs.org supply chain)
-- pypi        (2) — verify_pypi_package, verify_pypi_typosquat (pypi.org supply chain)
-- retraction  (3) — doi_retraction_status, retraction_watch_recent, retraction_watch_by_journal (Retraction Watch + Crossref crossmark)
-- workflow    (3) — workflow_paper_repro, workflow_crypto_diligence, workflow_ai_output_verify (curated multi-step verification)
-- policy      (2) — policy_list_presets, policy_evaluate (custom verification policy framework)
-- law         (5) — kor_law_lookup, kor_law_currency, kor_case_search, kor_bill_status, kor_company_status (국가법령정보센터 + 열린국회정보 + NTS×CSL Verified Fact corpus first two verticals)
-- sanctions   (1) — sanctions_screen (OFAC + UN + EU + KR STIC via openSanctions)
-- recall      (2) — drug_recall_check, product_recall_check (openFDA + CPSC SaferProducts)
-- journal     (1) — verify_journal_quality (DOAJ whitelist + predatory heuristic)
-- pr_diff     (1) — verify_pr_article_diff (press-release vs article fidelity diff)
-- pubpeer     (1) — verify_pubpeer_status (PubPeer post-publication peer-review commentary)
-- opencitations (1) — verify_doi_citations (OpenCitations COCI citation context + self-citation count)
-- funder      (1) — verify_funder (Crossref Funder Registry resolver)
-- wikipedia   (1) — verify_wikipedia_cite_health (Wikipedia external-link liveness audit)
+- law         (5) — kor_law_lookup, kor_law_currency, kor_case_search, kor_bill_status, kor_company_status (국가법령정보센터 + 열린국회정보 + NTS×CSL Verified Fact corpus — the Korean public-data moat)
+- reconcile   (3) — company_reconcile, recall_reconcile, person_reconcile (cross-source 2-4 registry consensus with deterministic provenance hash — Vivory-differentiated method. LOCKED 2026-05-22)
+- doi         (2) — verify_doi, doi_retraction_check (research-integrity anchor: verdict + retraction gate before an LLM cites a paper)
+- provenance  (3) — verify_c2pa, verify_hash_chain, compute_file_hash (offline-verifiable receipt backbone — the substance of "See for yourself")
 
 Architecture:
 - Tool definitions live in `tools/{category}.py` per concern
@@ -63,42 +43,10 @@ from mcp.types import TextContent, Tool
 
 from . import client
 from .tools import (
-    apt as apt_tools,
-    archive as archive_tools,
-    chain as chain_tools,
-    claim as claim_tools,
     doi as doi_tools,
-    domain as domain_tools,
-    entity as entity_tools,
-    filing as filing_tools,
-    forecast as forecast_tools,
-    identity as identity_tools,
-    indicator as indicator_tools,
-    journal as journal_tools,
     law as law_tools,
-    npm as npm_tools,
-    opencitations as opencitations_tools,
-    peer_review as peer_review_tools,
-    place as place_tools,
-    policy as policy_tools,
-    pr_diff as pr_diff_tools,
     provenance as provenance_tools,
-    pubpeer as pubpeer_tools,
-    pypi as pypi_tools,
-    quake as quake_tools,
-    recall as recall_tools,
     reconcile as reconcile_tools,
-    repro as repro_tools,
-    retraction as retraction_tools,
-    sanctions as sanctions_tools,
-    trial as trial_tools,
-    tvl as tvl_tools,
-    web as web_tools,
-    wikidata as wikidata_tools,
-    wikipedia as wikipedia_tools,
-    work as work_tools,
-    workflow as workflow_tools,
-    funder as funder_tools,
 )
 
 logger = logging.getLogger("vivory_mcp_verification")
@@ -107,81 +55,17 @@ server: Server = Server("vivory-verification")
 
 
 TOOLS: list[Tool] = [
-    *claim_tools.TOOLS,
     *doi_tools.TOOLS,
-    *archive_tools.TOOLS,
-    *repro_tools.TOOLS,
     *provenance_tools.TOOLS,
-    *peer_review_tools.TOOLS,
-    *forecast_tools.TOOLS,
-    *filing_tools.TOOLS,
-    *entity_tools.TOOLS,
-    *work_tools.TOOLS,
-    *wikidata_tools.TOOLS,
-    *trial_tools.TOOLS,
-    *indicator_tools.TOOLS,
-    *place_tools.TOOLS,
-    *tvl_tools.TOOLS,
-    *quake_tools.TOOLS,
-    *apt_tools.TOOLS,
-    *identity_tools.TOOLS,
-    *web_tools.TOOLS,
-    *domain_tools.TOOLS,
-    *chain_tools.TOOLS,
-    *npm_tools.TOOLS,
-    *pypi_tools.TOOLS,
-    *retraction_tools.TOOLS,
-    *workflow_tools.TOOLS,
-    *policy_tools.TOOLS,
     *law_tools.TOOLS,
-    *sanctions_tools.TOOLS,
-    *recall_tools.TOOLS,
-    *journal_tools.TOOLS,
-    *pr_diff_tools.TOOLS,
-    *pubpeer_tools.TOOLS,
-    *opencitations_tools.TOOLS,
-    *funder_tools.TOOLS,
-    *wikipedia_tools.TOOLS,
     *reconcile_tools.TOOLS,
 ]
 
 
 HANDLERS: dict[str, Any] = {
-    **claim_tools.HANDLERS,
     **doi_tools.HANDLERS,
-    **archive_tools.HANDLERS,
-    **repro_tools.HANDLERS,
     **provenance_tools.HANDLERS,
-    **peer_review_tools.HANDLERS,
-    **forecast_tools.HANDLERS,
-    **filing_tools.HANDLERS,
-    **entity_tools.HANDLERS,
-    **work_tools.HANDLERS,
-    **wikidata_tools.HANDLERS,
-    **trial_tools.HANDLERS,
-    **indicator_tools.HANDLERS,
-    **place_tools.HANDLERS,
-    **tvl_tools.HANDLERS,
-    **quake_tools.HANDLERS,
-    **apt_tools.HANDLERS,
-    **identity_tools.HANDLERS,
-    **web_tools.HANDLERS,
-    **domain_tools.HANDLERS,
-    **chain_tools.HANDLERS,
-    **npm_tools.HANDLERS,
-    **pypi_tools.HANDLERS,
-    **retraction_tools.HANDLERS,
-    **workflow_tools.HANDLERS,
-    **policy_tools.HANDLERS,
     **law_tools.HANDLERS,
-    **sanctions_tools.HANDLERS,
-    **recall_tools.HANDLERS,
-    **journal_tools.HANDLERS,
-    **pr_diff_tools.HANDLERS,
-    **pubpeer_tools.HANDLERS,
-    **opencitations_tools.HANDLERS,
-    **funder_tools.HANDLERS,
-    **wikipedia_tools.HANDLERS,
     **reconcile_tools.HANDLERS,
 }
 
@@ -292,7 +176,9 @@ def _startup_banner() -> None:
 
     Anonymous users see the upgrade path *before* hitting a 429. Pro users
     see confirmation that their key is being sent. Both surface the
-    sibling Korea MCP because one $29/mo key unlocks both.
+    Korean verdict tools bundled here (kor_law_currency, kor_company_status,
+    doi_retraction_status, …) — the prior `vivory-mcp-korea` sibling is
+    deprecated and no longer pairs with this package.
 
     Silence with `VIVORY_MCP_QUIET=1` for embedding in IDE logs.
     """
@@ -313,11 +199,11 @@ def _startup_banner() -> None:
         print(
             f"[vivory-mcp-verification] {tool_count} tools | Anonymous tier (100/day per IP) | "
             f"gateway={base}\n"
-            f"  → Tools Pro bridge ($4.99/mo, 1k call/mo) or Vivory API Pro\n"
-            f"    ($29/mo USDC, 10k/day, no auto-renew, no custody) at\n"
-            f"    https://api.vivory.app/dashboard/public-api — Korean sources\n"
-            f"    are bundled inside verdicts (kor_law_currency, kor_company_status,\n"
-            f"    doi_retraction_status, …).",
+            f"  → Tools Pro $4.99/mo single key (10k/day, no auto-renew, no custody)\n"
+            f"    at https://tools.vivory.app/pro — same key authenticates both the\n"
+            f"    tools.vivory.app utility surface and this Verification MCP\n"
+            f"    (bundle absorb 2026-06-01). Korean sources are bundled inside\n"
+            f"    verdicts (kor_law_currency, kor_company_status, doi_retraction_status, …).",
             file=sys.stderr,
             flush=True,
         )

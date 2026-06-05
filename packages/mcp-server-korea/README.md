@@ -1,80 +1,38 @@
-# vivory-mcp-korea
+# vivory-mcp-korea — ⚠️ DEPRECATED v0.6.2
 
 <!-- mcp-name: io.github.jayjodev/vivory-mcp-korea -->
 
-**Umbrella MCP server bundling Korean public-data sources into a single installation.** 56 tools across 16 official Korean government APIs — install once, get every Vivory-supported Korean dataset.
-
-Powered by the [Vivory Korea Data Gateway](https://api.vivory.app) — backend handles auth, caching, attribution, JS-literal parsing, and rate-limit gating.
-
----
-
-## What's included
-
-### v0.5 — 16 sources, 56 tools
-
-| Source | Tools | What it covers |
-|---|---|---|
-| **KOSIS** (통계청) | 15 | Macro/social/economic statistics — Population, Labor, CPI, GDP, Trade Balance, Household Income + full catalog search + time-series. |
-| **BOK** (한국은행 ECOS) | 1 | Macro dashboard — base rate, CPI, unemployment, M2, KRW/USD, recent series. |
-| **DART** (전자공시 · 금감원) | 6 | Korean listed-company filings, financial statements, major shareholders, company-info lookup, daily disclosures feed. |
-| **KMA** (기상청) | 4 | Real-time observation, short-range forecast, city presets, six living-weather indices (UV / sensible temp / pollen / etc.). |
-| **AirKorea** (환경부) | 2 | Real-time PM10 / PM2.5 / O3 / NO2 / SO2 / CO per station, plus regional forecast. |
-| **Opinet** (한국석유공사) | 3 | National avg / per-SIDO / Top-10 cheapest gas stations (5 fuel grades). |
-| **HIRA** (건강보험심사평가원) | 3 | Hospital + pharmacy directory search, hospitals nearby a coordinate. |
-| **NMC** (국립중앙의료원 E-gen) | 3 | ER real-time bed availability, night-shift pharmacies, trauma centers. |
-| **MOLIT** (국토교통부) | 4 | Apartment sale / rent transactions (RTMS) — raw transaction lists, monthly price trend, LAWD region codes. Sister tools in `vivory-mcp-verification` (`apt_market_snapshot` aggregated stats / `verify_apt_price` claim verification) hit the same MOLIT ingest but expose verification-axis surfaces. |
-| **KTO** (한국관광공사 TourAPI) | 4 | Tour spots by region, festivals by date, nearby tour by coordinate, full detail. |
-| **MFDS** (식품의약품안전처) | 1 | Korean food nutrition database — calories, macros, vitamins, minerals. |
-| **MOIS LOCALDATA** (행정안전부) | 1 | ~50,000 public restrooms by address. |
-| **NEIS** (교육부 나이스) | 1 | K-12 school search across 12,555 schools. |
-| **Seoul OpenData** (서울시) | 2 | Public parking lots (~2,300 with realtime), Seoul Bike (따릉이) stations. |
-| **MoE EV** (환경부) | 1 | EV chargers per SIDO with realtime status. |
-| **VWorld** (국토교통부 공간정보) | 4 | Place / address autocomplete, geocoder (address → WGS84), 박물관·미술관 1,534 venue listing + detail (Wikipedia + Google Places enrichment). |
-| **NTS** (국세청) | 1 | Korean business registration number (사업자등록번호) — checksum + live 국세청 status lookup (계속/휴업/폐업 + 일반/간이/면세 + tax type change date). |
-
-Tools are namespaced by source (`kosis_*`, `kma_*`, `dart_*`, `hira_*`, …) so Claude can pick the right one automatically.
-
-> **DART note**: `dart_company_search` resolves once the corp_code mapping has been synced upstream. The Vivory backend now auto-refreshes the ~3,500 listed-company mapping on a monthly cron (every 1st 05:10 KST); operators can still trigger an on-demand sync via `POST /api/public-tools/dart/admin/sync-corp-codes` (admin auth) if needed. Status visible via `dart_meta`. Other DART tools (disclosures, financials, major-shareholders) work directly when you already have an 8-digit `corp_code`.
-
-### Coming next (v0.5+)
-
-- **Forest Service** — hiking trails, mountain points.
-- **Kakao Local** reverse geocoding.
-- **AED** locations (NMC E-gen — pending data.go.kr activation).
-- **University search** (KCUE — pending data.go.kr activation).
-- **MVNO plans** (Korea Post — pending data.go.kr activation).
-- **VWorld v2** — full LOCALDATA venue surface beyond museums (restaurant / cafe / cinema / gym / etc.).
-
-When these ship, **users don't need to re-install** — `vivory-mcp-korea` auto-includes new tools as they're wired upstream.
+> **This package is deprecated.** Korean raw-data wrappers (KOSIS, BOK, DART, KMA, MOLIT, VWorld, NEIS, HIRA, NMC, Opinet, MFDS, MOIS, NTS, AirKorea, Seoul OpenData, MoE EV) conflicted with Vivory's verifiable-AI-work mission and several upstream source ToS. Migrate to **[`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/)** — Korean verdict tools are bundled there, and the Tools Pro $4.99/mo key authenticates the full 89-tool catalog (bundle absorb 2026-06-01; the prior standalone $29/mo Vivory API Pro tier is retired).
+>
+> **Migrate in one line:**
+>
+> ```bash
+> uvx vivory-mcp-verification
+> ```
 
 ---
 
-## Why this exists
+## Why deprecated
 
-Korean public-data APIs publish exclusively in Korean, require per-API key issuance, return JS-literal (not JSON) responses, and split similar data across 14+ portals. This MCP server normalizes everything to English JSON, attributes data per response, and presents one tool catalog the LLM can navigate.
+Vivory's mission is **verifiable AI work**, not raw-data redistribution. The umbrella Korean MCP shipped 56 wrappers across 16 upstream APIs. Several of those upstreams (DART bulk filings, NEIS school list, MOLIT raw transactions, VWorld 1,534 venue dump) prohibited bulk redistribution under their terms of service. Rather than litigate per-source, the entire raw-passthrough surface was retired.
 
-| Use case | Recommended package |
+Korean public sources are still used inside Vivory — as **underlying evidence for verdicts** in `vivory-mcp-verification`:
+
+| Verdict tool (in vivory-mcp-verification) | Korean source used as evidence |
 |---|---|
-| All Korean public data | **`vivory-mcp-korea`** ← this package |
-| Verification (DOI · archive · provenance · peer review · forecast · entities) | `vivory-mcp-verification` — sister umbrella, **53 tools across 22 clusters** (PyPI live, v0.5.1) |
+| `kor_law_currency` | 법령정보센터 (law.go.kr) |
+| `kor_company_status` | NTS 사업자등록 + CSL cross-check |
+| `kor_case_search` | 대법원 종합법률정보 |
+| `kor_bill_status` | 국회 의안정보 |
+| `doi_retraction_status` | Crossref + OpenAlex + PubPeer |
 
-> The earlier `vivory-mcp-kosis` standalone has been deprecated; all KOSIS tools ship inside this umbrella.
+This is consistent with Vivory's verifiable-AI-work mission and each source's ToS (evidence for verdicts vs. raw redistribution).
 
 ---
 
-## Installation
+## Migration
 
-Live on PyPI as [`vivory-mcp-korea`](https://pypi.org/project/vivory-mcp-korea/).
-
-### Claude Code
-
-```bash
-claude mcp add vivory-korea -- uvx vivory-mcp-korea
-```
-
-### Claude Desktop
-
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+Update your `claude_desktop_config.json` (or `claude mcp add` invocation) from this:
 
 ```json
 {
@@ -87,106 +45,42 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-Restart Claude Desktop. All 56 Korean data tools appear in the tool palette.
-
-### pip / pipx
-
-```bash
-pip install vivory-mcp-korea
-vivory-mcp-korea  # runs the stdio MCP server
-```
-
-### Install from source (development)
-
-```bash
-pip install "git+https://github.com/jayjodev/vivory-mcp.git#subdirectory=packages/mcp-server-korea"
-```
-
----
-
-## API tier — Vivory API Pro
-
-The server runs anonymously by default — **100 calls/day per IP**, no signup. Works for casual use.
-
-For higher limits, sign up at **[api.vivory.app/dashboard/public-api](https://api.vivory.app/dashboard/public-api)** and set `VIVORY_API_KEY`. **One key unlocks both MCPs**: a Pro key for `vivory-mcp-korea` also unlocks the sibling [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/) (53 verification tools across 22 clusters — DOI / ORCID / Wayback / SEC EDGAR / GLEIF / Wikidata / ClinicalTrials / World Bank / USPTO / OSM / DefiLlama / USGS / MOLIT realestate / RDAP+DoH / EVM blockchain audit, etc.).
-
-| Tier | Daily limit | How to enable |
-|---|---|---|
-| Anonymous | 100/day per IP | Default — no setup |
-| Pro | 10,000/day shared across 109 tools | $29/mo USDC (CoolWallet · Arbitrum) or card. 31-day pass, no auto-renew, no custody. `VIVORY_API_KEY=…` env var. |
-| Enterprise | 100,000/day | Contact contact@vivory.app (self-serve only, no SaaS sales) |
+to this:
 
 ```json
 {
   "mcpServers": {
-    "vivory-korea": {
+    "vivory-verification": {
       "command": "uvx",
-      "args": ["vivory-mcp-korea"],
-      "env": {
-        "VIVORY_API_KEY": "vk_live_..."
-      }
+      "args": ["vivory-mcp-verification"]
     }
   }
 }
 ```
 
----
-
-## Self-hosting
-
-```bash
-export VIVORY_API_BASE="http://localhost:8000/api"
-```
-
-Requires a working Vivory backend with upstream API keys configured (KOSIS / KMA / MOLIT / Opinet / etc.) — see Vivory backend (private monorepo).
+Same `VIVORY_API_KEY` env var (if set) carries over.
 
 ---
 
-## Example prompts
+## What this release still does
 
-> *"What's Korea's CPI trend over the last 24 months?"*
-> *"What's the air quality in Seoul right now, and forecast for tomorrow?"*
-> *"Find the 5 cheapest diesel stations near Incheon airport."*
-> *"List trauma-center-equipped hospitals within 10 km of latitude 37.5, longitude 127.0."*
-> *"Show me Gangnam-gu apartment sale transactions in April 2026."*
-> *"What festivals are happening in Seoul between May 1 and May 15?"*
-> *"How many bikes are currently available at Seoul Bike stations in Mapo-gu?"*
+To give existing v0.5.x / v0.6.x users a clear migration signal, the package:
 
-Claude picks the right tool automatically from the 56-tool catalog.
+- Ships exactly **one tool** (`vivory_korea_deprecated_migration_notice`) that returns the migration payload.
+- Returns the **same deprecation payload** for any other tool name the LLM tries (including the old `kosis_*`, `dart_*`, `kma_*`, `vworld_*`, `nts_*`, …) instead of silently 404ing.
+- Prints a loud stderr banner on startup (suppress with `VIVORY_MCP_QUIET=1`).
 
-For Korean listed-company queries (DART):
+**v0.6.2 wheel cleanup:** the dead raw-wrapper source modules (`tools/{kosis,bok,dart,kma,airkorea,opinet,hira,nmc,molit,kto,mfds,mois,neis,vworld}.py`, `client.py`) were unreachable since v0.6.0 but still bundled in the wheel. v0.6.2 deletes them — ToS-incompatible source should not ship even as unreachable code.
 
-> *"What did Samsung Electronics report in its 2024 annual filing — find their corp_code first."* → `dart_company_search` → `dart_financials`
-> *"Show me all KOSPI disclosures filed today."* → `dart_disclosures`
-> *"Who are the major shareholders of Hyundai Motor in 2024?"* → `dart_company_search` → `dart_major_shareholders`
-
----
-
-## Data attribution
-
-Every response includes an `attribution` block — source, license, citation requirement.
-
-| Source | License | Commercial use |
-|---|---|---|
-| KOSIS / KOGL Type 1 | Open with attribution | ✅ |
-| BOK ECOS / KOGL Type 1 | Open with attribution | ✅ |
-| KMA / data.go.kr | Open with attribution | ✅ |
-| AirKorea / data.go.kr | Open with attribution | ✅ |
-| MOLIT / data.go.kr | Open with attribution | ✅ |
-| MFDS / KOGL Type 1 | Open with attribution | ✅ |
-| TourAPI | Open with attribution + non-broker T&C | ✅ |
-| Seoul OpenData | KOGL Type 1 | ✅ |
-| Opinet | Open with daily quota | ✅ (1,500 shared/day) |
-| VWorld / 국토교통부 공간정보 | Open with attribution + non-bulk T&C §10-3 | ✅ |
+No upstream HTTP calls are made. No data is served.
 
 ---
 
 ## Project status
 
-- **Version**: 0.5.0 (16 sources / 56 tools — added NTS 사업자등록 진위 + 활성 status lookup)
+- **Version**: 0.6.2 (deprecated · final)
+- **Successor**: [`vivory-mcp-verification`](https://pypi.org/project/vivory-mcp-verification/)
 - **Source**: [github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea](https://github.com/jayjodev/vivory-mcp/tree/main/packages/mcp-server-korea)
-- **License**: MIT (wrapper) / per-source license for upstream data
-- **Roadmap**: see "Coming next" above
-- **Registries**: PyPI · Official MCP Registry (`io.github.jayjodev/vivory-mcp-korea`) · awesome-mcp-servers
+- **License**: MIT
 
 🇰🇷 Built in Seoul · 🌐 [vivory.app](https://vivory.app)

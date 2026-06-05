@@ -1,8 +1,12 @@
 """Vivory MCP server for KOSIS (Statistics Korea).
 
-DEPRECATED — EOL 2026-12-31. Migrate to `vivory-mcp-korea` umbrella
-(55 tools across 15 sources, tool names unchanged, same VIVORY_API_KEY).
-v0.1.3 = squat-lock reclaim (v0.1.2 hard-deleted, PyPI burned that number).
+DEPRECATED v0.1.4 — both this package AND the intermediate
+`vivory-mcp-korea` umbrella are retired. Migrate directly to
+`vivory-mcp-verification` (Korean verdict tools included, same Pro key).
+
+Any tool call returns the deprecation payload. The upstream KOSIS
+gateway at api.vivory.app/api/public-tools/kosis/* went cluster-internal
+on 2026-05-22, so old proxying would 404 regardless of this MCP layer.
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"

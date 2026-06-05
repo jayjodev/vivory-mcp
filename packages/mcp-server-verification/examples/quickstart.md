@@ -94,27 +94,27 @@ report a structured answer with the source list.
 
 ## 5. Common next tools
 
-| Need                           | Tool                                            |
-|--------------------------------|-------------------------------------------------|
-| Will this URL still exist?     | `verify_archive` (Wayback snapshot lookup)      |
-| Was this paper retracted?      | `doi_retraction_check` / `doi_retraction_status` |
-| Is the JPEG AI-generated?      | `ai_generator_signature_lookup`                 |
-| Image came from a real camera? | `extract_image_exif` + `image_perceptual_hash`  |
-| PDF metadata mismatch?         | `extract_pdf_metadata` + `verify_pdf_provenance` |
-| Is this LEI real?              | `verify_lei`                                    |
-| What's a Wikidata Q-number?    | `verify_qid`                                    |
-| Is this contract verified?     | `blockchain_audit_lookup`                       |
-| Is this Korean company alive?  | `kor_company_status`                            |
-| Was the law cited still valid? | `kor_law_currency`                              |
+| Need                              | Tool                                         |
+|-----------------------------------|----------------------------------------------|
+| Is this DOI real / what is it?    | `verify_doi`                                 |
+| Was this paper retracted?         | `doi_retraction_check`                       |
+| Is this Korean company alive?     | `kor_company_status`                         |
+| Was the law cited still valid?    | `kor_law_currency` / `kor_law_lookup`        |
+| Korean case / bill status?        | `kor_case_search` / `kor_bill_status`        |
+| Same entity across registries?    | `company_reconcile` / `person_reconcile`     |
+| Recall confirmed across sources?  | `recall_reconcile`                           |
+| Is this image C2PA-signed?        | `verify_c2pa`                                |
+| Fingerprint a file into a receipt?| `compute_file_hash` (SHA-256/512 + IPFS CID) |
+| Is this receipt chain intact?     | `verify_hash_chain`                          |
 
-98 tools total — see [README.md](../README.md) for the full category
+13 moat tools total — see [README.md](../README.md) for the full category
 table.
 
 ## 6. Rate limits
 
 - **Anonymous** (no key): 100 calls/day per IP. Polite for development.
 - **Free** (signup at [api.vivory.app/dashboard](https://api.vivory.app/dashboard)): 500/day.
-- **Pro** ($29/mo USDC, no auto-renew, no custody): 10,000/day.
+- **Tools Pro** ($4.99/mo, USDC or card, no auto-renew, no custody): 10,000/day across all 13 verification tools — single paid tier after bundle absorb 2026-06-01; the prior standalone $29/mo Vivory API Pro tier is retired.
 
 Set the key as an env var; the MCP picks it up automatically:
 

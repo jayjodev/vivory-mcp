@@ -92,11 +92,12 @@ You are generating, editing, or summarizing content that contains:
 ## Why
 
 Most LLM citations are unchecked. The Vivory MCP closes that gap with
-98 verification tools across 36 categories. One pip install, one
+89 verification tools across 34 categories. One pip install, one
 `mcp.json` entry, every output gets a verification trail.
 
 Rate limit: anonymous tier = 100/day per IP. Sign up at
-`api.vivory.app/dashboard` for free 500/day, or $29/mo Pro for 10k/day
-(USDC, no auto-renew, no custody).
+`api.vivory.app/dashboard` for free 500/day, or Tools Pro $4.99/mo for
+10k/day across all 89 tools — single paid tier after bundle absorb
+2026-06-01 (USDC or card, no auto-renew, no custody).
 
 License: MIT.
