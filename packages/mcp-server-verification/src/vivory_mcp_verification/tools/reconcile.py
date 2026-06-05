@@ -26,9 +26,9 @@ TOOLS: list[Tool] = [
             "supplied). Returns per-source legal-name / country / "
             "active-status values, the detected disagreements with "
             "severity labels, a majority-vote reconciled view, and a "
-            "deterministic provenance hash. Use this instead of "
-            "single-source `verify_lei` / `verify_qid` when the agent "
-            "needs a verdict robust to one-registry staleness. Verdict "
+            "deterministic provenance hash. Use this instead of trusting "
+            "any single registry when the agent needs a verdict robust to "
+            "one-registry staleness. Verdict "
             "values: consensus / partial_consensus / disputed / "
             "unverifiable."
         ),

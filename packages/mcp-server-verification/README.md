@@ -198,7 +198,7 @@ VIVORY_API_BASE=https://my-gateway.example.com/api vivory-mcp-verification
 ## The Vivory MCP family
 
 - **vivory-mcp-verification** (this package) — 13 moat verification
-  tools across 34 categories. Korean public sources are bundled inside
+  tools across 4 categories (law · reconcile · doi · provenance). Korean public sources are bundled inside
   verdict evidence (`kor_law_currency`, `kor_company_status`,
   `doi_retraction_status`, `kor_case_search`, `kor_bill_status`)
   instead of as a separate Korea-only MCP.
