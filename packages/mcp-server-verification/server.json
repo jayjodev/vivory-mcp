@@ -1,57 +1,24 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jayjodev/vivory-mcp-verification",
-  "title": "Vivory Verification Gateway",
-  "description": "Korean law/KYB, cross-source reconcile, DOI retraction & receipt hashes - 13 verification tools.",
-  "websiteUrl": "https://api.vivory.app",
+  "title": "Vivory Verification (discontinued)",
+  "description": "Discontinued 2026-08-09. The hosted API is gone; please remove this server.",
+  "websiteUrl": "https://vivory.app",
   "repository": {
     "url": "https://github.com/jayjodev/vivory-mcp",
     "source": "github",
     "subfolder": "packages/mcp-server-verification"
   },
-  "version": "0.14.0",
+  "version": "0.15.0",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "vivory-mcp-verification",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "transport": {
         "type": "stdio"
-      },
-      "environmentVariables": [
-        {
-          "name": "VIVORY_API_KEY",
-          "description": "Optional Tools Pro key for 10,000/day limits (vs 100/day anonymous). Get one at tools.vivory.app/pro.",
-          "isRequired": false,
-          "isSecret": true
-        },
-        {
-          "name": "VIVORY_API_BASE",
-          "description": "Override the upstream gateway URL (default: https://api.vivory.app/api). Useful for self-hosted Vivory backends.",
-          "isRequired": false,
-          "isSecret": false,
-          "default": "https://api.vivory.app/api"
-        }
-      ]
+      }
     }
-  ],
-  "_meta": {
-    "io.modelcontextprotocol.registry/publisher-provided": {
-      "tool": "vivory-mcp-publisher",
-      "categories": ["research", "verification", "provenance", "supply-chain", "law", "sanctions", "recall", "forecast", "citations"],
-      "regions": ["global"],
-      "license": "MIT",
-      "tool_count": 89,
-      "category_count": 34,
-      "pricing": {
-        "anonymous": "100/day per IP, no signup",
-        "tools_pro": "$4.99/mo single paid tier, 10,000/day, no auto-renew, no custody (bundle absorb 2026-06-01 — supersedes prior $29/mo Vivory API Pro)",
-        "unified_key_unlocks": ["vivory-mcp-verification", "tools.vivory.app"],
-        "checkout": "https://tools.vivory.app/pro"
-      },
-      "sibling_packages": [],
-      "deprecated_predecessors": ["vivory-mcp-korea", "vivory-mcp-kosis"]
-    }
-  }
+  ]
 }

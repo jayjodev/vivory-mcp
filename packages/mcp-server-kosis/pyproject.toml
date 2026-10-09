@@ -27,12 +27,6 @@ dependencies = [
     "mcp>=1.0.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
-    "jsonschema>=4.0.0",
-]
-
 [project.urls]
 Homepage = "https://vivory.app"
 Repository = "https://github.com/jayjodev/vivory-mcp"

@@ -1,16 +1,14 @@
-# Verification MCP — PyPI publish status
+# Verification MCP: PyPI publish status
 
-**Status 2026-05-16**: `vivory-mcp-verification` **0.4.1 LIVE on PyPI**. Install:
-
-```bash
-pip install vivory-mcp-verification
-# or
-uvx vivory-mcp-verification --help
-```
+**Status 2026-10-09**: `vivory-mcp-verification` **0.15.0 = final release (discontinued)**.
+The hosted API (`api.vivory.app`) was retired on 2026-08-09, so every tool in 0.14.0 and
+earlier fails. 0.15.0 only exposes `service_status`, which returns the end-of-service
+notice, and makes no network calls. Do not publish feature releases again; older versions
+stay on PyPI (no yank, no delete) so pinned installs keep resolving.
 
 The publish workflow lives in the **public mirror repo** (`jayjodev/vivory-mcp`) at
 `.github/workflows/publish-mcp-verification.yml`. The monorepo only mirrors source via
-`.github/workflows/sync-mcp-public.yml`. See [reference-api-key-store.md](../../../.claude_personal/projects/-home-ubuntu-vivory/memory/reference_api_key_store.md) for the GitHub PAT location (the same one drives `VIVORY_MCP_SYNC_TOKEN`).
+`.github/workflows/sync-mcp-public.yml`.
 
 ## How the publish was actually run (2026-05-16)
 
